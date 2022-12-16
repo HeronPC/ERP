@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Button?>
 
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" />
+<Pane id="paneles" fx:id="Menu" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@css/darkmode.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane id="panelsmenu" fx:id="Psuperior" prefHeight="83.0" prefWidth="1920.0" stylesheets="@css/darkmode.css">
+         <children>
+            <Label layoutX="1673.0" layoutY="22.0" text="Macaquisho" textFill="WHITE">
+               <font>
+                  <Font size="26.0" />
+               </font>
+            </Label>
+            <Button layoutX="1822.0" layoutY="1.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="72.0">
+               <graphic>
+                  <ImageView fitHeight="68.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/user.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </Pane>
+   </children>
+</Pane>
