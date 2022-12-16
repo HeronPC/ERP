@@ -3,7 +3,7 @@ package sge.proyectoerp;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class HelloController {
+public class ERPController {
     @FXML
     private Label welcomeText;
 
