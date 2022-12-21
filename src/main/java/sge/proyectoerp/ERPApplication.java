@@ -12,7 +12,7 @@ public class ERPApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ERPApplication.class.getResource("erp.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setMaximized(true);
+        //stage.setMaximized(true);
         stage.setTitle("Macaquisho");
         stage.setScene(scene);
         stage.show();
