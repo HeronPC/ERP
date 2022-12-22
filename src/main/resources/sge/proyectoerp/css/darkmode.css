@@ -4,3 +4,15 @@
 #panelsmenu{
     -fx-background-color: #2F3636;
 }
+#botonesmenu{
+    -fx-background-color: transparent;
+}
+#botonesmenu:hover {
+    -fx-background-color:
+
+            radial-gradient(center 50% 50%, radius 100%, #2F3636, #2F3636);
+}
+#botonperfil{
+    -fx-background-radius: 70 70 70 70;
+    -fx-background-color: transparent;
+}
