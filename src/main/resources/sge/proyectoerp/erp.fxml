@@ -11,7 +11,7 @@
 
 <Pane id="paneles" fx:id="Menu" prefHeight="790.0" prefWidth="1550.0" stylesheets="@css/darkmode.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sge.proyectoerp.ERPController">
    <children>
-      <Pane id="panelsmenu" fx:id="Psuperior" prefHeight="83.0" prefWidth="1550.0" stylesheets="@css/darkmode.css">
+      <Pane id="panelsmenu" fx:id="BarraSuperior" prefHeight="83.0" prefWidth="1550.0" stylesheets="@css/darkmode.css">
          <children>
             <Label fx:id="nombreusuario" layoutX="1295.0" layoutY="25.0" text="Macaquisho" textFill="WHITE">
                <font>
@@ -38,7 +38,7 @@
             </Button>
          </children>
       </Pane>
-      <Pane fx:id="Pmenu" layoutY="83.0" prefHeight="707.0" prefWidth="1550.0">
+      <Pane fx:id="PanelMenuPrincipal" layoutY="83.0" prefHeight="707.0" prefWidth="1550.0">
          <children>
             <GridPane alignment="CENTER" layoutX="254.0" layoutY="86.0" prefHeight="489.0" prefWidth="1043.0">
               <columnConstraints>
@@ -51,7 +51,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button id="botonesmenu" fx:id="b1" contentDisplay="TOP" mnemonicParsing="false" onAction="#btventas" prefHeight="162.0" prefWidth="161.0" stylesheets="@css/darkmode.css" text="VENTAS" textFill="WHITE" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  <Button id="botonesmenu" fx:id="btnVentas" contentDisplay="TOP" mnemonicParsing="false" onAction="#btventas" prefHeight="162.0" prefWidth="161.0" stylesheets="@css/darkmode.css" text="VENTAS" textFill="WHITE" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <graphic>
                         <ImageView fitHeight="127.0" fitWidth="121.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -63,7 +63,7 @@
                         <Font name="Comic Sans MS Bold" size="18.0" />
                      </font>
                   </Button>
-                  <Button id="botonesmenu" fx:id="b2" contentDisplay="TOP" mnemonicParsing="false" onAction="#btcompras" prefHeight="162.0" prefWidth="161.0" stylesheets="@css/darkmode.css" text="COMPRAS" textFill="WHITE" GridPane.columnIndex="1">
+                  <Button id="botonesmenu" fx:id="btnCompras" contentDisplay="TOP" mnemonicParsing="false" onAction="#btcompras" prefHeight="162.0" prefWidth="161.0" stylesheets="@css/darkmode.css" text="COMPRAS" textFill="WHITE" GridPane.columnIndex="1">
                      <font>
                         <Font name="Comic Sans MS Bold" size="18.0" />
                      </font>
@@ -75,7 +75,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button id="botonesmenu" fx:id="b3" contentDisplay="TOP" mnemonicParsing="false" onAction="#btInventario" prefHeight="162.0" prefWidth="161.0" stylesheets="@css/darkmode.css" text="INVENTARIO" textFill="WHITE" GridPane.columnIndex="2">
+                  <Button id="botonesmenu" fx:id="btnInventario" contentDisplay="TOP" mnemonicParsing="false" onAction="#btInventario" prefHeight="162.0" prefWidth="161.0" stylesheets="@css/darkmode.css" text="INVENTARIO" textFill="WHITE" GridPane.columnIndex="2">
                      <font>
                         <Font name="Comic Sans MS Bold" size="18.0" />
                      </font>
@@ -87,7 +87,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button id="botonesmenu" fx:id="b4" contentDisplay="TOP" mnemonicParsing="false" onAction="#btfacturacion" prefHeight="162.0" prefWidth="161.0" stylesheets="@css/darkmode.css" text="FACTURACIÓN" textFill="WHITE" GridPane.rowIndex="1">
+                  <Button id="botonesmenu" fx:id="btnFacturacion" contentDisplay="TOP" mnemonicParsing="false" onAction="#btfacturacion" prefHeight="162.0" prefWidth="161.0" stylesheets="@css/darkmode.css" text="FACTURACIÓN" textFill="WHITE" GridPane.rowIndex="1">
                      <font>
                         <Font name="Comic Sans MS Bold" size="18.0" />
                      </font>
@@ -99,7 +99,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button id="botonesmenu" fx:id="b5" contentDisplay="TOP" mnemonicParsing="false" onAction="#btempleados" prefHeight="162.0" prefWidth="161.0" stylesheets="@css/darkmode.css" text="EMPLEADOS" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <Button id="botonesmenu" fx:id="btnEmpleados" contentDisplay="TOP" mnemonicParsing="false" onAction="#btempleados" prefHeight="162.0" prefWidth="161.0" stylesheets="@css/darkmode.css" text="EMPLEADOS" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <font>
                         <Font name="Comic Sans MS Bold" size="18.0" />
                      </font>
@@ -115,7 +115,7 @@
             </GridPane>
          </children>
       </Pane>
-      <Pane fx:id="Pinventario" layoutY="83.0" prefHeight="707.0" prefWidth="1550.0" visible="false">
+      <Pane fx:id="PanelInventarioInicial" layoutY="83.0" prefHeight="707.0" prefWidth="1550.0" visible="false">
          <children>
             <HBox alignment="CENTER" layoutX="334.0" layoutY="288.0" prefHeight="134.0" prefWidth="883.0">
                <children>
@@ -144,7 +144,7 @@
             </HBox>
          </children>
       </Pane>
-      <Pane fx:id="Precepciones" layoutY="83.0" prefHeight="707.0" prefWidth="1550.0" visible="false">
+      <Pane fx:id="PanelRecepciones" layoutY="83.0" prefHeight="707.0" prefWidth="1550.0" visible="false">
          <children>
             <Label layoutX="40.0" layoutY="23.0" text="INVENTARIO / RECEPCIONES" textAlignment="CENTER" textFill="WHITE">
                <font>
@@ -173,7 +173,7 @@
             </TableView>
          </children>
       </Pane>
-      <Pane fx:id="Pcrearrecepciones" layoutY="83.0" prefHeight="707.0" prefWidth="1550.0" visible="false">
+      <Pane fx:id="PanelAddRecepciones" layoutY="83.0" prefHeight="707.0" prefWidth="1550.0" visible="false">
          <children>
             <GridPane alignment="CENTER" layoutX="153.0" layoutY="87.0" prefHeight="291.0" prefWidth="1052.0">
               <columnConstraints>
