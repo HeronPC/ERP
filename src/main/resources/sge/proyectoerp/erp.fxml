@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
 
-<Pane id="paneles" fx:id="Menu" prefHeight="790.0" prefWidth="1550.0" stylesheets="@css/darkmode.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sge.proyectoerp.ERPController">
+<Pane id="paneles" fx:id="Menu" prefHeight="790.0" prefWidth="1550.0" stylesheets="@css/darkmode.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sge.proyectoerp.ERPController">
    <children>
       <Pane id="panelsmenu" fx:id="Psuperior" prefHeight="83.0" prefWidth="1550.0" stylesheets="@css/darkmode.css">
          <children>
@@ -35,7 +38,7 @@
             </Button>
          </children>
       </Pane>
-      <Pane fx:id="Pmenu" layoutY="83.0" prefHeight="707.0" prefWidth="1550.0" visible="false">
+      <Pane fx:id="Pmenu" layoutY="83.0" prefHeight="707.0" prefWidth="1550.0">
          <children>
             <GridPane alignment="CENTER" layoutX="254.0" layoutY="86.0" prefHeight="489.0" prefWidth="1043.0">
               <columnConstraints>
@@ -170,7 +173,7 @@
             </TableView>
          </children>
       </Pane>
-      <Pane fx:id="Pcrearrecepciones" layoutY="83.0" prefHeight="707.0" prefWidth="1550.0">
+      <Pane fx:id="Pcrearrecepciones" layoutY="83.0" prefHeight="707.0" prefWidth="1550.0" visible="false">
          <children>
             <GridPane alignment="CENTER" layoutX="153.0" layoutY="87.0" prefHeight="291.0" prefWidth="1052.0">
               <columnConstraints>
