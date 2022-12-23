@@ -8,11 +8,50 @@
     -fx-background-color: transparent;
 }
 #botonesmenu:hover {
-    -fx-background-color:
-
-            radial-gradient(center 50% 50%, radius 100%, #2F3636, #2F3636);
+    -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #2F3636, #2F3636);
+    -fx-cursor: hand;
 }
 #botonperfil{
     -fx-background-radius: 70 70 70 70;
     -fx-background-color: transparent;
+}
+#botonperfil:hover{
+    -fx-cursor: hand;
+}
+#btsgeneral{
+    -fx-background-radius: 30 30 30 30;
+    -fx-background-color: #2F3636;
+}
+#btsgeneral:hover {
+    -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #2F3636, #3B4343);
+    -fx-cursor: hand;
+
+}
+#btscrear{
+    -fx-background-color: #29B84E;
+}
+
+#btscrear:hover{
+    -fx-cursor: hand;
+}
+
+.table-view{
+    -fx-background-color: transparent;
+}
+.table-view .label{
+    -fx-text-fill: white;
+}
+
+.table-view .column-header .label{
+    -fx-text-fill: white;
+
+}
+.table-view .column-header{
+    -fx-background-color: #2F3636;
+
+}
+.text-field {
+    -fx-text-fill: white;
+    -fx-background-color: #a9a9a9 , #3B4343 ;
+    -fx-background-insets: 3 1 -1 3, 0 0 0 0;
 }
