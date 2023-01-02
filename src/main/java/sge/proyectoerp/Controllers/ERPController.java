@@ -115,6 +115,9 @@ public class ERPController {
     @FXML
     private Button btnFacturacion;
 
+    //Variables nuevas
+
+
     @FXML
     void presscuenta() {
 
@@ -122,12 +125,15 @@ public class ERPController {
 
     @FXML
     void pressMenu() {
-
+        if (PanelMenuPrincipal.isVisible()) {
+            PanelMenuPrincipal.setVisible(false);
+        } else if (!PanelMenuPrincipal.isVisible()) {
+            PanelMenuPrincipal.setVisible(true);
+        }
     }
 
     @FXML
     void pressbtventas() {
-
     }
 
     @FXML
@@ -137,7 +143,8 @@ public class ERPController {
 
     @FXML
     void pressbtInventario() {
-
+        PanelMenuPrincipal.setVisible(false);
+        PanelInventarioInicial.setVisible(true);
     }
 
     @FXML
@@ -152,7 +159,8 @@ public class ERPController {
 
     @FXML
     void pressRecepciones() {
-
+        PanelInventarioInicial.setVisible(false);
+        PanelRecepciones.setVisible(true);
     }
 
     @FXML
