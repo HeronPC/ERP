@@ -1,6 +1,7 @@
 module sge.proyectoerp {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
 
 
     opens sge.proyectoerp to javafx.fxml;

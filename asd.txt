@@ -1,0 +1,6 @@
+referencia = txtReferencia
+recibir = txtrecibir
+fechaprevista = dateReferencia
+documento origen = txtDocumento
+Nombre producto = txtProducto
+Cantidad = txtCantidad

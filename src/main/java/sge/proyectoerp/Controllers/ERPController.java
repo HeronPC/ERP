@@ -4,8 +4,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-
+import java.sql.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+
+import static java.time.LocalDate.parse;
 
 public class ERPController {
 
@@ -120,6 +124,35 @@ public class ERPController {
     //Variables nuevas
     private Pane panelactual;
 
+    //Creamos la cadena con la que tenemos la direccion de la base de datos
+    private final String cadconexion = "jdbc:mysql://localhost:3306/erp";
+
+    private final String cadconexionps = "jdbc:mysql://localhost:3306/erp?useServerPrepStmts=true";
+    //Esta variable tiene el usuario con el que nos conectaremos a la base de datos
+    private final String user = "root";
+    //Esta es la contraseña del usuario anterior para conectarnos a la base de datos
+    private final String pswd = "root";
+
+    //Lo usaremos para informar al usuario mediante ventanas emergentes, podemos establecer el mensaje pasándoselo por
+    //parámetros
+    void crearalertainfo(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.setTitle("Info");
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    //Lo usaremos para informar al usuario de errores mediante ventanas emergentes, podemos establecer el mensaje
+    //pasándoselo por parámetros
+    void crearalertaerror(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(null);
+        alert.setTitle("Error");
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
 
     @FXML
     void presscuenta() {
@@ -204,7 +237,42 @@ public class ERPController {
 
     @FXML
     void pressbtnCrearRecepciones() {
+        //Creamos conexión null por si tuviéramos otra conexión cerrarla
+        Connection conexion = null;
+        //Ejecutamos dentro de un try para controlar todas las excepciones posibles
+        try {
+            //Creamos la conexión con la base de datos
+            conexion = DriverManager.getConnection(cadconexionps, user, pswd);
+            //Utilizamos un PreparedStatement para la consulta para mayor seguridad
+            PreparedStatement ps = conexion.prepareStatement("insert into Recepciones values (?, ?, ?, ?, ?, ?)");
+            ps.setString(1, txtReferencia.getText());
+            ps.setString(2, txtrecibir.getText());
 
+            //Parseamos la fecha
+            String fecha = dateReferencia.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalDate localdate = parse(fecha);
+
+            ps.setDate(3, Date.valueOf(localdate));
+            ps.setString(4, txtDocumento.getText());
+            ps.setString(5, txtProducto.getText());
+            ps.setInt(6, Integer.parseInt(txtCantidad.getText()));
+
+            //Creamos una ventana de confirmacion para la modificacion del ingreso
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Confirmación");
+            alert.setContentText("¿Está seguro de crear el producto " + txtProducto.getText() + "? ");
+            Optional<ButtonType> action = alert.showAndWait();
+            //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+            if (action.orElseThrow() == ButtonType.OK) {
+                ps.executeUpdate();
+                crearalertainfo("Recepcion creada");
+                cambiarpanel(PanelAddRecepciones, PanelRecepciones);
+            }
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @FXML
