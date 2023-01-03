@@ -5,6 +5,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
+import java.time.LocalDate;
+
 public class ERPController {
 
     @FXML
@@ -116,6 +118,7 @@ public class ERPController {
     private Button btnFacturacion;
 
     //Variables nuevas
+    private Pane panelactual;
 
 
     @FXML
@@ -125,9 +128,15 @@ public class ERPController {
 
     @FXML
     void pressMenu() {
-        if (PanelMenuPrincipal.isVisible()) {
-            PanelMenuPrincipal.setVisible(false);
-        } else if (!PanelMenuPrincipal.isVisible()) {
+        if(panelactual != PanelMenuPrincipal){
+            if (PanelMenuPrincipal.isVisible()) {
+                PanelMenuPrincipal.setVisible(false);
+                panelactual.setVisible(true);
+            } else if (!PanelMenuPrincipal.isVisible()) {
+                PanelMenuPrincipal.setVisible(true);
+                panelactual.setVisible(false);
+            }
+        } else {
             PanelMenuPrincipal.setVisible(true);
         }
     }
@@ -143,8 +152,7 @@ public class ERPController {
 
     @FXML
     void pressbtInventario() {
-        PanelMenuPrincipal.setVisible(false);
-        PanelInventarioInicial.setVisible(true);
+        cambiarpanel(PanelMenuPrincipal, PanelInventarioInicial);
     }
 
     @FXML
@@ -157,10 +165,15 @@ public class ERPController {
 
     }
 
+    private void cambiarpanel(Pane panel1, Pane panel2){
+        panel1.setVisible(false);
+        panel2.setVisible(true);
+        panelactual = panel2;
+    }
+
     @FXML
     void pressRecepciones() {
-        PanelInventarioInicial.setVisible(false);
-        PanelRecepciones.setVisible(true);
+        cambiarpanel(PanelInventarioInicial, PanelRecepciones);
     }
 
     @FXML
@@ -175,7 +188,8 @@ public class ERPController {
 
     @FXML
     void pressbtncrearRecepciones() {
-
+        cambiarpanel(PanelRecepciones, PanelAddRecepciones);
+        dateReferencia.setValue(LocalDate.now());
     }
 
     @FXML
