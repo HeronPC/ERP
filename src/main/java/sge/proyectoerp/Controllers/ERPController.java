@@ -1,13 +1,18 @@
 package sge.proyectoerp.Controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import sge.proyectoerp.Models.Recepciones;
+
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
+import java.util.*;
 
 import static java.time.LocalDate.parse;
 
@@ -92,7 +97,7 @@ public class ERPController {
     private Button btnDevoluciones;
 
     @FXML
-    private TableView<?> tableRecepciones;
+    private TableView<Recepciones> tableRecepciones;
 
     @FXML
     private Label nombreusuario;
@@ -107,7 +112,7 @@ public class ERPController {
     private Button btnCompras;
 
     @FXML
-    private TableColumn<?, ?> HechoColum;
+    private TableColumn<?, ?> CantidadColum;
 
     @FXML
     private Button btnRecepciones;
@@ -123,6 +128,8 @@ public class ERPController {
 
     //Variables nuevas
     private Pane panelactual;
+
+    private ArrayList<Recepciones> listrecepciones = new ArrayList<>();
 
     //Creamos la cadena con la que tenemos la direccion de la base de datos
     private final String cadconexion = "jdbc:mysql://localhost:3306/erp";
@@ -223,6 +230,7 @@ public class ERPController {
     void pressbtncrearRecepciones() {
         cambiarpanel(PanelRecepciones, PanelAddRecepciones);
         dateReferencia.setValue(LocalDate.now());
+        listrecepciones.clear();
     }
 
     @FXML
@@ -261,7 +269,7 @@ public class ERPController {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText(null);
             alert.setTitle("Confirmación");
-            alert.setContentText("¿Está seguro de crear el producto " + txtProducto.getText() + "? ");
+            alert.setContentText("¿Está seguro de crear la recepcion de los productos? ");
             Optional<ButtonType> action = alert.showAndWait();
             //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
             if (action.orElseThrow() == ButtonType.OK) {
@@ -269,7 +277,6 @@ public class ERPController {
                 crearalertainfo("Recepcion creada");
                 cambiarpanel(PanelAddRecepciones, PanelRecepciones);
             }
-
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -277,7 +284,21 @@ public class ERPController {
 
     @FXML
     void pressbtnRecepcionesAdd() {
+        //Parseamos la fecha
+        String fecha = dateReferencia.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate localdate = parse(fecha);
 
+
+        listrecepciones.add(new Recepciones(txtReferencia.getText(), txtrecibir.getText(), localdate,
+                txtDocumento.getText(), txtProducto.getText(), Integer.parseInt(txtCantidad.getText())));
+
+        tableRecepciones.getItems().removeAll();
+        ObservableList<Recepciones> obsrec = FXCollections.observableArrayList();
+
+
+
+        obsrec.setAll(listrecepciones);
+        tableRecepciones.setItems(obsrec);
     }
 
     @FXML
@@ -313,7 +334,7 @@ public class ERPController {
         assert txtCantidad != null : "fx:id=\"txtCantidad\" was not injected: check your FXML file 'erp.fxml'.";
         assert imgperfil != null : "fx:id=\"imgperfil\" was not injected: check your FXML file 'erp.fxml'.";
         assert btnCompras != null : "fx:id=\"btnCompras\" was not injected: check your FXML file 'erp.fxml'.";
-        assert HechoColum != null : "fx:id=\"HechoColum\" was not injected: check your FXML file 'erp.fxml'.";
+        assert CantidadColum != null : "fx:id=\"um\" was not injected: check your FXML file 'erp.fxml'.";
         assert btnRecepciones != null : "fx:id=\"btnRecepciones\" was not injected: check your FXML file 'erp.fxml'.";
         assert PanelInventarioInicial != null : "fx:id=\"PanelInventarioInicial\" was not injected: check your FXML file 'erp.fxml'.";
         assert PanelRecepciones != null : "fx:id=\"PanelRecepciones\" was not injected: check your FXML file 'erp.fxml'.";

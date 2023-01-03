@@ -243,7 +243,7 @@
             <TableView fx:id="tableRecepciones" editable="true" layoutX="158.0" layoutY="452.0" onMouseClicked="#selectRecepciones" prefHeight="200.0" prefWidth="1043.0">
               <columns>
                 <TableColumn fx:id="ProductoColum" prefWidth="664.0" text="Producto" />
-                <TableColumn fx:id="HechoColum" prefWidth="378.0" text="Hecho" />
+                <TableColumn fx:id="CantidadColum" prefWidth="378.0" text="Cantidad" />
               </columns>
             </TableView>
             <Label layoutX="40.0" layoutY="23.0" text="RECEPCIONES / NUEVO" textAlignment="CENTER" textFill="WHITE">
