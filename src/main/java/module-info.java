@@ -8,4 +8,5 @@ module sge.proyectoerp {
     exports sge.proyectoerp;
     exports sge.proyectoerp.Controllers;
     opens sge.proyectoerp.Controllers to javafx.fxml;
+    opens sge.proyectoerp.Models to javafx.base;
 }

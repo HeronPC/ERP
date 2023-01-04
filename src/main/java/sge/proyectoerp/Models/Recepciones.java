@@ -10,6 +10,12 @@ public class Recepciones {
     String nombreproducto;
     int cantidad;
 
+    public Recepciones(String nombreproducto, int cantidad) {
+        this.nombreproducto = nombreproducto;
+        this.cantidad = cantidad;
+    }
+
+
     public Recepciones(String referencia, String recibir, LocalDate dateReferencia, String docorigen, String nombreproducto, int cantidad) {
         this.referencia = referencia;
         this.recibir = recibir;

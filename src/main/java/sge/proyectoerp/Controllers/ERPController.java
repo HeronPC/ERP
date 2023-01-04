@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import sge.proyectoerp.Models.Recepciones;
@@ -61,7 +62,7 @@ public class ERPController {
     private Pane Menu;
 
     @FXML
-    private TableColumn<?, ?> ProductoColum;
+    private TableColumn<Recepciones, String> ProductoColum;
 
     @FXML
     private Pane BarraSuperior;
@@ -112,7 +113,7 @@ public class ERPController {
     private Button btnCompras;
 
     @FXML
-    private TableColumn<?, ?> CantidadColum;
+    private TableColumn<Recepciones, Integer> CantidadColum;
 
     @FXML
     private Button btnRecepciones;
@@ -168,7 +169,7 @@ public class ERPController {
 
     @FXML
     void pressMenu() {
-        if(panelactual != PanelMenuPrincipal){
+        if (panelactual != PanelMenuPrincipal) {
             if (PanelMenuPrincipal.isVisible()) {
                 PanelMenuPrincipal.setVisible(false);
                 panelactual.setVisible(true);
@@ -205,7 +206,7 @@ public class ERPController {
 
     }
 
-    private void cambiarpanel(Pane panel1, Pane panel2){
+    private void cambiarpanel(Pane panel1, Pane panel2) {
         panel1.setVisible(false);
         panel2.setVisible(true);
         panelactual = panel2;
@@ -240,7 +241,27 @@ public class ERPController {
 
     @FXML
     void selectRecepciones() {
-
+        //Ejecutaremos el codigo dentro de un try para controlar las excepciones
+        try {
+            //Creamos un médico con los datos selecionados de la tabla
+            Recepciones rec = tableRecepciones.getSelectionModel().getSelectedItem();
+            //Con un if comprobamos que los datos sean validos
+            for (int i = 0; i < listrecepciones.size(); i++) {
+                if(Objects.equals(listrecepciones.get(i).getNombreproducto(), rec.getNombreproducto())){
+                    txtReferencia.setText(rec.getReferencia());
+                    txtrecibir.setText(rec.getRecibir());
+                    dateReferencia.setValue(rec.getDateReferencia());
+                    txtDocumento.setText(rec.getDocorigen());
+                    txtProducto.setText(rec.getNombreproducto());
+                    txtCantidad.setText(String.valueOf(rec.getCantidad()));
+                }
+            }
+            //Controlamos las excepciones mostrandolas por la terminal
+        } catch (NullPointerException pi) {
+            System.out.print("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -253,23 +274,26 @@ public class ERPController {
             conexion = DriverManager.getConnection(cadconexionps, user, pswd);
             //Utilizamos un PreparedStatement para la consulta para mayor seguridad
             PreparedStatement ps = conexion.prepareStatement("insert into Recepciones values (?, ?, ?, ?, ?, ?)");
-            ps.setString(1, txtReferencia.getText());
-            ps.setString(2, txtrecibir.getText());
 
-            //Parseamos la fecha
-            String fecha = dateReferencia.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            LocalDate localdate = parse(fecha);
+            for (int i = 0; i < listrecepciones.size()-1; i++) {
+                ps.setString(1, listrecepciones.get(i).getReferencia());
+                ps.setString(2, listrecepciones.get(i).getRecibir());
 
-            ps.setDate(3, Date.valueOf(localdate));
-            ps.setString(4, txtDocumento.getText());
-            ps.setString(5, txtProducto.getText());
-            ps.setInt(6, Integer.parseInt(txtCantidad.getText()));
+                //Parseamos la fecha
+                String fecha = listrecepciones.get(i).getDateReferencia().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                LocalDate localdate = parse(fecha);
+
+                ps.setDate(3, Date.valueOf(localdate));
+                ps.setString(4, listrecepciones.get(i).getDocorigen());
+                ps.setString(5, listrecepciones.get(i).getNombreproducto());
+                ps.setInt(6, listrecepciones.get(i).getCantidad());
+            }
 
             //Creamos una ventana de confirmacion para la modificacion del ingreso
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText(null);
             alert.setTitle("Confirmación");
-            alert.setContentText("¿Está seguro de crear la recepcion de los productos? ");
+            alert.setContentText("Recuerde presionar en añadir producto para completar la insercion del producto");
             Optional<ButtonType> action = alert.showAndWait();
             //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
             if (action.orElseThrow() == ButtonType.OK) {
@@ -277,7 +301,7 @@ public class ERPController {
                 crearalertainfo("Recepcion creada");
                 cambiarpanel(PanelAddRecepciones, PanelRecepciones);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -295,10 +319,12 @@ public class ERPController {
         tableRecepciones.getItems().removeAll();
         ObservableList<Recepciones> obsrec = FXCollections.observableArrayList();
 
-
+        ProductoColum.setCellValueFactory(new PropertyValueFactory<>("nombreproducto"));
+        CantidadColum.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
 
         obsrec.setAll(listrecepciones);
         tableRecepciones.setItems(obsrec);
+        tableRecepciones.refresh();
     }
 
     @FXML
