@@ -2,23 +2,41 @@ package sge.proyectoerp.Controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingNode;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import sge.proyectoerp.Models.Recepciones;
 
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.net.URL;
 import java.sql.*;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import static java.time.LocalDate.parse;
 
 public class ERPController {
 
+    @FXML
+    private TextField txtempleado;
     @FXML
     private Button btnCrearRecepciones;
 
@@ -27,6 +45,8 @@ public class ERPController {
 
     @FXML
     private Pane PanelMenuPrincipal;
+    @FXML
+    private Label txtidpagina;
 
     @FXML
     private TextField txtrecibir;
@@ -80,6 +100,15 @@ public class ERPController {
     private Pane PanelAddRecepciones;
 
     @FXML
+    private Pane PanelAddExpediciones;
+
+    @FXML
+    private Pane PanelAddDevoluciones;
+
+    @FXML
+    private Pane PanelExpediciones;
+
+    @FXML
     private DatePicker dateReferencia;
 
     @FXML
@@ -122,11 +151,28 @@ public class ERPController {
     private Pane PanelInventarioInicial;
 
     @FXML
+    private GridPane Pempleados;
+    @FXML
     private Pane PanelRecepciones;
+
+    @FXML
+    private Pane PanelDevoluciones;
+    @FXML
+    private Pane PanelEmpleados;
+    @FXML
+    private Pane PanelAddEmpleados;
+
+    @FXML
+    private Pane PanelEditEmpleados;
 
     @FXML
     private Button btnFacturacion;
 
+    @FXML
+    private ImageView imgempleado;
+
+    @FXML
+    private ComboBox cbtipo;
     //Variables nuevas
     private Pane panelactual;
 
@@ -141,6 +187,101 @@ public class ERPController {
     //Esta es la contraseña del usuario anterior para conectarnos a la base de datos
     private final String pswd = "root";
 
+    //Debes crear otro método que añada los distintos departamentos que se vayan creando en la base de datos y se rellenen los gridlayout de los distintos departamentos
+    int counter = 0;
+    int filas = 0;
+    int cols = 0;
+
+    Stage selec = new Stage();
+
+    // create a File chooser
+    FileChooser fil_chooser = new FileChooser();
+    String image;
+    Image imagenem;
+
+    //Obtiene la imagen a la hora de crear un empleado
+    @FXML
+    void seleccionarimg(){
+        // Agregar filtros para facilitar la busqueda
+        fil_chooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Images", "*.*"),
+                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                new FileChooser.ExtensionFilter("PNG", "*.png")
+        );
+        // Obtener la imagen seleccionada
+        File file = fil_chooser.showOpenDialog(selec);
+        // Mostar la imagen
+        if (file != null) {
+            image = file.getPath();
+            imagenem = new Image(image);
+            imgempleado.setImage(imagenem);
+        }
+    }
+    //Metodo que crea los paneles de cada empleado
+
+    @FXML
+    void pressbtnCrearEmpleados() {
+        String nomempleado = String.valueOf(txtempleado.getText());//Esto es una mera prueba para que obtenga el nombre del ultimo empleado añadido, deberas cambiarlo para que obtenga el de la base de datos
+        SwingNode node = new SwingNode();
+        JPanel newpane = new JPanel(new BorderLayout());//Creamos el panel que se va a añadir multiples veces
+        newpane.setBorder(new EmptyBorder(10, 10, 10, 10));
+        newpane.setBackground(new java.awt.Color(41, 45, 45));
+        JLabel nombreempleado = new JLabel(nomempleado);//Aqui aparecerá el nombre de los empleados con respecto a la base de datos
+        nombreempleado.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
+        nombreempleado.setForeground (Color.white);
+        JLabel imagen = new JLabel();
+        imagen.setBorder(new EmptyBorder(10, 10, 10, 10));
+        ImageIcon icono= new ImageIcon(image);//establece la dirección url de la imagen de perfil del empleado, debera cambiar respecto a la base de datos
+        java.awt.Image newimg = icono.getImage().getScaledInstance(54, 61,  java.awt.Image.SCALE_SMOOTH);//Redimensiona la imagen
+        icono = new ImageIcon(newimg);
+        imagen.setIcon(icono);
+        JPanel btpane = new JPanel(new GridLayout(2,1));
+        JButton bteliminar = new JButton();
+        bteliminar.setBackground(new java.awt.Color(41, 45, 45));
+        ImageIcon iconoeliminar= new ImageIcon("src/main/resources/sge/proyectoerp/img/eliminar.png");
+        java.awt.Image newimgeliminar = iconoeliminar.getImage().getScaledInstance(7, 7,  java.awt.Image.SCALE_SMOOTH);
+        iconoeliminar = new ImageIcon(newimgeliminar);
+        bteliminar.setIcon(iconoeliminar);
+        JButton bteditar = new JButton();
+        bteditar.setBackground(new java.awt.Color(41, 45, 45));
+        ImageIcon iconoeditar = new ImageIcon("src/main/resources/sge/proyectoerp/img/lapiz.png");
+        java.awt.Image newimgeditar = iconoeditar.getImage().getScaledInstance(7, 7,  java.awt.Image.SCALE_SMOOTH);
+        iconoeditar = new ImageIcon(newimgeditar);
+        bteditar.setIcon(iconoeditar);
+        btpane.add(bteliminar);
+        btpane.add(bteditar);
+        bteditar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent ed) {
+                cambiarpanel(PanelEmpleados,PanelEditEmpleados);
+            }
+        });
+        bteliminar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                //pressbtnCrearEmpleados();
+                //Eliminar de la base de datos el nombre de la persona que es el id el boton pulsado y usar la funcion para que se vuelva a rellenar el gridpane
+            }
+        });
+        //Establecemos la posicion en el panel de cada objeto
+        newpane.add(btpane, BorderLayout.EAST);
+        newpane.add(imagen,BorderLayout.WEST);
+        newpane.add(nombreempleado,BorderLayout.CENTER);
+        newpane.setVisible(true);
+        bteditar.setName("bted"+txtempleado.getText());
+        bteliminar.setName("btel"+txtempleado.getText());//Debe obtener el nombre de cada empleado de la bse de datos para su posterior eliminacion
+        newpane.setName("panel"+counter);//El nombre de cada panel sera panel+numero de panel
+        node.setContent(newpane);//Añade el contenido al nodeswing
+        node.setId("node"+nomempleado);//Cambia el nombre del nodo con respecto al nombre del empleado, deberas hacer que cambie con los nombres que vaya cogiendo de la base de datos
+        Pempleados.add(node,cols,filas);//Va añadiendo los nodeswing al gridpane sumando filas y columnas
+        if(cols==4){
+            cols=-1;
+            filas++;
+        }
+        if(filas==5 && cols==5){}//debes deshabilitar el método cuandotodo el gripane esta lleno
+        cols++;
+        counter++;
+    }
     //Lo usaremos para informar al usuario mediante ventanas emergentes, podemos establecer el mensaje pasándoselo por
     //parámetros
     void crearalertainfo(String mensaje) {
@@ -176,9 +317,22 @@ public class ERPController {
             } else if (!PanelMenuPrincipal.isVisible()) {
                 PanelMenuPrincipal.setVisible(true);
                 panelactual.setVisible(false);
+                txtidpagina.setText("");
             }
         } else {
             PanelMenuPrincipal.setVisible(true);
+        }
+    }
+    @FXML
+    void pressatras() {
+        if(PanelRecepciones.isVisible()||PanelExpediciones.isVisible()||PanelDevoluciones.isVisible()){
+            cambiarpanel(panelactual, PanelInventarioInicial);
+            dateReferencia.setValue(LocalDate.now());
+            listrecepciones.clear();
+        } else if (PanelAddRecepciones.isVisible()) {cambiarpanel(panelactual, PanelRecepciones);
+        }else if (PanelAddExpediciones.isVisible()) {cambiarpanel(panelactual, PanelExpediciones);
+        }else if (PanelAddDevoluciones.isVisible()) {cambiarpanel(panelactual,PanelDevoluciones);
+        }else if (PanelAddEmpleados.isVisible() || PanelEditEmpleados.isVisible()) {cambiarpanel(panelactual,PanelEmpleados);
         }
     }
 
@@ -194,6 +348,7 @@ public class ERPController {
     @FXML
     void pressbtInventario() {
         cambiarpanel(PanelMenuPrincipal, PanelInventarioInicial);
+        txtidpagina.setText("INVENTARIO");
     }
 
     @FXML
@@ -203,7 +358,8 @@ public class ERPController {
 
     @FXML
     void pressbtempleados() {
-
+        cambiarpanel(PanelMenuPrincipal, PanelEmpleados);
+        txtidpagina.setText("EMPLEADOS");
     }
 
     private void cambiarpanel(Pane panel1, Pane panel2) {
@@ -218,20 +374,27 @@ public class ERPController {
     }
 
     @FXML
-    void pressbtnExpediciones() {
-
+    void pressExpediciones() {
+        cambiarpanel(PanelInventarioInicial, PanelExpediciones);
     }
 
     @FXML
-    void pressbtnDevoluciones() {
-
-    }
+    void pressDevoluciones() {cambiarpanel(PanelInventarioInicial, PanelDevoluciones);}
 
     @FXML
-    void pressbtncrearRecepciones() {
-        cambiarpanel(PanelRecepciones, PanelAddRecepciones);
-        dateReferencia.setValue(LocalDate.now());
-        listrecepciones.clear();
+    void pressbtncrear() {
+        if(PanelRecepciones.isVisible()){
+            cambiarpanel(PanelRecepciones, PanelAddRecepciones);
+            dateReferencia.setValue(LocalDate.now());
+            listrecepciones.clear();
+        }else if(PanelExpediciones.isVisible()){
+            cambiarpanel(PanelExpediciones, PanelAddExpediciones);
+        } else if (PanelDevoluciones.isVisible()) {
+            cambiarpanel(PanelDevoluciones, PanelAddDevoluciones);
+        } else if(PanelEmpleados.isVisible()){
+            cambiarpanel(PanelEmpleados,PanelAddEmpleados);
+        }
+
     }
 
     @FXML
@@ -306,6 +469,7 @@ public class ERPController {
         }
     }
 
+
     @FXML
     void pressbtnRecepcionesAdd() {
         //Parseamos la fecha
@@ -326,45 +490,20 @@ public class ERPController {
         tableRecepciones.setItems(obsrec);
         tableRecepciones.refresh();
     }
+    @FXML
+    void pressbtnCrearExpediciones() {
+
+    }
 
     @FXML
+    void pressbtnCrearDevoluciones() {
+
+    }
+    @FXML
     void initialize() {
-        assert btnCrearRecepciones != null : "fx:id=\"btnCrearRecepciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert Documentocolumn != null : "fx:id=\"Documentocolumn\" was not injected: check your FXML file 'erp.fxml'.";
-        assert PanelMenuPrincipal != null : "fx:id=\"PanelMenuPrincipal\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtrecibir != null : "fx:id=\"txtrecibir\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnInventario != null : "fx:id=\"btnInventario\" was not injected: check your FXML file 'erp.fxml'.";
-        assert Estadocolumn != null : "fx:id=\"Estadocolumn\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnEmpleados != null : "fx:id=\"btnEmpleados\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btcuenta != null : "fx:id=\"btcuenta\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnExpediciones != null : "fx:id=\"btnExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtDocumento != null : "fx:id=\"txtDocumento\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnVentas != null : "fx:id=\"btnVentas\" was not injected: check your FXML file 'erp.fxml'.";
-        assert contactocolumn != null : "fx:id=\"contactocolumn\" was not injected: check your FXML file 'erp.fxml'.";
-        assert tableInventario != null : "fx:id=\"tableInventario\" was not injected: check your FXML file 'erp.fxml'.";
-        assert Menu != null : "fx:id=\"Menu\" was not injected: check your FXML file 'erp.fxml'.";
-        assert ProductoColum != null : "fx:id=\"ProductoColum\" was not injected: check your FXML file 'erp.fxml'.";
-        assert BarraSuperior != null : "fx:id=\"BarraSuperior\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btncrearRecepciones != null : "fx:id=\"btncrearRecepciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert Fechacolumn != null : "fx:id=\"Fechacolumn\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnRecepcionesAdd != null : "fx:id=\"btnRecepcionesAdd\" was not injected: check your FXML file 'erp.fxml'.";
-        assert PanelAddRecepciones != null : "fx:id=\"PanelAddRecepciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert dateReferencia != null : "fx:id=\"dateReferencia\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtReferencia != null : "fx:id=\"txtReferencia\" was not injected: check your FXML file 'erp.fxml'.";
-        assert Referenciacolumn != null : "fx:id=\"Referenciacolumn\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtProducto != null : "fx:id=\"txtProducto\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnmenu != null : "fx:id=\"btnmenu\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnDevoluciones != null : "fx:id=\"btnDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert tableRecepciones != null : "fx:id=\"tableRecepciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert nombreusuario != null : "fx:id=\"nombreusuario\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtCantidad != null : "fx:id=\"txtCantidad\" was not injected: check your FXML file 'erp.fxml'.";
-        assert imgperfil != null : "fx:id=\"imgperfil\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnCompras != null : "fx:id=\"btnCompras\" was not injected: check your FXML file 'erp.fxml'.";
-        assert CantidadColum != null : "fx:id=\"um\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnRecepciones != null : "fx:id=\"btnRecepciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert PanelInventarioInicial != null : "fx:id=\"PanelInventarioInicial\" was not injected: check your FXML file 'erp.fxml'.";
-        assert PanelRecepciones != null : "fx:id=\"PanelRecepciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnFacturacion != null : "fx:id=\"btnFacturacion\" was not injected: check your FXML file 'erp.fxml'.";
+        ObservableList<String> items1 = FXCollections.observableArrayList();
+        items1.addAll("Recepciones", "Expediciones", "Devoluciones");
+        cbtipo.setItems(items1);
 
     }
 }

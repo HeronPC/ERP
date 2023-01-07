@@ -48,10 +48,98 @@
 }
 .table-view .column-header{
     -fx-background-color: #2F3636;
+    -fx-border-color: #2F3636;
 
 }
-.text-field {
+.table-view .cell {
+    -fx-alignment: center;
+    -fx-background-color: #2F3636;
+    -fx-border-color: #2F3636;
+    -fx-text-fill: lightgray;
+    -fx-alignment: CENTER;
+}
+.table-row-cell:selected .table-cell {
+    -fx-background-color: #3B4343;
+}
+
+.table-view .increment-button ,.table-view .decrement-button {
+    -fx-background-color:transparent;
+    -fx-background-radius: 2em;
+
+}
+
+/* The main scrollbar **track** CSS class  */
+.table-view .scroll-bar:horizontal .track,
+.table-view .scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-border-color:derive( #2F3636,80%);
+
+    -fx-background-radius: 2em;
+    -fx-border-radius:2em;
+}
+
+/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
+.table-view .scroll-bar:horizontal .thumb,
+.table-view .scroll-bar:vertical .thumb {
+    -fx-background-color:derive( #2F3636,90%);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
+
+}
+
+
+.text-field{
     -fx-text-fill: white;
     -fx-background-color: #a9a9a9 , #3B4343 ;
     -fx-background-insets: 3 1 -1 3, 0 0 0 0;
+}
+.combo-box{
+    -fx-background-color: #a9a9a9 , #3B4343 ;
+    -fx-background-insets: 3 1 -1 3, 0 0 0 0;
+}
+.list-cell{
+    -fx-background-color: #3B4343;
+    -fx-text-fill: white;
+
+}
+.combo-box-popup {
+    -fx-background-color: #3B4343 ;
+    -fx-text-fill: white;
+
+}
+.list-cell:hover{
+    -fx-background-color: #2F3636;
+    -fx-text-fill: white;
+}
+
+.combo-box .cell:selected{
+    -fx-text-fill: white;
+}
+#panelempleados{
+    -fx-border-style: none none solid none;
+    -fx-border-color: #2F3636;
+}
+#tabladepartamentos{
+    -fx-border-style: none solid none none;
+    -fx-border-color: #2F3636;
+}
+.tab-pane *.tab-header-area *.tab-header-background {
+    -fx-background-color:#2F3636;
+
+}
+.tab {
+    -fx-font-family: Arial;
+    -fx-text-fill: white;
+    -fx-font-size: 17;
+    -fx-background-color:#3B4343 ;
+}
+
+.tab:selected {
+    -fx-text-fill: white;
+    -fx-background-color:#3B4343;
+}
+.tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: white;
+    -fx-font-peso: negrita;
 }

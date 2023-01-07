@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane id="paneles" fx:id="Menu" prefHeight="790.0" prefWidth="1550.0" stylesheets="@css/darkmode.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sge.proyectoerp.Controllers.ERPController">
+<Pane id="paneles" fx:id="Menu" prefHeight="793.0" prefWidth="1536.0" stylesheets="@css/darkmode.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sge.proyectoerp.Controllers.ERPController">
    <children>
-      <Pane id="panelsmenu" fx:id="BarraSuperior" prefHeight="83.0" prefWidth="1550.0" stylesheets="@css/darkmode.css">
+      <Pane id="panelsmenu" fx:id="BarraSuperior" prefHeight="83.0" prefWidth="1536.0" stylesheets="@css/darkmode.css">
          <children>
             <Label fx:id="nombreusuario" layoutX="1295.0" layoutY="25.0" text="Macaquisho" textFill="WHITE">
                <font>
@@ -34,9 +34,14 @@
                   </ImageView>
                </graphic>
             </Button>
+            <Label fx:id="txtidpagina" layoutX="92.0" layoutY="26.0" prefHeight="32.0" prefWidth="268.0" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="22.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
-      <Pane fx:id="PanelMenuPrincipal" layoutY="83.0" prefHeight="707.0" prefWidth="1550.0">
+      <Pane fx:id="PanelMenuPrincipal" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0">
          <children>
             <GridPane alignment="CENTER" layoutX="254.0" layoutY="86.0" prefHeight="489.0" prefWidth="1043.0">
               <columnConstraints>
@@ -113,7 +118,7 @@
             </GridPane>
          </children>
       </Pane>
-      <Pane fx:id="PanelInventarioInicial" layoutY="83.0" prefHeight="707.0" prefWidth="1550.0" visible="false">
+      <Pane fx:id="PanelInventarioInicial" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0" visible="false">
          <children>
             <HBox alignment="CENTER" layoutX="334.0" layoutY="288.0" prefHeight="134.0" prefWidth="883.0">
                <children>
@@ -125,7 +130,7 @@
                         <Insets right="100.0" />
                      </HBox.margin>
                   </Button>
-                  <Button id="btsgeneral" fx:id="btnExpediciones" mnemonicParsing="false" onAction="#pressbtnExpediciones" prefHeight="595.0" prefWidth="217.0" stylesheets="@css/darkmode.css" text="EXPEDICIONES" textFill="WHITE">
+                  <Button id="btsgeneral" fx:id="btnExpediciones" mnemonicParsing="false" onAction="#pressExpediciones" prefHeight="595.0" prefWidth="217.0" stylesheets="@css/darkmode.css" text="EXPEDICIONES" textFill="WHITE">
                      <font>
                         <Font name="Comic Sans MS" size="21.0" />
                      </font>
@@ -133,7 +138,7 @@
                         <Insets right="100.0" />
                      </HBox.margin>
                   </Button>
-                  <Button id="btsgeneral" fx:id="btnDevoluciones" mnemonicParsing="false" onAction="#pressbtnDevoluciones" prefHeight="595.0" prefWidth="217.0" stylesheets="@css/darkmode.css" text="DEVOLUCIONES" textFill="WHITE">
+                  <Button id="btsgeneral" fx:id="btnDevoluciones" mnemonicParsing="false" onAction="#pressDevoluciones" prefHeight="595.0" prefWidth="217.0" stylesheets="@css/darkmode.css" text="DEVOLUCIONES" textFill="WHITE">
                      <font>
                         <Font name="Comic Sans MS" size="21.0" />
                      </font>
@@ -142,14 +147,14 @@
             </HBox>
          </children>
       </Pane>
-      <Pane fx:id="PanelRecepciones" layoutY="83.0" prefHeight="707.0" prefWidth="1550.0" visible="false">
+      <Pane fx:id="PanelRecepciones" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0" visible="false">
          <children>
             <Label layoutX="40.0" layoutY="23.0" text="INVENTARIO / RECEPCIONES" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="Comic Sans MS Bold" size="22.0" />
                </font>
             </Label>
-            <Button id="btscrear" fx:id="btncrearRecepciones" layoutX="158.0" layoutY="93.0" mnemonicParsing="false" onAction="#pressbtncrearRecepciones" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
+            <Button id="btscrear" fx:id="btncrearRecepciones" layoutX="158.0" layoutY="93.0" mnemonicParsing="false" onAction="#pressbtncrear" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
                <font>
                   <Font name="Comic Sans MS Bold" size="14.0" />
                </font>
@@ -169,9 +174,15 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
+            <Button id="botonperfil" fx:id="btcuenta11211" layoutX="6.0" layoutY="17.0" mnemonicParsing="false" onAction="#pressatras" prefHeight="44.0" prefWidth="185.0" stylesheets="@css/darkmode.css" />
+            <ImageView fx:id="imgperfil11211" fitHeight="50.0" fitWidth="33.0" layoutX="6.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@img/atrasblanco.png" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
-      <Pane fx:id="PanelAddRecepciones" layoutY="83.0" prefHeight="707.0" prefWidth="1550.0" visible="false">
+      <Pane fx:id="PanelAddRecepciones" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0" visible="false">
          <children>
             <GridPane alignment="CENTER" layoutX="153.0" layoutY="87.0" prefHeight="291.0" prefWidth="1052.0">
               <columnConstraints>
@@ -263,6 +274,952 @@
                   <Font name="Comic Sans MS Bold" size="14.0" />
                </font>
             </Button>
+            <ImageView fx:id="imgperfil11" fitHeight="50.0" fitWidth="33.0" layoutX="6.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@img/atrasblanco.png" />
+               </image>
+            </ImageView>
+            <Button id="botonperfil" fx:id="btcuenta11" layoutX="12.0" layoutY="17.0" mnemonicParsing="false" onAction="#pressatras" prefHeight="44.0" prefWidth="185.0" stylesheets="@css/darkmode.css" />
+         </children>
+      </Pane>
+      <Pane fx:id="PanelExpediciones" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0" visible="false">
+         <children>
+            <Label layoutX="40.0" layoutY="23.0" text="INVENTARIO / EXPEDICIONES" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="22.0" />
+               </font>
+            </Label>
+            <Button id="btscrear" layoutX="158.0" layoutY="93.0" mnemonicParsing="false" onAction="#pressbtncrear" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="14.0" />
+               </font>
+            </Button>
+            <TableView layoutX="158.0" layoutY="158.0" prefHeight="624.0" prefWidth="1235.0" stylesheets="@css/darkmode.css">
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+               <columns>
+                  <TableColumn editable="false" prefWidth="154.0" sortable="false" styleClass="celdas" text="Referencia" />
+                  <TableColumn id="celdas" prefWidth="75.0" text="Contacto" />
+                  <TableColumn id="celdas" prefWidth="75.0" text="Fecha Prevista" />
+                  <TableColumn id="celdas" prefWidth="75.0" text="Documento origen" />
+                  <TableColumn id="celdas" prefWidth="75.0" text="Estado" />
+               </columns>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </TableView>
+            <Button id="botonperfil" fx:id="btcuenta111" layoutX="6.0" layoutY="17.0" mnemonicParsing="false" onAction="#pressatras" prefHeight="44.0" prefWidth="185.0" stylesheets="@css/darkmode.css" />
+            <ImageView fx:id="imgperfil111" fitHeight="50.0" fitWidth="33.0" layoutX="6.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@img/atrasblanco.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane fx:id="PanelAddExpediciones" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0" visible="false">
+         <children>
+            <GridPane alignment="CENTER" layoutX="153.0" layoutY="87.0" prefHeight="291.0" prefWidth="1052.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0" GridPane.rowIndex="1">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Dirección de entrega" textFill="WHITE">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="txtrecibir1" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="80.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <children>
+                        <Label alignment="CENTER" text="Fecha prevista" textFill="WHITE">
+                           <font>
+                              <Font name="Comic Sans MS" size="17.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="70.0" />
+                           </HBox.margin>
+                        </Label>
+                        <DatePicker fx:id="dateReferencia1" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </DatePicker>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="55.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Documento origen" textFill="WHITE">
+                           <font>
+                              <Font name="Comic Sans MS" size="17.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="70.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="txtDocumento1" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="91.0" prefWidth="526.0" spacing="50.0" />
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="55.0" GridPane.rowIndex="2">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Tipo de operación" textFill="WHITE">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="70.0" />
+                           </HBox.margin>
+                        </Label>
+                        <ComboBox fx:id="cbtipo" prefWidth="150.0" stylesheets="@css/darkmode.css" />
+                     </children>
+                  </HBox>
+               </children>
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+            </GridPane>
+            <TableView fx:id="tableRecepciones1" editable="true" layoutX="158.0" layoutY="452.0" onMouseClicked="#selectRecepciones" prefHeight="200.0" prefWidth="1043.0">
+               <columns>
+                  <TableColumn fx:id="ProductoColum1" prefWidth="664.0" text="Producto" />
+                  <TableColumn fx:id="CantidadColum1" prefWidth="378.0" text="Cantidad" />
+               </columns>
+            </TableView>
+            <Label layoutX="40.0" layoutY="23.0" text="EXPEDICIONES / NUEVO" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="22.0" />
+               </font>
+            </Label>
+            <Button id="btscrear" fx:id="btnCrearExpediciones" layoutX="1205.0" layoutY="24.0" mnemonicParsing="false" onAction="#pressbtnCrearExpediciones" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="14.0" />
+               </font>
+            </Button>
+            <TextField fx:id="txtProducto1" layoutX="332.0" layoutY="393.0" prefHeight="31.0" prefWidth="410.0" stylesheets="@css/darkmode.css" />
+            <TextField fx:id="txtCantidad1" layoutX="790.0" layoutY="393.0" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
+            <Button id="btscrear" fx:id="btnRecepcionesAdd1" layoutX="984.0" layoutY="393.0" mnemonicParsing="false" onAction="#pressbtnRecepcionesAdd" stylesheets="@css/darkmode.css" text="AÑADIR" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button id="botonperfil" fx:id="btcuenta112" layoutX="17.0" layoutY="18.0" mnemonicParsing="false" onAction="#pressatras" prefHeight="44.0" prefWidth="196.0" stylesheets="@css/darkmode.css" />
+            <ImageView fx:id="imgperfil112" fitHeight="50.0" fitWidth="33.0" layoutX="8.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@img/atrasblanco.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane fx:id="PanelDevoluciones" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0" visible="false">
+         <children>
+            <Label layoutX="40.0" layoutY="23.0" text="INVENTARIO / DEVOLUCIONES" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="22.0" />
+               </font>
+            </Label>
+            <Button id="btscrear" layoutX="158.0" layoutY="93.0" mnemonicParsing="false" onAction="#pressbtncrear" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="14.0" />
+               </font>
+            </Button>
+            <TableView layoutX="158.0" layoutY="158.0" prefHeight="624.0" prefWidth="1235.0" stylesheets="@css/darkmode.css">
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+               <columns>
+                  <TableColumn editable="false" prefWidth="154.0" sortable="false" styleClass="celdas" text="Referencia" />
+                  <TableColumn id="celdas" prefWidth="75.0" text="Contacto" />
+                  <TableColumn id="celdas" prefWidth="75.0" text="Fecha Prevista" />
+                  <TableColumn id="celdas" prefWidth="75.0" text="Documento origen" />
+                  <TableColumn id="celdas" prefWidth="75.0" text="Estado" />
+               </columns>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </TableView>
+            <ImageView fx:id="imgperfil1121" fitHeight="50.0" fitWidth="33.0" layoutX="7.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@img/atrasblanco.png" />
+               </image>
+            </ImageView>
+            <Button id="botonperfil" fx:id="btcuenta1121" layoutX="7.0" layoutY="17.0" mnemonicParsing="false" onAction="#pressatras" prefHeight="44.0" prefWidth="185.0" stylesheets="@css/darkmode.css" />
+         </children>
+      </Pane>
+      <Pane fx:id="PanelAddDevoluciones" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0" visible="false">
+         <children>
+            <GridPane alignment="CENTER" layoutX="153.0" layoutY="87.0" prefHeight="291.0" prefWidth="1052.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0" GridPane.rowIndex="1">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Dirección de entrega" textFill="WHITE">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="txtrecibir11" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="80.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <children>
+                        <Label alignment="CENTER" text="Fecha prevista" textFill="WHITE">
+                           <font>
+                              <Font name="Comic Sans MS" size="17.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="70.0" />
+                           </HBox.margin>
+                        </Label>
+                        <DatePicker fx:id="dateReferencia11" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </DatePicker>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="55.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Documento origen" textFill="WHITE">
+                           <font>
+                              <Font name="Comic Sans MS" size="17.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="70.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="txtDocumento11" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="91.0" prefWidth="526.0" spacing="50.0" />
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="55.0" GridPane.rowIndex="2">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Tipo de operación" textFill="WHITE">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="70.0" />
+                           </HBox.margin>
+                        </Label>
+                        <ComboBox fx:id="cbtipo1" prefWidth="150.0" stylesheets="@css/darkmode.css" />
+                     </children>
+                  </HBox>
+               </children>
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+            </GridPane>
+            <TableView fx:id="tableRecepciones11" editable="true" layoutX="158.0" layoutY="452.0" onMouseClicked="#selectRecepciones" prefHeight="200.0" prefWidth="1043.0">
+               <columns>
+                  <TableColumn fx:id="ProductoColum11" prefWidth="664.0" text="Producto" />
+                  <TableColumn fx:id="CantidadColum11" prefWidth="378.0" text="Cantidad" />
+               </columns>
+            </TableView>
+            <Label layoutX="40.0" layoutY="23.0" text="DEVOLUCIONES / NUEVO" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="22.0" />
+               </font>
+            </Label>
+            <Button id="btscrear" fx:id="btnCrearDevoluciones" layoutX="1205.0" layoutY="24.0" mnemonicParsing="false" onAction="#pressbtnCrearDevoluciones" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="14.0" />
+               </font>
+            </Button>
+            <TextField fx:id="txtProducto11" layoutX="332.0" layoutY="393.0" prefHeight="31.0" prefWidth="410.0" stylesheets="@css/darkmode.css" />
+            <TextField fx:id="txtCantidad11" layoutX="790.0" layoutY="393.0" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
+            <Button id="btscrear" fx:id="btnRecepcionesAdd11" layoutX="984.0" layoutY="393.0" mnemonicParsing="false" onAction="#pressbtnRecepcionesAdd" stylesheets="@css/darkmode.css" text="AÑADIR" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="14.0" />
+               </font>
+            </Button>
+            <ImageView fx:id="imgperfil1122" fitHeight="50.0" fitWidth="33.0" layoutX="8.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@img/atrasblanco.png" />
+               </image>
+            </ImageView>
+            <Button id="botonperfil" fx:id="btcuenta1122" layoutX="16.0" layoutY="23.0" mnemonicParsing="false" onAction="#pressatras" prefHeight="31.0" prefWidth="209.0" stylesheets="@css/darkmode.css" />
+         </children>
+      </Pane>
+      <Pane fx:id="PanelEmpleados" layoutY="83.0" prefHeight="710.0" prefWidth="1536.0" visible="false">
+         <children>
+            <Pane id="panelempleados" prefHeight="83.0" prefWidth="1536.0" stylesheets="@css/darkmode.css">
+               <children>
+                  <Button id="btscrear" layoutX="20.0" layoutY="26.0" mnemonicParsing="false" onAction="#pressbtncrear" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
+                     <font>
+                        <Font name="Comic Sans MS Bold" size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
+            <TableView id="tabladepartamentos" layoutY="83.0" prefHeight="628.0" prefWidth="200.0" stylesheets="@css/darkmode.css">
+              <columns>
+                <TableColumn editable="false" prefWidth="197.0" text="DEPARTAMENTOS" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <GridPane id="gridpane" fx:id="Pempleados" hgap="10.0" layoutX="200.0" layoutY="83.0" prefHeight="624.0" prefWidth="1335.0" stylesheets="@css/darkmode.css" vgap="10.0">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </GridPane>
+         </children>
+      </Pane>
+      <Pane fx:id="PanelAddEmpleados" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0" visible="false">
+         <children>
+            <GridPane alignment="CENTER" layoutX="242.0" layoutY="90.0" prefHeight="291.0" prefWidth="1052.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="50.0" GridPane.rowIndex="1">
+                     <children>
+                        <TextField fx:id="txtrecibir2" prefHeight="31.0" prefWidth="258.0" promptText="Puesto de trabajo" stylesheets="@css/darkmode.css" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="55.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Departamento" textFill="WHITE">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="70.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="txtDocumento2" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="91.0" prefWidth="526.0" spacing="50.0">
+                     <children>
+                        <TextField fx:id="txtempleado" prefHeight="74.0" prefWidth="406.0" promptText="Nombre empleado" stylesheets="@css/darkmode.css">
+                           <font>
+                              <Font size="34.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.rowIndex="2">
+                     <children>
+                        <Label text="Teléfono" textFill="WHITE">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="txtDocumento21" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="119.0" prefWidth="526.0" spacing="20.0" GridPane.rowIndex="3">
+                     <children>
+                        <Label prefHeight="61.0" prefWidth="145.0" text="Correo electrónico laboral" textAlignment="RIGHT" textFill="WHITE" wrapText="true">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="txtDocumento211" prefHeight="31.0" prefWidth="292.0" stylesheets="@css/darkmode.css" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="57.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Gerente" textFill="WHITE">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="115.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="txtDocumento22" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
+                     </children>
+                  </HBox>
+                  <ImageView fx:id="imgempleado" fitHeight="127.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                     <image>
+                        <Image url="@img/usuarioblanco.png" />
+                     </image>
+                  </ImageView>
+                  <Button id="btscrear" mnemonicParsing="false" onAction="#seleccionarimg" stylesheets="@css/darkmode.css" text="Selecionar" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Comic Sans MS Bold" size="15.0" />
+                     </font>
+                  </Button>
+               </children>
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="101.0" minHeight="10.0" prefHeight="101.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="65.0" minHeight="10.0" prefHeight="65.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="106.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="185.0" minHeight="10.0" prefHeight="73.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+            </GridPane>
+            <Label layoutX="40.0" layoutY="23.0" text="EMPLEADOS / NUEVO" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="22.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="imgperfil113" fitHeight="50.0" fitWidth="33.0" layoutX="6.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@img/atrasblanco.png" />
+               </image>
+            </ImageView>
+            <Button id="botonperfil" fx:id="btatras" layoutX="12.0" layoutY="17.0" mnemonicParsing="false" onAction="#pressatras" prefHeight="44.0" prefWidth="171.0" stylesheets="@css/darkmode.css" />
+            <Button id="btscrear" fx:id="btnCrearEmpleados" layoutX="1205.0" layoutY="24.0" mnemonicParsing="false" onAction="#pressbtnCrearEmpleados" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="14.0" />
+               </font>
+            </Button>
+            <TabPane layoutX="242.0" layoutY="402.0" prefHeight="291.0" prefWidth="934.0" stylesheets="@css/darkmode.css" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Información del Trabajo">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <Pane prefHeight="253.0" prefWidth="934.0">
+                                 <children>
+                                    <GridPane layoutY="-2.0" prefHeight="255.0" prefWidth="934.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="441.0" spacing="30.0" GridPane.rowIndex="3">
+                                             <children>
+                                                <Label text="Horas Laborales" textFill="WHITE">
+                                                   <font>
+                                                      <Font size="17.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <TextField fx:id="txtDocumento2121" prefHeight="31.0" prefWidth="135.0" promptText="40 horas/semana" stylesheets="@css/darkmode.css" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="441.0" spacing="20.0" GridPane.rowIndex="1">
+                                             <children>
+                                                <Label text="Dirección Laboral" textFill="WHITE">
+                                                   <font>
+                                                      <Font size="17.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <TextField fx:id="txtDocumento212" prefHeight="31.0" prefWidth="263.0" stylesheets="@css/darkmode.css" />
+                                             </children>
+                                          </HBox>
+                                          <Label prefHeight="23.0" prefWidth="102.0" text="UBICACIÓN" textAlignment="CENTER" textFill="WHITE">
+                                             <GridPane.margin>
+                                                <Insets left="20.0" />
+                                             </GridPane.margin>
+                                             <font>
+                                                <Font name="Comic Sans MS Bold" size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Separator maxWidth="-Infinity" prefHeight="0.0" prefWidth="300.0" valignment="BOTTOM">
+                                             <GridPane.margin>
+                                                <Insets left="10.0" top="30.0" />
+                                             </GridPane.margin>
+                                          </Separator>
+                                          <Separator maxWidth="-Infinity" prefHeight="0.0" prefWidth="300.0" valignment="BOTTOM" GridPane.rowIndex="2">
+                                             <padding>
+                                                <Insets left="10.0" top="30.0" />
+                                             </padding>
+                                          </Separator>
+                                          <Label prefHeight="23.0" prefWidth="102.0" text="HORARIO" textAlignment="CENTER" textFill="WHITE" GridPane.rowIndex="2">
+                                             <font>
+                                                <Font name="Comic Sans MS Bold" size="16.0" />
+                                             </font>
+                                             <GridPane.margin>
+                                                <Insets left="20.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </Pane>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="Información Privada">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <Pane prefHeight="253.0" prefWidth="934.0">
+                                 <children>
+                                    <GridPane prefHeight="255.0" prefWidth="934.0">
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="441.0" spacing="30.0" GridPane.rowIndex="5">
+                                             <children>
+                                                <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="441.0" spacing="20.0">
+                                                   <children>
+                                                      <Label text="Género" textFill="WHITE">
+                                                         <font>
+                                                            <Font size="17.0" />
+                                                         </font>
+                                                         <HBox.margin>
+                                                            <Insets left="9.0" />
+                                                         </HBox.margin>
+                                                      </Label>
+                                                      <TextField fx:id="txtDocumento21213" prefHeight="31.0" prefWidth="135.0" stylesheets="@css/darkmode.css" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="441.0" spacing="20.0" GridPane.rowIndex="1">
+                                             <children>
+                                                <Label text="Dirección Laboral" textFill="WHITE">
+                                                   <font>
+                                                      <Font size="17.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <TextField fx:id="txt6" prefHeight="31.0" prefWidth="263.0" stylesheets="@css/darkmode.css" />
+                                             </children>
+                                          </HBox>
+                                          <Label prefHeight="23.0" prefWidth="102.0" text="CONTACTO" textAlignment="CENTER" textFill="WHITE">
+                                             <font>
+                                                <Font name="Comic Sans MS Bold" size="16.0" />
+                                             </font>
+                                             <GridPane.margin>
+                                                <Insets left="20.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <Separator maxWidth="-Infinity" prefHeight="0.0" prefWidth="360.0" valignment="BOTTOM">
+                                             <GridPane.margin>
+                                                <Insets left="10.0" top="30.0" />
+                                             </GridPane.margin>
+                                          </Separator>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="441.0" spacing="20.0" GridPane.rowIndex="2">
+                                             <children>
+                                                <Label prefHeight="52.0" prefWidth="150.0" text="Número de Cuenta Bancaria" textAlignment="RIGHT" textFill="WHITE" wrapText="true">
+                                                   <font>
+                                                      <Font size="17.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="8.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <TextField fx:id="txt5" prefHeight="31.0" prefWidth="263.0" stylesheets="@css/darkmode.css" />
+                                             </children>
+                                          </HBox>
+                                          <Separator maxWidth="-Infinity" prefHeight="0.0" prefWidth="360.0" valignment="BOTTOM" GridPane.rowIndex="3">
+                                             <GridPane.margin>
+                                                <Insets left="10.0" top="30.0" />
+                                             </GridPane.margin>
+                                          </Separator>
+                                          <Label prefHeight="23.0" prefWidth="130.0" text="CIUDADANÍA" textAlignment="CENTER" textFill="WHITE" GridPane.rowIndex="3">
+                                             <font>
+                                                <Font name="Comic Sans MS Bold" size="16.0" />
+                                             </font>
+                                             <GridPane.margin>
+                                                <Insets left="20.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="441.0" spacing="20.0" GridPane.rowIndex="4">
+                                             <children>
+                                                <Label text="DNI" textFill="WHITE">
+                                                   <font>
+                                                      <Font size="17.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <TextField fx:id="txtDocumento21212" prefHeight="31.0" prefWidth="175.0" stylesheets="@css/darkmode.css" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="441.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                             <children>
+                                                <Label text="Fecha de nacimiento" textFill="WHITE">
+                                                   <font>
+                                                      <Font size="17.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <DatePicker fx:id="dateReferencia2" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                    </GridPane>
+                                 </children></Pane>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+         </children>
+      </Pane>
+      <Pane fx:id="PanelEditEmpleados" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0" visible="false">
+         <children>
+            <GridPane alignment="CENTER" layoutX="242.0" layoutY="90.0" prefHeight="291.0" prefWidth="1052.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="50.0" GridPane.rowIndex="1">
+                     <children>
+                        <TextField fx:id="txtrecibir21" prefHeight="31.0" prefWidth="258.0" promptText="Puesto de trabajo" stylesheets="@css/darkmode.css" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="55.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Departamento" textFill="WHITE">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="70.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="txt1" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="91.0" prefWidth="526.0" spacing="50.0">
+                     <children>
+                        <TextField fx:id="txtempleado1" prefHeight="74.0" prefWidth="406.0" promptText="Nombre empleado" stylesheets="@css/darkmode.css">
+                           <font>
+                              <Font size="34.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.rowIndex="2">
+                     <children>
+                        <Label text="Teléfono" textFill="WHITE">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="txt2" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="119.0" prefWidth="526.0" spacing="20.0" GridPane.rowIndex="3">
+                     <children>
+                        <Label prefHeight="61.0" prefWidth="145.0" text="Correo electrónico laboral" textAlignment="RIGHT" textFill="WHITE" wrapText="true">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="txtDocumento2111" prefHeight="31.0" prefWidth="292.0" stylesheets="@css/darkmode.css" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="57.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Gerente" textFill="WHITE">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="115.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="txtDocumento221" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
+                     </children>
+                  </HBox>
+                  <ImageView fx:id="imgempleado1" fitHeight="127.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                     <image>
+                        <Image url="@img/usuarioblanco.png" />
+                     </image>
+                  </ImageView>
+                  <Button id="btscrear" mnemonicParsing="false" onAction="#seleccionarimg" stylesheets="@css/darkmode.css" text="Selecionar" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Comic Sans MS Bold" size="15.0" />
+                     </font>
+                  </Button>
+               </children>
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="101.0" minHeight="10.0" prefHeight="101.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="65.0" minHeight="10.0" prefHeight="65.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="106.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="185.0" minHeight="10.0" prefHeight="73.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+            </GridPane>
+            <Label layoutX="40.0" layoutY="23.0" text="EMPLEADOS / EDITAR" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="22.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="imgperfil1131" fitHeight="50.0" fitWidth="33.0" layoutX="6.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@img/atrasblanco.png" />
+               </image>
+            </ImageView>
+            <Button id="botonperfil" fx:id="btatras1" layoutX="12.0" layoutY="17.0" mnemonicParsing="false" onAction="#pressatras" prefHeight="44.0" prefWidth="171.0" stylesheets="@css/darkmode.css" />
+            <Button id="btscrear" fx:id="btnCrearEmpleados1" layoutX="1205.0" layoutY="24.0" mnemonicParsing="false" onAction="#pressbtnCrearEmpleados" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="14.0" />
+               </font>
+            </Button>
+            <TabPane layoutX="242.0" layoutY="402.0" prefHeight="291.0" prefWidth="934.0" stylesheets="@css/darkmode.css" tabClosingPolicy="UNAVAILABLE">
+               <tabs>
+                  <Tab text="Información del Trabajo">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <Pane prefHeight="253.0" prefWidth="934.0">
+                                 <children>
+                                    <GridPane layoutY="-2.0" prefHeight="255.0" prefWidth="934.0">
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="441.0" spacing="30.0" GridPane.rowIndex="3">
+                                             <children>
+                                                <Label text="Horas Laborales" textFill="WHITE">
+                                                   <font>
+                                                      <Font size="17.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <TextField fx:id="txt3" prefHeight="31.0" prefWidth="135.0" promptText="40 horas/semana" stylesheets="@css/darkmode.css" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="441.0" spacing="20.0" GridPane.rowIndex="1">
+                                             <children>
+                                                <Label text="Dirección Laboral" textFill="WHITE">
+                                                   <font>
+                                                      <Font size="17.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <TextField fx:id="txt4" prefHeight="31.0" prefWidth="263.0" stylesheets="@css/darkmode.css" />
+                                             </children>
+                                          </HBox>
+                                          <Label prefHeight="23.0" prefWidth="102.0" text="UBICACIÓN" textAlignment="CENTER" textFill="WHITE">
+                                             <font>
+                                                <Font name="Comic Sans MS Bold" size="16.0" />
+                                             </font>
+                                             <GridPane.margin>
+                                                <Insets left="20.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <Separator maxWidth="-Infinity" prefHeight="0.0" prefWidth="300.0" valignment="BOTTOM">
+                                             <GridPane.margin>
+                                                <Insets left="10.0" top="30.0" />
+                                             </GridPane.margin>
+                                          </Separator>
+                                          <Separator maxWidth="-Infinity" prefHeight="0.0" prefWidth="300.0" valignment="BOTTOM" GridPane.rowIndex="2">
+                                             <padding>
+                                                <Insets left="10.0" top="30.0" />
+                                             </padding>
+                                          </Separator>
+                                          <Label prefHeight="23.0" prefWidth="102.0" text="HORARIO" textAlignment="CENTER" textFill="WHITE" GridPane.rowIndex="2">
+                                             <font>
+                                                <Font name="Comic Sans MS Bold" size="16.0" />
+                                             </font>
+                                             <GridPane.margin>
+                                                <Insets left="20.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                       </children>
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                    </GridPane>
+                                 </children>
+                              </Pane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab text="Información Privada">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <Pane prefHeight="253.0" prefWidth="934.0">
+                                 <children>
+                                    <GridPane prefHeight="255.0" prefWidth="934.0">
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="441.0" spacing="30.0" GridPane.rowIndex="5">
+                                             <children>
+                                                <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="441.0" spacing="20.0">
+                                                   <children>
+                                                      <Label text="Género" textFill="WHITE">
+                                                         <font>
+                                                            <Font size="17.0" />
+                                                         </font>
+                                                         <HBox.margin>
+                                                            <Insets left="9.0" />
+                                                         </HBox.margin>
+                                                      </Label>
+                                                      <TextField fx:id="txtDocumento212131" prefHeight="31.0" prefWidth="135.0" stylesheets="@css/darkmode.css" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="441.0" spacing="20.0" GridPane.rowIndex="1">
+                                             <children>
+                                                <Label text="Dirección Laboral" textFill="WHITE">
+                                                   <font>
+                                                      <Font size="17.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <TextField fx:id="txtDocumento21211" prefHeight="31.0" prefWidth="263.0" stylesheets="@css/darkmode.css" />
+                                             </children>
+                                          </HBox>
+                                          <Label prefHeight="23.0" prefWidth="102.0" text="CONTACTO" textAlignment="CENTER" textFill="WHITE">
+                                             <font>
+                                                <Font name="Comic Sans MS Bold" size="16.0" />
+                                             </font>
+                                             <GridPane.margin>
+                                                <Insets left="20.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <Separator maxWidth="-Infinity" prefHeight="0.0" prefWidth="360.0" valignment="BOTTOM">
+                                             <GridPane.margin>
+                                                <Insets left="10.0" top="30.0" />
+                                             </GridPane.margin>
+                                          </Separator>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="441.0" spacing="20.0" GridPane.rowIndex="2">
+                                             <children>
+                                                <Label prefHeight="52.0" prefWidth="150.0" text="Número de Cuenta Bancaria" textAlignment="RIGHT" textFill="WHITE" wrapText="true">
+                                                   <font>
+                                                      <Font size="17.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="8.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <TextField fx:id="txtDocumento212111" prefHeight="31.0" prefWidth="263.0" stylesheets="@css/darkmode.css" />
+                                             </children>
+                                          </HBox>
+                                          <Separator maxWidth="-Infinity" prefHeight="0.0" prefWidth="360.0" valignment="BOTTOM" GridPane.rowIndex="3">
+                                             <GridPane.margin>
+                                                <Insets left="10.0" top="30.0" />
+                                             </GridPane.margin>
+                                          </Separator>
+                                          <Label prefHeight="23.0" prefWidth="130.0" text="CIUDADANÍA" textAlignment="CENTER" textFill="WHITE" GridPane.rowIndex="3">
+                                             <font>
+                                                <Font name="Comic Sans MS Bold" size="16.0" />
+                                             </font>
+                                             <GridPane.margin>
+                                                <Insets left="20.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="441.0" spacing="20.0" GridPane.rowIndex="4">
+                                             <children>
+                                                <Label text="DNI" textFill="WHITE">
+                                                   <font>
+                                                      <Font size="17.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <TextField fx:id="txtDocumento212121" prefHeight="31.0" prefWidth="175.0" stylesheets="@css/darkmode.css" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="441.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                             <children>
+                                                <Label text="Fecha de nacimiento" textFill="WHITE">
+                                                   <font>
+                                                      <Font size="17.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <DatePicker fx:id="dateReferencia21" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                    </GridPane>
+                                 </children>
+                              </Pane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+               </tabs>
+            </TabPane>
          </children>
       </Pane>
    </children>
