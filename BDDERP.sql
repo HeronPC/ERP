@@ -13,6 +13,8 @@ Estado VARCHAR(100)
 
 SELECT Contacto, Referencia, FechaPrevista, Documento, Estado FROM recepciones;
 
+Select Producto, Cantidad from productosrec WHERE referencia = "HSJF";
+
 CREATE OR REPLACE TABLE devoluciones(
 Referencia VARCHAR(15) PRIMARY KEY,
 Proveedor VARCHAR(50),
@@ -40,3 +42,8 @@ REFERENCES Recepciones (Referencia)
 ON UPDATE CASCADE
 ON DELETE CASCADE
 );
+
+INSERT INTO recepciones VALUES ("HSJF", "IKEA", '2020-03-04', "agfg.pdf", "ikeasupport@gmail.com", "En camino");
+
+INSERT INTO productosrec VALUES ("HSJF", "Mueble", 54);
+INSERT INTO productosrec VALUES ("HSJF", "Silla", 34);

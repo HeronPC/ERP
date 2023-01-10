@@ -3,6 +3,7 @@ module sge.proyectoerp {
     requires javafx.fxml;
     requires java.sql;
     requires javafx.swing;
+    requires mysql.connector.java;
 
 
     opens sge.proyectoerp to javafx.fxml;

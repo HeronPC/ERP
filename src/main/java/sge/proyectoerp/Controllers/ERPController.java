@@ -39,7 +39,7 @@ public class ERPController {
     private Button btnCrearRecepciones;
 
     @FXML
-    private TableColumn<?, ?> CantidadColum;
+    private TableColumn<Recepciones, Integer> CantidadColum;
 
     @FXML
     private ImageView imgempleado1;
@@ -267,7 +267,7 @@ public class ERPController {
     private TableColumn<?, ?> contactocolumn;
 
     @FXML
-    private TableColumn<?, ?> ProductoColum;
+    private TableColumn<Recepciones, String> ProductoColum;
 
     @FXML
     private Pane BarraSuperior;
@@ -645,29 +645,92 @@ public class ERPController {
         } else if (PanelEmpleados.isVisible()) {
             cambiarpanel(PanelEmpleados, PanelAddEmpleados);
         }
-
     }
 
     @FXML
     void selectInventario() {
+        //Definimos el campo de conexion como null
+        Connection conexion = null;
+        //Ejecutamos dentro de un try para controlar las excepciones
+        try {
+            tableRecepciones.getItems().clear();
+            //Creamos un paciente con los datos extraidos del campo seleccionado de la tabla
+            Recepciones rec = tableInventarioRecep.getSelectionModel().getSelectedItem();
+            //Creamos la conexion
+            conexion = DriverManager.getConnection(cadconexion, user, pswd);
+            //Creamos el correspondiente Statement con nuestra conexion anterior
+            Statement st = conexion.createStatement();
+            //Creamos la consulta
+            String consulta = "Select * from productosrec";
+            //Guardamos dentro del ResulSet la ejecucion de la consulta con la conexion anterior
+            ResultSet rs = st.executeQuery(consulta);
+            String consulta2 = "Select * from recepciones";
 
+            ObservableList<Recepciones> obsrec = FXCollections.observableArrayList();
+
+            while (rs.next()) {
+                if(Objects.equals(rec.getReferencia(), rs.getString(1))){
+                    //Rellenamos los datos de los pacientes con sus respectivos campos
+                    obsrec.add(new Recepciones(rs.getString(2),
+                            rs.getInt(3)
+                    ));
+                    ProductoColum.setCellValueFactory(new PropertyValueFactory<>("nombreproducto"));
+                    CantidadColum.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+                    txtProducto.setText(rs.getString(2));
+                    txtCantidad.setText(String.valueOf(rs.getInt(3)));
+                    tableRecepciones.setItems(obsrec);
+                    tableRecepciones.refresh();
+                }
+            }
+            ResultSet rs2 = st.executeQuery(consulta2);
+            while(rs2.next()){
+                if (Objects.equals(rs2.getString(1), rec.getReferencia())) {
+                    txtReferencia.setText(rec.getReferencia());
+                    txtrecibir.setText(rs2.getString(2));
+                    dateReferencia.setValue(rs2.getDate(3).toLocalDate());
+                    txtDocumento.setText(rs2.getString(4));
+                }
+            }
+
+            cambiarpanel(panelactual, PanelAddRecepciones);
+            //Controlamos las excepciones con los catch
+        } catch (NullPointerException pi) {
+            System.out.print("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //Comprobamos que la conexion sea null, en caso de que no lo sea la cerramos
+            try {
+                assert conexion != null;
+                conexion.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
     void selectRecepciones() {
+        //Definimos el campo de conexion como null
+        Connection conexion = null;
         //Ejecutaremos el codigo dentro de un try para controlar las excepciones
         try {
             //Creamos un médico con los datos selecionados de la tabla
             Recepciones rec = tableRecepciones.getSelectionModel().getSelectedItem();
+            //Creamos la conexion
+            conexion = DriverManager.getConnection(cadconexion, user, pswd);
+            //Creamos el Statement con la conexion
+            Statement st = conexion.createStatement();
+            //Creamos la consulta
+            String consulta = "Select Producto, Cantidad from productosrec";
+            //Guardamos dentro del ResulSet la ejecucion de la consulta con la conexion anterior
+            ResultSet rs = st.executeQuery(consulta);
             //Con un if comprobamos que los datos sean validos
-            for (Recepciones listrecepcione : listrecepciones) {
-                if (Objects.equals(listrecepcione.getNombreproducto(), rec.getNombreproducto())) {
-                    txtReferencia.setText(rec.getReferencia());
-                    txtrecibir.setText(rec.getRecibir());
-                    dateReferencia.setValue(rec.getDateReferencia());
-                    txtDocumento.setText(rec.getDocorigen());
-                    txtProducto.setText(rec.getNombreproducto());
-                    txtCantidad.setText(String.valueOf(rec.getCantidad()));
+            while (rs.next()){
+                if(Objects.equals(rs.getString(1), rec.getNombreproducto())){
+                    txtProducto.setText(rs.getString(1));
+                    txtCantidad.setText(String.valueOf(rs.getInt(2)));
+                    break;
                 }
             }
             //Controlamos las excepciones mostrandolas por la terminal
@@ -720,7 +783,7 @@ public class ERPController {
         }
     }
 
-    void rellenartablaRecepciones(){
+    void rellenartablaRecepciones() {
         Connection conexion = null;
         //Ejecutamos el código en un try para controlar las excepciones
         try {

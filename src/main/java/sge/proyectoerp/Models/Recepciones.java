@@ -37,6 +37,22 @@ public class Recepciones {
         this.cantidad = cantidad;
     }
 
+    public String getContacto() {
+        return contacto;
+    }
+
+    public void setContacto(String contacto) {
+        this.contacto = contacto;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
     public String getReferencia() {
         return referencia;
     }
