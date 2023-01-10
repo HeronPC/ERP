@@ -1,0 +1,476 @@
+@FXML
+    void seleccionarimg(){
+        // Agregar filtros para facilitar la busqueda
+        fil_chooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Images", "*.*"),
+                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                new FileChooser.ExtensionFilter("PNG", "*.png")
+        );
+        // Obtener la imagen seleccionada
+        File file = fil_chooser.showOpenDialog(selec);
+        // Mostar la imagen
+        if (file != null) {
+            image = file.getPath();
+            imagenem = new Image(image);
+            imgempleado.setImage(imagenem);
+        }
+    }
+    //Metodo que crea los paneles de cada empleado
+
+    @FXML
+    void pressbtnCrearEmpleados() {
+        cambiarpanel(panelactual,PanelEmpleados);
+        String nomempleado = String.valueOf(txtNombreEmpleado.getText());//Esto es una mera prueba para que obtenga el nombre del ultimo empleado añadido, deberas cambiarlo para que obtenga el de la base de datos
+        SwingNode node = new SwingNode();
+        JPanel newpane = new JPanel(new BorderLayout());//Creamos el panel que se va a añadir multiples veces
+        newpane.setBorder(new EmptyBorder(10, 10, 10, 10));
+        newpane.setBackground(new java.awt.Color(41, 45, 45));
+        JLabel nombreempleado = new JLabel(nomempleado);//Aqui aparecerá el nombre de los empleados con respecto a la base de datos
+        nombreempleado.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
+        nombreempleado.setForeground (Color.white);
+        JLabel imagen = new JLabel();
+        imagen.setBorder(new EmptyBorder(10, 10, 10, 10));
+        ImageIcon icono= new ImageIcon(image);//establece la dirección url de la imagen de perfil del empleado, debera cambiar respecto a la base de datos
+        java.awt.Image newimg = icono.getImage().getScaledInstance(54, 61,  java.awt.Image.SCALE_SMOOTH);//Redimensiona la imagen
+        icono = new ImageIcon(newimg);
+        imagen.setIcon(icono);
+        JPanel btpane = new JPanel(new GridLayout(2,1));
+        JButton bteliminar = new JButton();
+        bteliminar.setBackground(new java.awt.Color(41, 45, 45));
+        ImageIcon iconoeliminar= new ImageIcon("src/main/resources/sge/proyectoerp/img/eliminar.png");
+        java.awt.Image newimgeliminar = iconoeliminar.getImage().getScaledInstance(7, 7,  java.awt.Image.SCALE_SMOOTH);
+        iconoeliminar = new ImageIcon(newimgeliminar);
+        bteliminar.setIcon(iconoeliminar);
+        JButton bteditar = new JButton();
+        bteditar.setBackground(new java.awt.Color(41, 45, 45));
+        ImageIcon iconoeditar = new ImageIcon("src/main/resources/sge/proyectoerp/img/lapiz.png");
+        java.awt.Image newimgeditar = iconoeditar.getImage().getScaledInstance(7, 7,  java.awt.Image.SCALE_SMOOTH);
+        iconoeditar = new ImageIcon(newimgeditar);
+        bteditar.setIcon(iconoeditar);
+        btpane.add(bteliminar);
+        btpane.add(bteditar);
+        bteditar.addActionListener(ed -> cambiarpanel(PanelEmpleados,PanelEditEmpleados));
+        bteliminar.addActionListener(e -> {
+            //pressbtnCrearEmpleados();
+            //Eliminar de la base de datos el nombre de la persona que es el id el boton pulsado y usar la funcion para que se vuelva a rellenar el gridpane
+        });
+        //Establecemos la posicion en el panel de cada objeto
+        newpane.add(btpane, BorderLayout.EAST);
+        newpane.add(imagen,BorderLayout.WEST);
+        newpane.add(nombreempleado,BorderLayout.CENTER);
+        newpane.setVisible(true);
+        bteditar.setName("bted"+txtNombreEmpleado.getText());
+        bteliminar.setName("btel"+txtNombreEmpleado.getText());//Debe obtener el nombre de cada empleado de la bse de datos para su posterior eliminacion
+        newpane.setName("panel"+counter);//El nombre de cada panel sera panel+numero de panel
+        node.setContent(newpane);//Añade el contenido al nodeswing
+        node.setId("node"+nomempleado);//Cambia el nombre del nodo con respecto al nombre del empleado, deberas hacer que cambie con los nombres que vaya cogiendo de la base de datos
+        Pempleados.add(node,cols,filas);//Va añadiendo los nodeswing al gridpane sumando filas y columnas
+        if(cols==4){
+            cols=-1;
+            filas++;
+        }
+        if(filas==5 && cols==5){}//debes deshabilitar el método cuandotodo el gripane esta lleno
+        cols++;
+        counter++;
+    }
+    //Lo usaremos para informar al usuario mediante ventanas emergentes, podemos establecer el mensaje pasándoselo por
+    //parámetros
+    void crearalertainfo(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.setTitle("Info");
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    //Lo usaremos para informar al usuario de errores mediante ventanas emergentes, podemos establecer el mensaje
+    //pasándoselo por parámetros
+    void crearalertaerror(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(null);
+        alert.setTitle("Error");
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+
+    @FXML
+    void presscuenta() {
+
+    }
+
+    @FXML
+    void pressMenu() {
+        if (panelactual != PanelMenuPrincipal) {
+            if (PanelMenuPrincipal.isVisible()) {
+                PanelMenuPrincipal.setVisible(false);
+                panelactual.setVisible(true);
+            } else if (!PanelMenuPrincipal.isVisible()) {
+                PanelMenuPrincipal.setVisible(true);
+                panelactual.setVisible(false);
+                txtidpagina.setText("");
+            }
+        } else {
+            PanelMenuPrincipal.setVisible(true);
+        }
+    }
+    @FXML
+    void pressatras() {
+        if(PanelRecepciones.isVisible()||PanelExpediciones.isVisible()||PanelDevoluciones.isVisible()){
+            cambiarpanel(panelactual, PanelInventarioInicial);
+            dateReferencia.setValue(LocalDate.now());
+            listrecepciones.clear();
+        } else if (PanelAddRecepciones.isVisible()) {cambiarpanel(panelactual, PanelRecepciones);
+        }else if (PanelAddExpediciones.isVisible()) {cambiarpanel(panelactual, PanelExpediciones);
+        }else if (PanelAddDevoluciones.isVisible()) {cambiarpanel(panelactual,PanelDevoluciones);
+        }else if (PanelAddEmpleados.isVisible() || PanelEditEmpleados.isVisible()) {cambiarpanel(panelactual,PanelEmpleados);
+        }
+    }
+
+    @FXML
+    void pressbtncrearExpediciones() {
+
+    }
+
+    @FXML
+    void SelectExpediciones() {
+
+    }
+
+    @FXML
+    void selectExpediciones() {
+        //Ejecutaremos el codigo dentro de un try para controlar las excepciones
+        try {
+            //Creamos un médico con los datos selecionados de la tabla
+            Devoluciones dev = tableDevoluciones.getSelectionModel().getSelectedItem();
+            //Con un if comprobamos que los datos sean validos
+            for (int i = 0; i < listdevoluciones.size(); i++) {
+                if(Objects.equals(listdevoluciones.get(i).getNombreproducto(), dev.getNombreproducto())){
+                    txtRecibirDevoluciones.setText(dev.getRecibir());
+                    dateDevoluciones.setValue(dev.getDateReferencia());
+                    cbtipoDevoluciones.getSelectionModel().select(dev.getTipo());
+                    txtDocDevoluciones.setText(dev.getDocorigen());
+                    txtProductoDevoluciones.setText(dev.getNombreproducto());
+                    txtCantidadDevoluciones.setText(String.valueOf(dev.getCantidad()));
+                }
+            }
+            //Controlamos las excepciones mostrandolas por la terminal
+        } catch (NullPointerException pi) {
+            System.out.print("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void pressbtnExpAdd() {
+
+    }
+
+    @FXML
+    void pressbtncrearDevoluciones() {
+        //Parseamos la fecha
+        String fecha = dateDevoluciones.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate localdate = parse(fecha);
+
+        listdevoluciones.add(new Devoluciones(txtRecibirDevoluciones.getText(),
+                localdate,
+                cbtipoDevoluciones.getSelectionModel().getSelectedItem(),
+                txtDocDevoluciones.getText(),
+                txtProductoDevoluciones.getText(),
+                Integer.parseInt(txtCantidadDevoluciones.getText())));
+
+        tableDevoluciones.getItems().removeAll();
+        ObservableList<Devoluciones> obsdev = FXCollections.observableArrayList();
+
+        ColumProductDevoluciones.setCellValueFactory(new PropertyValueFactory<>("nombreproducto"));
+        ColumCantidadDevoluciones.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+
+        obsdev.setAll(listdevoluciones);
+        tableDevoluciones.setItems(obsdev);
+        tableDevoluciones.refresh();
+    }
+
+    @FXML
+    void SelectDevoluciones() {
+
+    }
+
+    @FXML
+    void selectDevoluciones() {
+        //Ejecutaremos el codigo dentro de un try para controlar las excepciones
+        try {
+            //Creamos un médico con los datos selecionados de la tabla
+            Recepciones rec = tableRecepciones.getSelectionModel().getSelectedItem();
+            //Con un if comprobamos que los datos sean validos
+            for (int i = 0; i < listrecepciones.size(); i++) {
+                if(Objects.equals(listrecepciones.get(i).getNombreproducto(), rec.getNombreproducto())){
+                    txtReferencia.setText(rec.getReferencia());
+                    txtrecibir.setText(rec.getRecibir());
+                    dateReferencia.setValue(rec.getDateReferencia());
+                    txtDocumento.setText(rec.getDocorigen());
+                    txtProducto.setText(rec.getNombreproducto());
+                    txtCantidad.setText(String.valueOf(rec.getCantidad()));
+                }
+            }
+            //Controlamos las excepciones mostrandolas por la terminal
+        } catch (NullPointerException pi) {
+            System.out.print("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void pressbtncrearEmpleados() {
+
+    }
+
+    @FXML
+    void selectDepartamentos() {
+
+    }
+
+
+    @FXML
+    void pressbtnEditarEmpleados() {
+
+    }
+
+    @FXML
+    void pressbtventas() {
+    }
+
+    @FXML
+    void pressbtcompras() {
+
+    }
+
+    @FXML
+    void pressbtInventario() {
+        cambiarpanel(PanelMenuPrincipal, PanelInventarioInicial);
+        txtidpagina.setText("INVENTARIO");
+    }
+
+    @FXML
+    void pressbtfacturacion() {
+
+    }
+
+    @FXML
+    void pressbtempleados() {
+        cambiarpanel(PanelMenuPrincipal, PanelEmpleados);
+        txtidpagina.setText("EMPLEADOS");
+    }
+
+    private void cambiarpanel(Pane panel1, Pane panel2) {
+        panel1.setVisible(false);
+        panel2.setVisible(true);
+        panelactual = panel2;
+    }
+
+    @FXML
+    void pressRecepciones() {
+        cambiarpanel(PanelInventarioInicial, PanelRecepciones);
+    }
+
+    @FXML
+    void pressExpediciones() {
+        cambiarpanel(PanelInventarioInicial, PanelExpediciones);
+    }
+
+    @FXML
+    void pressDevoluciones() {cambiarpanel(PanelInventarioInicial, PanelDevoluciones);}
+
+    @FXML
+    void pressbtncrear() {
+        if(PanelRecepciones.isVisible()){
+            cambiarpanel(PanelRecepciones, PanelAddRecepciones);
+            dateReferencia.setValue(LocalDate.now());
+            listrecepciones.clear();
+        }else if(PanelExpediciones.isVisible()){
+            cambiarpanel(PanelExpediciones, PanelAddExpediciones);
+        } else if (PanelDevoluciones.isVisible()) {
+            cambiarpanel(PanelDevoluciones, PanelAddDevoluciones);
+        } else if(PanelEmpleados.isVisible()){
+            cambiarpanel(PanelEmpleados,PanelAddEmpleados);
+        }
+
+    }
+
+    @FXML
+    void selectInventario() {
+
+    }
+
+    @FXML
+    void selectRecepciones() {
+        //Ejecutaremos el codigo dentro de un try para controlar las excepciones
+        try {
+            //Creamos un médico con los datos selecionados de la tabla
+            Recepciones rec = tableRecepciones.getSelectionModel().getSelectedItem();
+            //Con un if comprobamos que los datos sean validos
+            for (int i = 0; i < listrecepciones.size(); i++) {
+                if(Objects.equals(listrecepciones.get(i).getNombreproducto(), rec.getNombreproducto())){
+                    txtReferencia.setText(rec.getReferencia());
+                    txtrecibir.setText(rec.getRecibir());
+                    dateReferencia.setValue(rec.getDateReferencia());
+                    txtDocumento.setText(rec.getDocorigen());
+                    txtProducto.setText(rec.getNombreproducto());
+                    txtCantidad.setText(String.valueOf(rec.getCantidad()));
+                }
+            }
+            //Controlamos las excepciones mostrandolas por la terminal
+        } catch (NullPointerException pi) {
+            System.out.print("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void pressbtnCrearRecepciones() {
+        //Creamos conexión null por si tuviéramos otra conexión cerrarla
+        Connection conexion = null;
+        //Ejecutamos dentro de un try para controlar todas las excepciones posibles
+        try {
+            //Creamos la conexión con la base de datos
+            conexion = DriverManager.getConnection(cadconexionps, user, pswd);
+            //Utilizamos un PreparedStatement para la consulta para mayor seguridad
+            PreparedStatement ps = conexion.prepareStatement("insert into Recepciones values (?, ?, ?, ?, ?, ?)");
+
+            for (int i = 0; i < listrecepciones.size()-1; i++) {
+                ps.setString(1, listrecepciones.get(i).getReferencia());
+                ps.setString(2, listrecepciones.get(i).getRecibir());
+
+                //Parseamos la fecha
+                String fecha = listrecepciones.get(i).getDateReferencia().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                LocalDate localdate = parse(fecha);
+
+                ps.setDate(3, Date.valueOf(localdate));
+                ps.setString(4, listrecepciones.get(i).getDocorigen());
+                ps.setString(5, listrecepciones.get(i).getNombreproducto());
+                ps.setInt(6, listrecepciones.get(i).getCantidad());
+            }
+
+            //Creamos una ventana de confirmacion para la modificacion del ingreso
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Confirmación");
+            alert.setContentText("Recuerde presionar en añadir producto para completar la insercion del producto");
+            Optional<ButtonType> action = alert.showAndWait();
+            //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+            if (action.orElseThrow() == ButtonType.OK) {
+                ps.executeUpdate();
+                crearalertainfo("Recepcion creada");
+                cambiarpanel(PanelAddRecepciones, PanelRecepciones);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    void pressbtnRecepcionesAdd() {
+        //Parseamos la fecha
+        String fecha = dateReferencia.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate localdate = parse(fecha);
+
+
+        listrecepciones.add(new Recepciones(txtReferencia.getText(), txtrecibir.getText(), localdate,
+                txtDocumento.getText(), txtProducto.getText(), Integer.parseInt(txtCantidad.getText())));
+
+        tableRecepciones.getItems().removeAll();
+        ObservableList<Recepciones> obsrec = FXCollections.observableArrayList();
+
+        ProductoColum.setCellValueFactory(new PropertyValueFactory<>("nombreproducto"));
+        CantidadColum.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+
+        obsrec.setAll(listrecepciones);
+        tableRecepciones.setItems(obsrec);
+        tableRecepciones.refresh();
+    }
+    @FXML
+    void pressbtnCrearExpediciones() {
+        //Creamos conexión null por si tuviéramos otra conexión cerrarla
+        Connection conexion = null;
+        //Ejecutamos dentro de un try para controlar todas las excepciones posibles
+        try {
+            //Creamos la conexión con la base de datos
+            conexion = DriverManager.getConnection(cadconexionps, user, pswd);
+            //Utilizamos un PreparedStatement para la consulta para mayor seguridad
+            PreparedStatement ps = conexion.prepareStatement("insert into expediciones values (?, ?, ?, ?, ?, ?)");
+
+            for (int i = 0; i < listrecepciones.size()-1; i++) {
+                ps.setString(1, listrecepciones.get(i).getReferencia());
+                ps.setString(2, listrecepciones.get(i).getRecibir());
+
+                //Parseamos la fecha
+                String fecha = listrecepciones.get(i).getDateReferencia().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                LocalDate localdate = parse(fecha);
+
+                ps.setDate(3, Date.valueOf(localdate));
+                ps.setString(4, listrecepciones.get(i).getDocorigen());
+                ps.setString(5, listrecepciones.get(i).getNombreproducto());
+                ps.setInt(6, listrecepciones.get(i).getCantidad());
+            }
+
+            //Creamos una ventana de confirmacion para la modificacion del ingreso
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Confirmación");
+            alert.setContentText("Recuerde presionar en añadir producto para completar la insercion del producto");
+            Optional<ButtonType> action = alert.showAndWait();
+            //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+            if (action.orElseThrow() == ButtonType.OK) {
+                ps.executeUpdate();
+                crearalertainfo("Recepcion creada");
+                cambiarpanel(PanelAddRecepciones, PanelRecepciones);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void pressbtnCrearDevoluciones() {
+        //Creamos conexión null por si tuviéramos otra conexión cerrarla
+        Connection conexion = null;
+        //Ejecutamos dentro de un try para controlar todas las excepciones posibles
+        try {
+            //Creamos la conexión con la base de datos
+            conexion = DriverManager.getConnection(cadconexionps, user, pswd);
+            //Utilizamos un PreparedStatement para la consulta para mayor seguridad
+            PreparedStatement ps = conexion.prepareStatement("insert into Devoluciones values (?, ?, ?, ?, ?, ?)");
+
+            for (int i = 0; i < listdevoluciones.size()-1; i++) {
+                ps.setString(1, listdevoluciones.get(i).getRecibir());
+
+                //Parseamos la fecha
+                String fecha = listdevoluciones.get(i).getDateReferencia().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                LocalDate localdate = parse(fecha);
+
+                ps.setDate(2, Date.valueOf(localdate));
+                ps.setString(3, cbtipoDevoluciones.getSelectionModel().getSelectedItem());
+                ps.setString(4, listdevoluciones.get(i).getDocorigen());
+                ps.setString(5, listdevoluciones.get(i).getNombreproducto());
+                ps.setInt(6, listdevoluciones.get(i).getCantidad());
+            }
+
+            //Creamos una ventana de confirmacion para la modificacion del ingreso
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Confirmación");
+            alert.setContentText("Recuerde presionar en añadir producto para completar la insercion del producto");
+            Optional<ButtonType> action = alert.showAndWait();
+            //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+            if (action.orElseThrow() == ButtonType.OK) {
+                ps.executeUpdate();
+                crearalertainfo("Devolucion creada");
+                cambiarpanel(PanelAddDevoluciones, PanelDevoluciones);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
