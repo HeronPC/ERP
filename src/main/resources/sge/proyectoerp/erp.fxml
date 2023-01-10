@@ -41,7 +41,7 @@
             </Label>
          </children>
       </Pane>
-      <Pane fx:id="PanelMenuPrincipal" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0" visible="false">
+      <Pane fx:id="PanelMenuPrincipal" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0">
          <children>
             <GridPane alignment="CENTER" layoutX="254.0" layoutY="86.0" prefHeight="489.0" prefWidth="1043.0">
               <columnConstraints>
@@ -159,7 +159,7 @@
                   <Font name="Comic Sans MS Bold" size="14.0" />
                </font>
             </Button>
-            <TableView fx:id="tableInventario" layoutX="158.0" layoutY="158.0" onMouseClicked="#selectInventario" prefHeight="519.0" prefWidth="1235.0" stylesheets="@css/darkmode.css">
+            <TableView fx:id="tableInventarioRecep" layoutX="158.0" layoutY="158.0" onMouseClicked="#selectInventario" prefHeight="519.0" prefWidth="1235.0" stylesheets="@css/darkmode.css">
               <columns>
                 <TableColumn fx:id="contactocolumn" editable="false" prefWidth="154.0" sortable="false" styleClass="celdas" text="Contacto" />
                 <TableColumn id="celdas" fx:id="Referenciacolumn" prefWidth="75.0" text="Referencia" />
@@ -362,19 +362,7 @@
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="91.0" prefWidth="526.0" spacing="50.0" />
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="55.0" GridPane.rowIndex="2">
-                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Tipo de operación" textFill="WHITE">
-                           <font>
-                              <Font size="17.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="70.0" />
-                           </HBox.margin>
-                        </Label>
-                        <ComboBox fx:id="cbTipoExp" prefWidth="150.0" stylesheets="@css/darkmode.css" />
-                     </children>
-                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="55.0" GridPane.rowIndex="2" />
                </children>
                <columnConstraints>
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -452,7 +440,7 @@
             <Button id="botonperfil" fx:id="btnVolverDevoluciones" layoutX="7.0" layoutY="17.0" mnemonicParsing="false" onAction="#pressatras" prefHeight="44.0" prefWidth="185.0" stylesheets="@css/darkmode.css" />
          </children>
       </Pane>
-      <Pane fx:id="PanelAddDevoluciones" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0">
+      <Pane fx:id="PanelAddDevoluciones" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0" visible="false">
          <children>
             <GridPane alignment="CENTER" layoutX="153.0" layoutY="87.0" prefHeight="291.0" prefWidth="1052.0">
                <children>
@@ -483,7 +471,9 @@
                         </DatePicker>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="55.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="55.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <HBox alignment="CENTER" prefHeight="91.0" prefWidth="526.0" spacing="50.0" />
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="55.0" GridPane.rowIndex="2">
                      <children>
                         <Label alignment="CENTER" contentDisplay="CENTER" text="Documento origen" textFill="WHITE">
                            <font>
@@ -494,20 +484,6 @@
                            </HBox.margin>
                         </Label>
                         <TextField fx:id="txtDocDevoluciones" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="91.0" prefWidth="526.0" spacing="50.0" />
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="55.0" GridPane.rowIndex="2">
-                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Tipo de operación" textFill="WHITE">
-                           <font>
-                              <Font size="17.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="70.0" />
-                           </HBox.margin>
-                        </Label>
-                        <ComboBox fx:id="cbtipoDevoluciones" prefWidth="150.0" stylesheets="@css/darkmode.css" />
                      </children>
                   </HBox>
                </children>
