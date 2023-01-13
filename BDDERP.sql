@@ -2,18 +2,26 @@ CREATE DATABASE if NOT EXISTS ERP;
 
 USE ERP;
 
-CREATE OR REPLACE TABLE recepciones(
-Referencia VARCHAR(15) PRIMARY KEY,
-Proveedor VARCHAR(50),
-FechaPrevista DATE,
-Documento VARCHAR(100),
-Contacto VARCHAR(50),
-Estado VARCHAR(100)
+CREATE OR REPLACE TABLE proveedores(
+CIF CHAR(9) PRIMARY KEY,
+Nombre VARCHAR(50) UNIQUE,
+Direccion VARCHAR(100),
+Email VARCHAR(50),
+Tel CHAR(9) UNIQUE
 );
 
-SELECT Contacto, Referencia, FechaPrevista, Documento, Estado FROM recepciones;
-
-Select Producto, Cantidad from productosrec WHERE referencia = "HSJF";
+CREATE OR REPLACE TABLE recepciones(
+Referencia VARCHAR(15) PRIMARY KEY,
+Nombre VARCHAR(50),
+FechaPrevista DATE,
+Documento VARCHAR(100),
+Tel CHAR(9),
+Estado VARCHAR(100),
+CONSTRAINT Nombre FOREIGN KEY (Nombre) 
+REFERENCES proveedores (Nombre),
+CONSTRAINT Tel FOREIGN KEY (Tel) 
+REFERENCES proveedores (Tel)
+);
 
 CREATE OR REPLACE TABLE devoluciones(
 Referencia VARCHAR(15) PRIMARY KEY,
@@ -43,7 +51,10 @@ ON UPDATE CASCADE
 ON DELETE CASCADE
 );
 
-INSERT INTO recepciones VALUES ("HSJF", "IKEA", '2020-03-04', "agfg.pdf", "ikeasupport@gmail.com", "En camino");
+INSERT INTO proveedores VALUES ("CAD87542G", "Iago S.L.", "C/ Calatrava n8", "iago@safareyes.es", "678542987");
+
+INSERT INTO recepciones VALUES ("HSJF", "Iago S.L.", '2020-03-04', "agfg.pdf", "678542987", "En camino");
 
 INSERT INTO productosrec VALUES ("HSJF", "Mueble", 54);
 INSERT INTO productosrec VALUES ("HSJF", "Silla", 34);
+INSERT INTO productosrec VALUES("HSJF", "Cabesona", 34);

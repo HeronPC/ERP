@@ -15,7 +15,7 @@ public class ERPApplication extends Application {
         stage.setTitle("Macaquisho");
         Pane root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("erp.fxml")));
         Scene scene = new Scene(root);
-        stage.setMaximized(true);
+        //stage.setMaximized(true);
         stage.setScene(scene);
         stage.show();
     }

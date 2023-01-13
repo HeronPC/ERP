@@ -28,6 +28,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -416,18 +417,29 @@ public class ERPController {
     @FXML
     private Button btnFacturacion;
 
+    @FXML
+    private Label lblAtrasRecepciones;
+
+    @FXML
+    private Label lblAtrasExpediciones;
+
+    @FXML
+    private Label lblAtrasDevoluciones;
+
 
     //Variables nuevas
     private Pane panelactual;
 
-    private ArrayList<Recepciones> listrecepciones = new ArrayList<>();
-    private ArrayList<Expediciones> listexpediciones = new ArrayList<>();
-    private ArrayList<Devoluciones> listdevoluciones = new ArrayList<>();
+    private final ArrayList<Recepciones> listrecepciones = new ArrayList<>();
+    private final ArrayList<Expediciones> listexpediciones = new ArrayList<>();
+    private final ArrayList<Devoluciones> listdevoluciones = new ArrayList<>();
+
+    String bdd = "erp";
 
     //Creamos la cadena con la que tenemos la direccion de la base de datos
-    private final String cadconexion = "jdbc:mysql://localhost:3306/erp";
+    private final String cadconexion = String.format("jdbc:mysql://localhost:3306/%s", bdd);
 
-    private final String cadconexionps = "jdbc:mysql://localhost:3306/erp?useServerPrepStmts=true";
+    private final String cadconexionps = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true", bdd);
     //Esta variable tiene el usuario con el que nos conectaremos a la base de datos
     private final String user = "root";
     //Esta es la contraseña del usuario anterior para conectarnos a la base de datos
@@ -437,6 +449,8 @@ public class ERPController {
     int counter = 0;
     int filas = 0;
     int cols = 0;
+
+    String referenciaactual;
 
     Stage selec = new Stage();
 
@@ -637,7 +651,10 @@ public class ERPController {
         if (PanelRecepciones.isVisible()) {
             cambiarpanel(PanelRecepciones, PanelAddRecepciones);
             dateReferencia.setValue(LocalDate.now());
-            listrecepciones.clear();
+            lblAtrasRecepciones.setText("RECEPCIONES / CREAR");
+            txtReferencia.setDisable(false);
+            btnCrearRecepciones.setText("CREAR");
+            clearRecepciones();
         } else if (PanelExpediciones.isVisible()) {
             cambiarpanel(PanelExpediciones, PanelAddExpediciones);
         } else if (PanelDevoluciones.isVisible()) {
@@ -645,6 +662,16 @@ public class ERPController {
         } else if (PanelEmpleados.isVisible()) {
             cambiarpanel(PanelEmpleados, PanelAddEmpleados);
         }
+    }
+
+    private void clearRecepciones() {
+        listrecepciones.clear();
+        txtReferencia.clear();
+        txtCantidad.clear();
+        txtProducto.clear();
+        txtDocumento.clear();
+        txtrecibir.clear();
+        tableRecepciones.getItems().clear();
     }
 
     @FXML
@@ -661,37 +688,19 @@ public class ERPController {
             //Creamos el correspondiente Statement con nuestra conexion anterior
             Statement st = conexion.createStatement();
             //Creamos la consulta
-            String consulta = "Select * from productosrec";
-            //Guardamos dentro del ResulSet la ejecucion de la consulta con la conexion anterior
-            ResultSet rs = st.executeQuery(consulta);
-            String consulta2 = "Select * from recepciones";
-
-            ObservableList<Recepciones> obsrec = FXCollections.observableArrayList();
-
-            while (rs.next()) {
-                if(Objects.equals(rec.getReferencia(), rs.getString(1))){
-                    //Rellenamos los datos de los pacientes con sus respectivos campos
-                    obsrec.add(new Recepciones(rs.getString(2),
-                            rs.getInt(3)
-                    ));
-                    ProductoColum.setCellValueFactory(new PropertyValueFactory<>("nombreproducto"));
-                    CantidadColum.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
-                    txtProducto.setText(rs.getString(2));
-                    txtCantidad.setText(String.valueOf(rs.getInt(3)));
-                    tableRecepciones.setItems(obsrec);
-                    tableRecepciones.refresh();
-                }
+            referenciaactual = rec.getReferencia();
+            String consulta2 = String.format("Select * from recepciones where referencia = '%s'", rec.getReferencia());
+            ResultSet rs = st.executeQuery(consulta2);
+            if (rs.next()) {
+                txtReferencia.setText(rec.getReferencia());
+                txtrecibir.setText(rs.getString(2));
+                dateReferencia.setValue(rs.getDate(3).toLocalDate());
+                txtDocumento.setText(rs.getString(4));
             }
-            ResultSet rs2 = st.executeQuery(consulta2);
-            while(rs2.next()){
-                if (Objects.equals(rs2.getString(1), rec.getReferencia())) {
-                    txtReferencia.setText(rec.getReferencia());
-                    txtrecibir.setText(rs2.getString(2));
-                    dateReferencia.setValue(rs2.getDate(3).toLocalDate());
-                    txtDocumento.setText(rs2.getString(4));
-                }
-            }
-
+            rellenartablaAddRecepciones();
+            lblAtrasRecepciones.setText("RECEPCIONES / EDITAR");
+            txtReferencia.setDisable(true);
+            btnCrearRecepciones.setText("EDITAR");
             cambiarpanel(panelactual, PanelAddRecepciones);
             //Controlamos las excepciones con los catch
         } catch (NullPointerException pi) {
@@ -726,12 +735,20 @@ public class ERPController {
             //Guardamos dentro del ResulSet la ejecucion de la consulta con la conexion anterior
             ResultSet rs = st.executeQuery(consulta);
             //Con un if comprobamos que los datos sean validos
-            while (rs.next()){
-                if(Objects.equals(rs.getString(1), rec.getNombreproducto())){
+            while (rs.next()) {
+                if (Objects.equals(rs.getString(1), rec.getNombreproducto())) {
                     txtProducto.setText(rs.getString(1));
                     txtCantidad.setText(String.valueOf(rs.getInt(2)));
                     break;
                 }
+            }
+
+            String consulta2 = String.format("Select Producto, Cantidad from productosrec where referencia = '%s'", referenciaactual);
+            //Guardamos dentro del ResulSet la ejecucion de la consulta con la conexion anterior
+            ResultSet rs2 = st.executeQuery(consulta);
+            listrecepciones.clear();
+            while (rs2.next()) {
+                listrecepciones.add(new Recepciones(rs2.getString(1), rs2.getInt(2)));
             }
             //Controlamos las excepciones mostrandolas por la terminal
         } catch (NullPointerException pi) {
@@ -750,22 +767,15 @@ public class ERPController {
             //Creamos la conexión con la base de datos
             conexion = DriverManager.getConnection(cadconexionps, user, pswd);
             //Utilizamos un PreparedStatement para la consulta para mayor seguridad
-            PreparedStatement ps = conexion.prepareStatement("insert into Recepciones values (?, ?, ?, ?, ?, ?)");
+            PreparedStatement ps = conexion.prepareStatement("INSERT INTO recepciones (Referencia, Nombre, FechaPrevista, Documento) VALUES  (?, ?, ?, ?)");
 
-            for (int i = 0; i < listrecepciones.size() - 1; i++) {
-                ps.setString(1, listrecepciones.get(i).getReferencia());
-                ps.setString(2, listrecepciones.get(i).getRecibir());
-
-                //Parseamos la fecha
-                String fecha = listrecepciones.get(i).getDateReferencia().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                LocalDate localdate = parse(fecha);
-
-                ps.setDate(3, Date.valueOf(localdate));
-                ps.setString(4, listrecepciones.get(i).getDocorigen());
-                ps.setString(5, listrecepciones.get(i).getNombreproducto());
-                ps.setInt(6, listrecepciones.get(i).getCantidad());
-            }
-
+            ps.setString(1, txtReferencia.getText());
+            ps.setString(2, txtrecibir.getText());
+            //Parseamos la fecha
+            String fecha = dateReferencia.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalDate localdate = parse(fecha);
+            ps.setDate(3, Date.valueOf(localdate));
+            ps.setString(4, txtDocumento.getText());
             //Creamos una ventana de confirmacion para la modificacion del ingreso
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText(null);
@@ -775,7 +785,17 @@ public class ERPController {
             //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
             if (action.orElseThrow() == ButtonType.OK) {
                 ps.executeUpdate();
+                //Creamos el Statement con la conexion
+                Statement st = conexion.createStatement();
+                for (int i = 0; i < listrecepciones.size(); i++) {
+                    String consulta = String.format("insert into productosrec values ('%s', '%s', %s)",
+                            txtReferencia.getText(),
+                            listrecepciones.get(i).getNombreproducto(),
+                            listrecepciones.get(i).getCantidad());
+                    st.execute(consulta);
+                }
                 crearalertainfo("Recepcion creada");
+                rellenartablaRecepciones();
                 cambiarpanel(PanelAddRecepciones, PanelRecepciones);
             }
         } catch (Exception e) {
@@ -790,8 +810,9 @@ public class ERPController {
             //Creamos la conexion
             conexion = DriverManager.getConnection(cadconexion, user, pswd);
             Statement st = conexion.createStatement();
+            tableRecepciones.getItems().clear();
             //Creamos la consulta
-            String consulta = "SELECT Contacto, Referencia, FechaPrevista, Documento, Estado FROM recepciones;";
+            String consulta = "SELECT Tel, Referencia, FechaPrevista, Documento, Estado FROM recepciones;";
             //Guardamos la ejecución de la consulta en la variable rs
             ResultSet rs = st.executeQuery(consulta);
             //Bucle para seguir importando datos mientras los haya
@@ -812,8 +833,8 @@ public class ERPController {
                 Documentocolumn.setCellValueFactory(new PropertyValueFactory<>("docorigen"));
                 Estadocolumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
                 //Metemos dentro la tabla paciente la lista creada anteriormente
+                tableInventarioRecep.setItems(obsrec);
             }
-            tableInventarioRecep.setItems(obsrec);
             //Refrescamos la tabla paciente
             tableInventarioRecep.refresh();
             //Controlamos las excepciones mostrándolas por la terminal
@@ -831,46 +852,49 @@ public class ERPController {
         }
     }
 
+    void rellenartablaAddRecepciones() {
+        //Ejecutamos el código en un try para controlar las excepciones
+        tableRecepciones.getItems().clear();
+        try {
+            ObservableList<Recepciones> obsrec = FXCollections.observableArrayList();
+            //Rellenamos los datos de los pacientes con sus respectivos campos
+            ProductoColum.setCellValueFactory(new PropertyValueFactory<>("nombreproducto"));
+            CantidadColum.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+            txtProducto.setText("");
+            txtCantidad.setText("");
+            obsrec.addAll(listrecepciones);
+            tableRecepciones.setItems(obsrec);
+            tableRecepciones.refresh();
+            //Controlamos las excepciones mostrándolas por la terminal
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     void pressbtnRecepcionesAdd() {
         //Parseamos la fecha
-        String fecha = dateReferencia.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        LocalDate localdate = parse(fecha);
         //Establecemos la conexion en null, por si estaba abierta anteriormente
         Connection conexion = null;
         //Ejecutamos el código en un try para controlar las excepciones
         try {
-            tableInventarioRecep.getItems().clear();
             //Creamos la conexion
-            conexion = DriverManager.getConnection(cadconexion, user, pswd);
-            Statement st = conexion.createStatement();
-            //Creamos la consulta
-            String consulta = "SELECT Contacto, Referencia, FechaPrevista, Documento, Estado FROM recepciones;";
-            //Guardamos la ejecución de la consulta en la variable rs
-            ResultSet rs = st.executeQuery(consulta);
-            //Bucle para seguir importando datos mientras los haya
-            ObservableList<Recepciones> obsrec = FXCollections.observableArrayList();
-            while (rs.next()) {
-                //ObservableList para guardar dentro el paciente correspondiente para añadirlo a las columnas
-                //Creamos un paciente, con los campos obtenidos de la consulta
-                obsrec.add(new Recepciones(rs.getString(1),
-                        rs.getString(2),
-                        rs.getDate(3).toLocalDate(),
-                        rs.getString(4),
-                        rs.getString(5))
-                );
-                //Relacionamos la columna con el campo del constructor correcto
-                contactocolumn.setCellValueFactory(new PropertyValueFactory<>("contacto"));
-                Referenciacolumn.setCellValueFactory(new PropertyValueFactory<>("referencia"));
-                Fechacolumn.setCellValueFactory(new PropertyValueFactory<>("dateReferencia"));
-                Documentocolumn.setCellValueFactory(new PropertyValueFactory<>("docorigen"));
-                Estadocolumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
-                //Metemos dentro la tabla paciente la lista creada anteriormente
-            }
-            tableInventarioRecep.setItems(obsrec);
-            //Refrescamos la tabla paciente
-            tableInventarioRecep.refresh();
+            conexion = DriverManager.getConnection(cadconexionps, user, pswd);
+
+            listrecepciones.add(new Recepciones(txtProducto.getText(), Integer.parseInt(txtCantidad.getText())));
+            txtProducto.clear();
+            txtCantidad.clear();
+            rellenartablaAddRecepciones();
+
+            /*
+            PreparedStatement ps2 = conexion.prepareStatement("insert into productosrec values (?, ?, ?)");
+            ps2.setString(1, txtReferencia.getText());
+            ps2.setString(2, txtProducto.getText());
+            ps2.setInt(3, Integer.parseInt(txtCantidad.getText()));
+            ps2.executeUpdate();
+            rellenartablaAddRecepciones();
+             */
             //Controlamos las excepciones mostrándolas por la terminal
         } catch (Exception e) {
             e.printStackTrace();
@@ -952,16 +976,19 @@ public class ERPController {
         assert btnCrearRecepciones != null : "fx:id=\"btnCrearRecepciones\" was not injected: check your FXML file 'erp.fxml'.";
         assert CantidadColum != null : "fx:id=\"CantidadColum\" was not injected: check your FXML file 'erp.fxml'.";
         assert imgempleado1 != null : "fx:id=\"imgempleado1\" was not injected: check your FXML file 'erp.fxml'.";
+        assert tableInventarioRecep != null : "fx:id=\"tableInventarioRecep\" was not injected: check your FXML file 'erp.fxml'.";
         assert PanelExpediciones != null : "fx:id=\"PanelExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
         assert btcuenta != null : "fx:id=\"btcuenta\" was not injected: check your FXML file 'erp.fxml'.";
         assert btnExpediciones != null : "fx:id=\"btnExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
         assert txtTelefonoEmpleado != null : "fx:id=\"txtTelefonoEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
+        assert lblAtrasRecepciones != null : "fx:id=\"lblAtrasRecepciones\" was not injected: check your FXML file 'erp.fxml'.";
         assert btnDevolucionesAdd != null : "fx:id=\"btnDevolucionesAdd\" was not injected: check your FXML file 'erp.fxml'.";
         assert ColumProductDevoluciones != null : "fx:id=\"ColumProductDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
         assert txtCantidadDevoluciones != null : "fx:id=\"txtCantidadDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
         assert PanelEmpleados != null : "fx:id=\"PanelEmpleados\" was not injected: check your FXML file 'erp.fxml'.";
         assert txtDocumento212131 != null : "fx:id=\"txtDocumento212131\" was not injected: check your FXML file 'erp.fxml'.";
         assert Fechacolumn != null : "fx:id=\"Fechacolumn\" was not injected: check your FXML file 'erp.fxml'.";
+        assert lblAtrasExpediciones != null : "fx:id=\"lblAtrasExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
         assert dateReferencia != null : "fx:id=\"dateReferencia\" was not injected: check your FXML file 'erp.fxml'.";
         assert txtReferencia != null : "fx:id=\"txtReferencia\" was not injected: check your FXML file 'erp.fxml'.";
         assert btnAddDevoluciones != null : "fx:id=\"btnAddDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
@@ -996,6 +1023,7 @@ public class ERPController {
         assert txtDocExp != null : "fx:id=\"txtDocExp\" was not injected: check your FXML file 'erp.fxml'.";
         assert btnEditarEmpleados != null : "fx:id=\"btnEditarEmpleados\" was not injected: check your FXML file 'erp.fxml'.";
         assert Referenciacolumn != null : "fx:id=\"Referenciacolumn\" was not injected: check your FXML file 'erp.fxml'.";
+        assert lblAtrasDevoluciones != null : "fx:id=\"lblAtrasDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
         assert tableDepartamentos != null : "fx:id=\"tableDepartamentos\" was not injected: check your FXML file 'erp.fxml'.";
         assert TableExpediciones != null : "fx:id=\"TableExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
         assert txtHorasSemanalesEditarEmpleado != null : "fx:id=\"txtHorasSemanalesEditarEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
@@ -1054,7 +1082,6 @@ public class ERPController {
         assert ColumExpReferencia != null : "fx:id=\"ColumExpReferencia\" was not injected: check your FXML file 'erp.fxml'.";
         assert txtDocumentoEditarEmpleado != null : "fx:id=\"txtDocumentoEditarEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
         assert txtidpagina != null : "fx:id=\"txtidpagina\" was not injected: check your FXML file 'erp.fxml'.";
-        assert tableInventarioRecep != null : "fx:id=\"tableInventarioRecep\" was not injected: check your FXML file 'erp.fxml'.";
         assert btncrearExpediciones != null : "fx:id=\"btncrearExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
         assert ColumContExpediciones != null : "fx:id=\"ColumContExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
         assert btnVolverDevoluciones != null : "fx:id=\"btnVolverDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
