@@ -28,7 +28,6 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -588,8 +587,10 @@ public class ERPController {
             cambiarpanel(panelactual, PanelInventarioInicial);
             dateReferencia.setValue(LocalDate.now());
             listrecepciones.clear();
+            rellenartablaRecepciones();
         } else if (PanelAddRecepciones.isVisible()) {
             cambiarpanel(panelactual, PanelRecepciones);
+            rellenartablaRecepciones();
         } else if (PanelAddExpediciones.isVisible()) {
             cambiarpanel(panelactual, PanelExpediciones);
         } else if (PanelAddDevoluciones.isVisible()) {
@@ -759,46 +760,93 @@ public class ERPController {
 
     @FXML
     void pressbtnCrearRecepciones() {
-        //Creamos conexión null por si tuviéramos otra conexión cerrarla
-        Connection conexion = null;
-        //Ejecutamos dentro de un try para controlar todas las excepciones posibles
-        try {
-            //Creamos la conexión con la base de datos
-            conexion = DriverManager.getConnection(cadconexionps, user, pswd);
-            //Utilizamos un PreparedStatement para la consulta para mayor seguridad
-            PreparedStatement ps = conexion.prepareStatement("INSERT INTO recepciones (Referencia, Nombre, FechaPrevista, Documento) VALUES  (?, ?, ?, ?)");
+        if (Objects.equals(btnCrearRecepciones.getText(), "EDITAR")){
+            //Creamos conexión null por si tuviéramos otra conexión cerrarla
+            Connection conexion = null;
+            //Ejecutamos dentro de un try para controlar todas las excepciones posibles
+            try {
+                //Creamos la conexión con la base de datos
+                conexion = DriverManager.getConnection(cadconexionps, user, pswd);
+                //Utilizamos un PreparedStatement para la consulta para mayor seguridad
 
-            ps.setString(1, txtReferencia.getText());
-            ps.setString(2, txtrecibir.getText());
-            //Parseamos la fecha
-            String fecha = dateReferencia.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            LocalDate localdate = parse(fecha);
-            ps.setDate(3, Date.valueOf(localdate));
-            ps.setString(4, txtDocumento.getText());
-            //Creamos una ventana de confirmacion para la modificacion del ingreso
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setHeaderText(null);
-            alert.setTitle("Confirmación");
-            alert.setContentText("Recuerde presionar en añadir producto para completar la insercion del producto");
-            Optional<ButtonType> action = alert.showAndWait();
-            //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
-            if (action.orElseThrow() == ButtonType.OK) {
-                ps.executeUpdate();
-                //Creamos el Statement con la conexion
                 Statement st = conexion.createStatement();
-                for (int i = 0; i < listrecepciones.size(); i++) {
-                    String consulta = String.format("insert into productosrec values ('%s', '%s', %s)",
-                            txtReferencia.getText(),
-                            listrecepciones.get(i).getNombreproducto(),
-                            listrecepciones.get(i).getCantidad());
-                    st.execute(consulta);
+                //Parseamos la fecha
+                String fecha = dateReferencia.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                LocalDate localdate = parse(fecha);
+
+                String consulta = String.format("UPDATE recepciones SET Nombre = '%s', " +
+                        "FechaPrevista = '%s', " +
+                        "Documento = '%s' " +
+                        "WHERE Referencia = '%s'", txtrecibir.getText(),
+                        Date.valueOf(localdate), txtDocumento.getText(),
+                        txtReferencia.getText());
+
+                //Creamos una ventana de confirmacion para la modificacion del ingreso
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setHeaderText(null);
+                alert.setTitle("Confirmación");
+                alert.setContentText("Recuerde presionar en añadir producto para completar la edicion del producto");
+                Optional<ButtonType> action = alert.showAndWait();
+                //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+                if (action.orElseThrow() == ButtonType.OK) {
+                    st.executeUpdate(consulta);
+                    //Creamos el Statement con la conexion
+                    for (Recepciones listrecepcione : listrecepciones) {
+                        String consulta2 = String.format("Update productosrec set Referencia = '%s', Producto = '%s', Cantidad = %s",
+                                txtReferencia.getText(),
+                                listrecepcione.getNombreproducto(),
+                                listrecepcione.getCantidad());
+                        st.execute(consulta2);
+                    }
+                    crearalertainfo("Recepcion editada");
+                    rellenartablaRecepciones();
+                    cambiarpanel(PanelAddRecepciones, PanelRecepciones);
                 }
-                crearalertainfo("Recepcion creada");
-                rellenartablaRecepciones();
-                cambiarpanel(PanelAddRecepciones, PanelRecepciones);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else if(Objects.equals(btnCrearRecepciones.getText(), "CREAR")){
+            //Creamos conexión null por si tuviéramos otra conexión cerrarla
+            Connection conexion = null;
+            //Ejecutamos dentro de un try para controlar todas las excepciones posibles
+            try {
+                //Creamos la conexión con la base de datos
+                conexion = DriverManager.getConnection(cadconexionps, user, pswd);
+                //Utilizamos un PreparedStatement para la consulta para mayor seguridad
+                PreparedStatement ps = conexion.prepareStatement("INSERT INTO recepciones (Referencia, Nombre, FechaPrevista, Documento) VALUES  (?, ?, ?, ?)");
+
+                ps.setString(1, txtReferencia.getText());
+                ps.setString(2, txtrecibir.getText());
+                //Parseamos la fecha
+                String fecha = dateReferencia.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                LocalDate localdate = parse(fecha);
+                ps.setDate(3, Date.valueOf(localdate));
+                ps.setString(4, txtDocumento.getText());
+                //Creamos una ventana de confirmacion para la modificacion del ingreso
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setHeaderText(null);
+                alert.setTitle("Confirmación");
+                alert.setContentText("Recuerde presionar en añadir producto para completar la insercion del producto");
+                Optional<ButtonType> action = alert.showAndWait();
+                //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+                if (action.orElseThrow() == ButtonType.OK) {
+                    ps.executeUpdate();
+                    //Creamos el Statement con la conexion
+                    Statement st = conexion.createStatement();
+                    for (Recepciones listrecepcione : listrecepciones) {
+                        String consulta = String.format("insert into productosrec values ('%s', '%s', %s)",
+                                txtReferencia.getText(),
+                                listrecepcione.getNombreproducto(),
+                                listrecepcione.getCantidad());
+                        st.execute(consulta);
+                    }
+                    crearalertainfo("Recepcion creada");
+                    rellenartablaRecepciones();
+                    cambiarpanel(PanelAddRecepciones, PanelRecepciones);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -847,7 +895,6 @@ public class ERPController {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -873,39 +920,16 @@ public class ERPController {
 
     @FXML
     void pressbtnRecepcionesAdd() {
-        //Parseamos la fecha
-        //Establecemos la conexion en null, por si estaba abierta anteriormente
-        Connection conexion = null;
         //Ejecutamos el código en un try para controlar las excepciones
         try {
-            //Creamos la conexion
-            conexion = DriverManager.getConnection(cadconexionps, user, pswd);
-
             listrecepciones.add(new Recepciones(txtProducto.getText(), Integer.parseInt(txtCantidad.getText())));
             txtProducto.clear();
             txtCantidad.clear();
             rellenartablaAddRecepciones();
 
-            /*
-            PreparedStatement ps2 = conexion.prepareStatement("insert into productosrec values (?, ?, ?)");
-            ps2.setString(1, txtReferencia.getText());
-            ps2.setString(2, txtProducto.getText());
-            ps2.setInt(3, Integer.parseInt(txtCantidad.getText()));
-            ps2.executeUpdate();
-            rellenartablaAddRecepciones();
-             */
             //Controlamos las excepciones mostrándolas por la terminal
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            //Controlamos que la connexion sea null, en el caso contrario lo definiremos como tal
-            try {
-                assert conexion != null;
-                conexion.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
         }
     }
 
