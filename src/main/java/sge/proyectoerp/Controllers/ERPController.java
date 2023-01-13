@@ -720,7 +720,6 @@ public class ERPController {
 
     @FXML
     void selectRecepciones() {
-        //Definimos el campo de conexion como null
         Connection conexion = null;
         //Ejecutaremos el codigo dentro de un try para controlar las excepciones
         try {
