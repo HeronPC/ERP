@@ -1,14 +1,9 @@
 package sge.proyectoerp.Controllers;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -20,7 +15,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import sge.proyectoerp.ERPApplication;
 import sge.proyectoerp.Models.Devoluciones;
 import sge.proyectoerp.Models.Expediciones;
 import sge.proyectoerp.Models.Recepciones;
@@ -30,9 +24,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -42,19 +33,19 @@ import java.util.Optional;
 
 import static java.time.LocalDate.parse;
 
-public class ERPController {
+public class ERPControllerOld {
 
     @FXML
     private Button btnCrearRecepciones;
 
     @FXML
-    private TableColumn<?, ?> CantidadColum;
+    private TableColumn<Recepciones, Integer> CantidadColum;
 
     @FXML
     private ImageView imgempleado1;
 
     @FXML
-    private TableView<Recepciones> tableInventarioRecep;
+    private TextField txtCantidadDevoluciones;
 
     @FXML
     private Pane PanelExpediciones;
@@ -69,16 +60,10 @@ public class ERPController {
     private TextField txtTelefonoEmpleado;
 
     @FXML
-    private Label lblAtrasRecepciones;
-
-    @FXML
     private Button btnDevolucionesAdd;
 
     @FXML
-    private TableColumn<?, ?> ColumProductDevoluciones;
-
-    @FXML
-    private TextField txtCantidadDevoluciones;
+    private TableColumn<Devoluciones, String> ColumProductDevoluciones;
 
     @FXML
     private Pane PanelEmpleados;
@@ -88,9 +73,6 @@ public class ERPController {
 
     @FXML
     private TableColumn<?, ?> Fechacolumn;
-
-    @FXML
-    private Label lblAtrasExpediciones;
 
     @FXML
     private DatePicker dateReferencia;
@@ -195,9 +177,6 @@ public class ERPController {
     private TableColumn<?, ?> Referenciacolumn;
 
     @FXML
-    private Label lblAtrasDevoluciones;
-
-    @FXML
     private TableView<?> tableDepartamentos;
 
     @FXML
@@ -231,7 +210,7 @@ public class ERPController {
     private Button btnExpAdd;
 
     @FXML
-    private TableView<?> tableDevoluciones;
+    private TableView<Devoluciones> tableDevoluciones;
 
     @FXML
     private Button btnCompras;
@@ -288,7 +267,7 @@ public class ERPController {
     private TableColumn<?, ?> contactocolumn;
 
     @FXML
-    private TableColumn<?, ?> ProductoColum;
+    private TableColumn<Recepciones, String> ProductoColum;
 
     @FXML
     private Pane BarraSuperior;
@@ -318,7 +297,7 @@ public class ERPController {
     private TextField txtHorasSemanaEmpleado;
 
     @FXML
-    private TableColumn<?, ?> ColumCantidadDevoluciones;
+    private TableColumn<Devoluciones, Integer> ColumCantidadDevoluciones;
 
     @FXML
     private TextField txtNombreEditEmpleado;
@@ -370,6 +349,9 @@ public class ERPController {
 
     @FXML
     private Label txtidpagina;
+
+    @FXML
+    private TableView<Recepciones> tableInventarioRecep;
 
     @FXML
     private Button btncrearExpediciones;
@@ -435,216 +417,28 @@ public class ERPController {
     private Button btnFacturacion;
 
     @FXML
-    private Label lblnombreusuario;
+    private Label lblAtrasRecepciones;
 
     @FXML
-    private Pane BarraSuperior1;
+    private Label lblAtrasExpediciones;
 
     @FXML
-    private ImageView imgperfil1;
+    private Label lblAtrasDevoluciones;
 
-    @FXML
-    private Pane Pperfil;
-
-    @FXML
-    private Button btaddbd;
-
-    @FXML
-    private Pane Pnewbd;
-
-    @FXML
-    private GridPane Pgridbd;
-
-    @FXML
-    private TextField txtnombd;
-
-    @FXML
-    private Button btcuenta1;
-
-    @FXML
-    private Button btaddbd11;
-
-    @FXML
-    private ImageView imgperfil12;
-
-    @FXML
-    private Button btaddbd1;
-
-    @FXML
-    private Label txtidpagina1;
-
-    @FXML
-    private Pane Pbasesdedatos;
-
-    @FXML
-    private Button btacceder;
-
-    @FXML
-    private Pane PInicio;
-
-    @FXML
-    private TextField txtusuario;
-
-    @FXML
-    private TextField txtcontrasena;
-
-    @FXML
-    private ImageView imgperfil1111;
-
-    @FXML
-    private TextField txtcontrasena12;
-
-    @FXML
-    private TextField txtcontrasena11;
-
-    @FXML
-    private TextField txtcontrasena1;
-
-    @FXML
-    private TextField txtcontrasena13;
-
-    @FXML
-    private Pane PRegistro;
-
-    @FXML
-    private TextField txtusuario1;
-
-    @FXML
-    private Button btcuenta1111;
 
     //Variables nuevas
     private Pane panelactual;
 
-    private ArrayList<Recepciones> listrecepciones = new ArrayList<>();
+    private final ArrayList<Recepciones> listrecepciones = new ArrayList<>();
     private final ArrayList<Expediciones> listexpediciones = new ArrayList<>();
     private final ArrayList<Devoluciones> listdevoluciones = new ArrayList<>();
 
-
-    //CAMBIOS
-    ERPApplication app = new ERPApplication();
-
-    Stage stagere = new Stage();
-    @FXML
-    public void pressregistro(ActionEvent event) throws IOException {
-        URL url = Paths.get("./src/main/resources/sge/proyectoerp/register.fxml").toUri().toURL();
-        Pane root = FXMLLoader.load(url);
-        Scene scene= new Scene(root, 1068, 700);
-        stagere.setScene(scene);
-        stagere.centerOnScreen();
-        stagere.show();
-
-        ((Node)(event.getSource())).getScene().getWindow().hide();
-    }
-
-    Stage stagebd = new Stage();
-    String usuario;
-    @FXML
-    public void pressbtnacceder(ActionEvent event) throws IOException {
-        setUser();
-        URL url = Paths.get("./src/main/resources/sge/proyectoerp/bd.fxml").toUri().toURL();
-        Pane root = FXMLLoader.load(url);
-        Scene scene= new Scene(root, 1068, 700);
-        stagebd.setScene(scene);
-        stagebd.centerOnScreen();
-        stagebd.show();
-        ((Node)(event.getSource())).getScene().getWindow().hide();
-        Label myLabel = (Label) root.lookup("#lblnombreusuario");
-        myLabel.setText(setUser());
-    }
-    public String setUser(){
-        usuario = txtusuario.getText();
-        return usuario;
-    };
-    @FXML
-    public void pressbtnregistrarse(){
-
-    }
-    @FXML
-    public void pressaddbd(){
-        txtnombd.setText(null);
-        Pnewbd.setVisible(true);
-
-    }
-    String nombd;
-    Stage stageerp = new Stage();
-
-    ObservableList<String> items1 = FXCollections.observableArrayList();
-    @FXML
-    public void pressbtnewbd(){
-        Pnewbd.setVisible(false);
-        nombd = txtnombd.getText();
-        SwingNode node2 = new SwingNode();
-        JPanel Panelbd = new JPanel(new BorderLayout());//Creamos el panel que se va a añadir multiples veces
-        JPanel Panelizq = new JPanel(new FlowLayout(FlowLayout.CENTER,10,3));
-        Panelizq.setBackground(new java.awt.Color(41, 45, 45));
-        Panelizq.setSize(100,30);
-        Panelbd.setBorder(new EmptyBorder(40, 30, 30, 30));
-        Panelbd.setBackground(new java.awt.Color(41, 45, 45));
-        JLabel nombrebd = new JLabel(nombd);//Aqui aparecerá el nombre de los empleados con respecto a la base de datos
-        nombrebd.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
-        nombrebd.setForeground (Color.white);
-        JButton btel = new JButton();
-        btel.setBackground(new java.awt.Color(41, 45, 45));
-        ImageIcon iconoeliminar= new ImageIcon("src/main/resources/sge/proyectoerp/img/eliminar.png");
-        java.awt.Image newimgeliminar = iconoeliminar.getImage().getScaledInstance(7, 7,  java.awt.Image.SCALE_SMOOTH);
-        iconoeliminar = new ImageIcon(newimgeliminar);
-        btel.setIcon(iconoeliminar);
-        JButton btentrar = new JButton("Acceder");
-        btentrar.setBackground(new java.awt.Color(41, 184, 78));
-        Panelizq.add(btel);
-        Panelizq.add(nombrebd);
-        Panelbd.add(Panelizq,BorderLayout.WEST);
-        Panelbd.add(btentrar,BorderLayout.EAST);
-        btel.addActionListener(new ActionListener() {
-           @Override
-           public void actionPerformed(java.awt.event.ActionEvent el) {
-               //Metodo para eliminar las base de datos añadidas en el usuario, para eliminarlas deberas hacer un delete a la base de datos y luego llamar al metodo para que recarge los paneles de las base de datos
-           }
-        });
-
-        btentrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e){
-                Platform.runLater(new Runnable() {
-                    public void run() {
-                        try {
-                            URL url = Paths.get("./src/main/resources/sge/proyectoerp/erp.fxml").toUri().toURL();
-                            Pane root = FXMLLoader.load(url);
-                            Scene scene= new Scene(root, 1536, 790);
-                            stageerp.setScene(scene);
-                            stageerp.centerOnScreen();
-                            stageerp.show();
-                            Label myLabel = (Label) root.lookup("#lblnombreusuario");
-                            usuario = lblnombreusuario.getText();
-                            myLabel.setText(usuario);
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
-                    }
-                });
-            }
-        });
-        node2.setContent(Panelbd);//Añade el contenido al nodeswing
-        node2.setId("node"+nombd);//Cambia el nombre del nodo con respecto al nombre del empleado, deberas hacer que cambie con los nombres que vaya cogiendo de la base de datos
-        Pgridbd.add(node2,cols,filas);//Va añadiendo los nodeswing al gridpane sumando filas y columnas
-        filas++;
-        if(filas==4){btaddbd.setDisable(true);}//debes deshabilitar el método cuandotodo el gripane esta lleno
-        counter++;
-
-    }
-
-    @FXML
-    public void presscerrar(){
-        txtnombd.setText(null);
-        Pnewbd.setVisible(false);
-    }
-    public String bd = "erp";
-    //CAMBIOS
+    String bdd = "erp";
 
     //Creamos la cadena con la que tenemos la direccion de la base de datos
-    private final String cadconexion = String.format("jdbc:mysql://localhost:3306/%s",bd);
+    private final String cadconexion = String.format("jdbc:mysql://localhost:3306/%s", bdd);
 
-    private final String cadconexionps = "jdbc:mysql://localhost:3306/erp?useServerPrepStmts=true";
+    private final String cadconexionps = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true", bdd);
     //Esta variable tiene el usuario con el que nos conectaremos a la base de datos
     private final String user = "root";
     //Esta es la contraseña del usuario anterior para conectarnos a la base de datos
@@ -655,17 +449,19 @@ public class ERPController {
     int filas = 0;
     int cols = 0;
 
-    Stage selec = new Stage();
     String referenciaactual;
+
+    Stage selec = new Stage();
 
     // create a File chooser
     FileChooser fil_chooser = new FileChooser();
     String image;
     Image imagenem;
 
+    //Métodos generales
     //Obtiene la imagen a la hora de crear un empleado
     @FXML
-    void seleccionarimg(){
+    void seleccionarimg() {
         // Agregar filtros para facilitar la busqueda
         fil_chooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("All Images", "*.*"),
@@ -685,42 +481,36 @@ public class ERPController {
 
     @FXML
     void pressbtnCrearEmpleados() {
-        cambiarpanel(panelactual,PanelEmpleados);
         String nomempleado = String.valueOf(txtNombreEmpleado.getText());//Esto es una mera prueba para que obtenga el nombre del ultimo empleado añadido, deberas cambiarlo para que obtenga el de la base de datos
         SwingNode node = new SwingNode();
         JPanel newpane = new JPanel(new BorderLayout());//Creamos el panel que se va a añadir multiples veces
         newpane.setBorder(new EmptyBorder(10, 10, 10, 10));
-        newpane.setBackground(new java.awt.Color(41, 45, 45));
+        newpane.setBackground(new Color(41, 45, 45));
         JLabel nombreempleado = new JLabel(nomempleado);//Aqui aparecerá el nombre de los empleados con respecto a la base de datos
         nombreempleado.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
-        nombreempleado.setForeground (Color.white);
+        nombreempleado.setForeground(Color.white);
         JLabel imagen = new JLabel();
         imagen.setBorder(new EmptyBorder(10, 10, 10, 10));
-        ImageIcon icono= new ImageIcon(image);//establece la dirección url de la imagen de perfil del empleado, debera cambiar respecto a la base de datos
-        java.awt.Image newimg = icono.getImage().getScaledInstance(54, 61,  java.awt.Image.SCALE_SMOOTH);//Redimensiona la imagen
+        ImageIcon icono = new ImageIcon(image);//establece la dirección url de la imagen de perfil del empleado, debera cambiar respecto a la base de datos
+        java.awt.Image newimg = icono.getImage().getScaledInstance(54, 61, java.awt.Image.SCALE_SMOOTH);//Redimensiona la imagen
         icono = new ImageIcon(newimg);
         imagen.setIcon(icono);
-        JPanel btpane = new JPanel(new GridLayout(2,1));
+        JPanel btpane = new JPanel(new GridLayout(2, 1));
         JButton bteliminar = new JButton();
-        bteliminar.setBackground(new java.awt.Color(41, 45, 45));
-        ImageIcon iconoeliminar= new ImageIcon("src/main/resources/sge/proyectoerp/img/eliminar.png");
-        java.awt.Image newimgeliminar = iconoeliminar.getImage().getScaledInstance(7, 7,  java.awt.Image.SCALE_SMOOTH);
+        bteliminar.setBackground(new Color(41, 45, 45));
+        ImageIcon iconoeliminar = new ImageIcon("src/main/resources/sge/proyectoerp/img/eliminar.png");
+        java.awt.Image newimgeliminar = iconoeliminar.getImage().getScaledInstance(7, 7, java.awt.Image.SCALE_SMOOTH);
         iconoeliminar = new ImageIcon(newimgeliminar);
         bteliminar.setIcon(iconoeliminar);
         JButton bteditar = new JButton();
-        bteditar.setBackground(new java.awt.Color(41, 45, 45));
+        bteditar.setBackground(new Color(41, 45, 45));
         ImageIcon iconoeditar = new ImageIcon("src/main/resources/sge/proyectoerp/img/lapiz.png");
-        java.awt.Image newimgeditar = iconoeditar.getImage().getScaledInstance(7, 7,  java.awt.Image.SCALE_SMOOTH);
+        java.awt.Image newimgeditar = iconoeditar.getImage().getScaledInstance(7, 7, java.awt.Image.SCALE_SMOOTH);
         iconoeditar = new ImageIcon(newimgeditar);
         bteditar.setIcon(iconoeditar);
         btpane.add(bteliminar);
         btpane.add(bteditar);
-        bteditar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent ed) {
-                cambiarpanel(PanelEmpleados,PanelEditEmpleados);
-            }
-        });
+        bteditar.addActionListener(ed -> cambiarpanel(PanelEmpleados, PanelEditEmpleados));
         bteliminar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -730,23 +520,25 @@ public class ERPController {
         });
         //Establecemos la posicion en el panel de cada objeto
         newpane.add(btpane, BorderLayout.EAST);
-        newpane.add(imagen,BorderLayout.WEST);
-        newpane.add(nombreempleado,BorderLayout.CENTER);
+        newpane.add(imagen, BorderLayout.WEST);
+        newpane.add(nombreempleado, BorderLayout.CENTER);
         newpane.setVisible(true);
-        bteditar.setName("bted"+txtNombreEmpleado.getText());
-        bteliminar.setName("btel"+txtNombreEmpleado.getText());//Debe obtener el nombre de cada empleado de la bse de datos para su posterior eliminacion
-        newpane.setName("panel"+counter);//El nombre de cada panel sera panel+numero de panel
+        bteditar.setName("bted" + txtNombreEmpleado.getText());
+        bteliminar.setName("btel" + txtNombreEmpleado.getText());//Debe obtener el nombre de cada empleado de la bse de datos para su posterior eliminacion
+        newpane.setName("panel" + counter);//El nombre de cada panel sera panel+numero de panel
         node.setContent(newpane);//Añade el contenido al nodeswing
-        node.setId("node"+nomempleado);//Cambia el nombre del nodo con respecto al nombre del empleado, deberas hacer que cambie con los nombres que vaya cogiendo de la base de datos
-        Pempleados.add(node,cols,filas);//Va añadiendo los nodeswing al gridpane sumando filas y columnas
-        if(cols==4){
-            cols=-1;
+        node.setId("node" + nomempleado);//Cambia el nombre del nodo con respecto al nombre del empleado, deberas hacer que cambie con los nombres que vaya cogiendo de la base de datos
+        Pempleados.add(node, cols, filas);//Va añadiendo los nodeswing al gridpane sumando filas y columnas
+        if (cols == 4) {
+            cols = -1;
             filas++;
         }
-        if(filas==5 && cols==5){}//debes deshabilitar el método cuandotodo el gripane esta lleno
+        if (filas == 5 && cols == 5) {
+        }//debes deshabilitar el método cuandotodo el gripane esta lleno
         cols++;
         counter++;
     }
+
     //Lo usaremos para informar al usuario mediante ventanas emergentes, podemos establecer el mensaje pasándoselo por
     //parámetros
     void crearalertainfo(String mensaje) {
@@ -770,20 +562,7 @@ public class ERPController {
 
     @FXML
     void presscuenta() {
-        Pperfil.setVisible(true);
-    }
-    @FXML
-    void cerrarperfil() {
-        Pperfil.setVisible(false);
-    }
-    @FXML
-    void presslogout(ActionEvent event){
-        ((Node)(event.getSource())).getScene().getWindow().hide();
-        app.start(new Stage());
-    }
-    @FXML
-    void presscerrarbd(ActionEvent event){
-        ((Node)(event.getSource())).getScene().getWindow().hide();
+
     }
 
     @FXML
@@ -996,9 +775,9 @@ public class ERPController {
                 LocalDate localdate = parse(fecha);
 
                 String consulta = String.format("UPDATE recepciones SET Nombre = '%s', " +
-                                "FechaPrevista = '%s', " +
-                                "Documento = '%s' " +
-                                "WHERE Referencia = '%s'", txtrecibir.getText(),
+                        "FechaPrevista = '%s', " +
+                        "Documento = '%s' " +
+                        "WHERE Referencia = '%s'", txtrecibir.getText(),
                         Date.valueOf(localdate), txtDocumento.getText(),
                         txtReferencia.getText());
 
@@ -1214,37 +993,13 @@ public class ERPController {
     void pressbtnEditarEmpleados() {
 
     }
+
     @FXML
     void initialize() {
-        assert lblnombreusuario != null : "fx:id=\"lblnombreusuario\" was not injected: check your FXML file 'bd.fxml'.";
-        assert BarraSuperior1 != null : "fx:id=\"BarraSuperior1\" was not injected: check your FXML file 'bd.fxml'.";
-        assert imgperfil1 != null : "fx:id=\"imgperfil1\" was not injected: check your FXML file 'bd.fxml'.";
-        assert Pperfil != null : "fx:id=\"Pperfil\" was not injected: check your FXML file 'bd.fxml'.";
-        assert btaddbd != null : "fx:id=\"btaddbd\" was not injected: check your FXML file 'bd.fxml'.";
-        assert Pnewbd != null : "fx:id=\"Pnewbd\" was not injected: check your FXML file 'bd.fxml'.";
-        assert Pgridbd != null : "fx:id=\"Pgridbd\" was not injected: check your FXML file 'bd.fxml'.";
-        assert txtnombd != null : "fx:id=\"txtnombd\" was not injected: check your FXML file 'bd.fxml'.";
-        assert btcuenta1 != null : "fx:id=\"btcuenta1\" was not injected: check your FXML file 'bd.fxml'.";
-        assert btaddbd11 != null : "fx:id=\"btaddbd11\" was not injected: check your FXML file 'bd.fxml'.";
-        assert imgperfil12 != null : "fx:id=\"imgperfil12\" was not injected: check your FXML file 'bd.fxml'.";
-        assert btaddbd1 != null : "fx:id=\"btaddbd1\" was not injected: check your FXML file 'bd.fxml'.";
-        assert txtidpagina1 != null : "fx:id=\"txtidpagina1\" was not injected: check your FXML file 'bd.fxml'.";
-        assert Pbasesdedatos != null : "fx:id=\"Pbasesdedatos\" was not injected: check your FXML file 'bd.fxml'.";
-        assert btacceder != null : "fx:id=\"btacceder\" was not injected: check your FXML file 'inicio.fxml'.";
-        assert PInicio != null : "fx:id=\"PInicio\" was not injected: check your FXML file 'inicio.fxml'.";
-        assert txtusuario != null : "fx:id=\"txtusuario\" was not injected: check your FXML file 'inicio.fxml'.";
-        assert txtcontrasena != null : "fx:id=\"txtcontrasena\" was not injected: check your FXML file 'inicio.fxml'.";
-        assert imgperfil1111 != null : "fx:id=\"imgperfil1111\" was not injected: check your FXML file 'register.fxml'.";
-        assert txtcontrasena12 != null : "fx:id=\"txtcontrasena12\" was not injected: check your FXML file 'register.fxml'.";
-        assert txtcontrasena11 != null : "fx:id=\"txtcontrasena11\" was not injected: check your FXML file 'register.fxml'.";
-        assert txtcontrasena1 != null : "fx:id=\"txtcontrasena1\" was not injected: check your FXML file 'register.fxml'.";
-        assert txtcontrasena13 != null : "fx:id=\"txtcontrasena13\" was not injected: check your FXML file 'register.fxml'.";
-        assert PRegistro != null : "fx:id=\"PRegistro\" was not injected: check your FXML file 'register.fxml'.";
-        assert txtusuario1 != null : "fx:id=\"txtusuario1\" was not injected: check your FXML file 'register.fxml'.";
-        assert btcuenta1111 != null : "fx:id=\"btcuenta1111\" was not injected: check your FXML file 'register.fxml'.";
         assert btnCrearRecepciones != null : "fx:id=\"btnCrearRecepciones\" was not injected: check your FXML file 'erp.fxml'.";
         assert CantidadColum != null : "fx:id=\"CantidadColum\" was not injected: check your FXML file 'erp.fxml'.";
         assert imgempleado1 != null : "fx:id=\"imgempleado1\" was not injected: check your FXML file 'erp.fxml'.";
+        assert tableInventarioRecep != null : "fx:id=\"tableInventarioRecep\" was not injected: check your FXML file 'erp.fxml'.";
         assert PanelExpediciones != null : "fx:id=\"PanelExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
         assert btcuenta != null : "fx:id=\"btcuenta\" was not injected: check your FXML file 'erp.fxml'.";
         assert btnExpediciones != null : "fx:id=\"btnExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
@@ -1263,6 +1018,7 @@ public class ERPController {
         assert btnSeleccionarIMGEditarEmpleado != null : "fx:id=\"btnSeleccionarIMGEditarEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
         assert txtDepartamentoEmpleado != null : "fx:id=\"txtDepartamentoEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
         assert txtCantidadExp != null : "fx:id=\"txtCantidadExp\" was not injected: check your FXML file 'erp.fxml'.";
+        assert tableRecepciones != null : "fx:id=\"tableRecepciones\" was not injected: check your FXML file 'erp.fxml'.";
         assert Pempleados != null : "fx:id=\"Pempleados\" was not injected: check your FXML file 'erp.fxml'.";
         assert txtDireccionLaboralEmpleado != null : "fx:id=\"txtDireccionLaboralEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
         assert ColumProductoExpedic != null : "fx:id=\"ColumProductoExpedic\" was not injected: check your FXML file 'erp.fxml'.";
@@ -1370,5 +1126,6 @@ public class ERPController {
         assert txtProductoExp != null : "fx:id=\"txtProductoExp\" was not injected: check your FXML file 'erp.fxml'.";
         assert ColumExpDoc != null : "fx:id=\"ColumExpDoc\" was not injected: check your FXML file 'erp.fxml'.";
         assert btnFacturacion != null : "fx:id=\"btnFacturacion\" was not injected: check your FXML file 'erp.fxml'.";
+        rellenartablaRecepciones();
     }
 }

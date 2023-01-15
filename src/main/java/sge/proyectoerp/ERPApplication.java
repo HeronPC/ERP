@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import sge.proyectoerp.Controllers.ERPController;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class ERPApplication extends Application {
     Scene scene;
@@ -30,7 +31,7 @@ public class ERPApplication extends Application {
 
 
     public Scene initStage(int x, int y) throws IOException {
-        root = FXMLLoader.load(getClass().getResource("inicio.fxml"));
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("inicio.fxml")));
         return new Scene(root, x, y);
     }
 
