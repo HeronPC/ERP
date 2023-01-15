@@ -7,11 +7,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane id="paneles" fx:id="Menu" prefHeight="793.0" prefWidth="1536.0" stylesheets="@css/darkmode.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sge.proyectoerp.Controllers.ERPController">
+<Pane id="paneles" fx:id="Menu" prefHeight="790.0" prefWidth="1536.0" stylesheets="@css/darkmode.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sge.proyectoerp.Controllers.ERPController">
    <children>
       <Pane id="panelsmenu" fx:id="BarraSuperior" prefHeight="83.0" prefWidth="1536.0" stylesheets="@css/darkmode.css">
          <children>
-            <Label fx:id="nombreusuario" layoutX="1295.0" layoutY="25.0" text="Macaquisho" textFill="WHITE">
+            <Label fx:id="lblnombreusuario" alignment="CENTER_RIGHT" layoutX="1289.0" layoutY="23.0" prefHeight="38.0" prefWidth="161.0" text="User" textFill="WHITE">
                <font>
                   <Font size="26.0" />
                </font>
@@ -1198,5 +1198,19 @@
             </TabPane>
          </children>
       </Pane>
+      <VBox id="panelsmenu" fx:id="Pperfil" layoutX="1380.0" layoutY="85.0" onMouseExited="#cerrarperfil" prefHeight="102.0" prefWidth="154.0" stylesheets="@css/darkmode.css" visible="false">
+         <children>
+            <Button id="botonperfil" fx:id="btaddbd11" mnemonicParsing="false" onAction="#pressaddbd" prefHeight="50.0" prefWidth="157.0" stylesheets="@css/darkmode.css" text="EDITAR PERFIL" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS" size="15.0" />
+               </font>
+            </Button>
+            <Button id="botonperfil" fx:id="btaddbd1" mnemonicParsing="false" onAction="#presscerrarbd" prefHeight="50.0" prefWidth="157.0" stylesheets="@css/darkmode.css" text="SALIR" textFill="RED">
+               <font>
+                  <Font name="Comic Sans MS" size="15.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
    </children>
 </Pane>

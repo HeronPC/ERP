@@ -1,3 +1,9 @@
+#panelprincipal{
+    -fx-background-color: #3B4343;
+    -fx-border-style: solid;
+    -fx-border-color:#2F3636;
+    -fx-border-width: 2;
+}
 #paneles{
     -fx-background-color: #3B4343;
 }
