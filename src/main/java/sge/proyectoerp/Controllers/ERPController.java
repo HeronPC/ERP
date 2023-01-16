@@ -1150,7 +1150,7 @@ public class ERPController {
     }
 
     @FXML
-    void pressbtnCrearDevoluiones() {
+    void pressbtnCrearDevoluciones() {
 
     }
 
@@ -1180,7 +1180,7 @@ public class ERPController {
     }
 
     @FXML
-    void pressbtncrearDevoluciones() {
+    void pressbtnAddDevoluciones() {
 
     }
 

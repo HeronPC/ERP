@@ -412,7 +412,7 @@
                   <Font name="Comic Sans MS Bold" size="22.0" />
                </font>
             </Label>
-            <Button id="btscrear" fx:id="btnAddDevoluciones" layoutX="158.0" layoutY="93.0" mnemonicParsing="false" onAction="#pressbtncrearDevoluciones" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
+            <Button id="btscrear" fx:id="btnAddDevoluciones" layoutX="158.0" layoutY="93.0" mnemonicParsing="false" onAction="#pressbtnAddDevoluciones" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
                <font>
                   <Font name="Comic Sans MS Bold" size="14.0" />
                </font>
