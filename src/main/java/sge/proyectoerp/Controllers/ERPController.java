@@ -1166,6 +1166,11 @@ public class ERPController {
     }
 
     @FXML
+    void pressbtnAddEmpleados() {
+
+    }
+
+    @FXML
     void pressbtncrearExpediciones() {
 
     }

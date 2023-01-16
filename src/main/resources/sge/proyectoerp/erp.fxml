@@ -309,7 +309,7 @@
                   <Insets />
                </opaqueInsets>
             </TableView>
-            <Button id="botonperfil" fx:id="btnVolverExpediciones" layoutX="6.0" layoutY="17.0" mnemonicParsing="false" onAction="#pressatras" prefHeight="44.0" prefWidth="185.0" stylesheets="@css/darkmode.css" />
+            <Button id="botonperfil" fx:id="" layoutX="6.0" layoutY="17.0" mnemonicParsing="false" onAction="#pressatras" prefHeight="44.0" prefWidth="185.0" stylesheets="@css/darkmode.css" />
             <ImageView fx:id="imgperfil111" fitHeight="50.0" fitWidth="33.0" layoutX="6.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@img/atrasblanco.png" />
@@ -672,7 +672,7 @@
                </image>
             </ImageView>
             <Button id="botonperfil" fx:id="btnVolverEmpNuevo" layoutX="12.0" layoutY="17.0" mnemonicParsing="false" onAction="#pressatras" prefHeight="44.0" prefWidth="171.0" stylesheets="@css/darkmode.css" />
-            <Button id="btscrear" fx:id="btnCrearEmpleados" layoutX="1205.0" layoutY="24.0" mnemonicParsing="false" onAction="#pressbtnCrearEmpleados" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
+            <Button id="btscrear" fx:id="btnAddEmpleados" layoutX="1205.0" layoutY="24.0" mnemonicParsing="false" onAction="#pressbtnAddEmpleados" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
                <font>
                   <Font name="Comic Sans MS Bold" size="14.0" />
                </font>
