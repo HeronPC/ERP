@@ -544,7 +544,7 @@
          <children>
             <Pane id="panelempleados" prefHeight="83.0" prefWidth="1536.0" stylesheets="@css/darkmode.css">
                <children>
-                  <Button id="btscrear" fx:id="btnCrearEmpleados" layoutX="20.0" layoutY="26.0" mnemonicParsing="false" onAction="#pressbtncrearEmpleados" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
+                  <Button id="btscrear" fx:id="btnCrearEmpleados" layoutX="20.0" layoutY="26.0" mnemonicParsing="false" onAction="#pressbtncrear" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
                      <font>
                         <Font name="Comic Sans MS Bold" size="14.0" />
                      </font>
@@ -684,7 +684,7 @@
                </image>
             </ImageView>
             <Button id="botonperfil" fx:id="btnVolverEmpNuevo" layoutX="12.0" layoutY="17.0" mnemonicParsing="false" onAction="#pressatras" prefHeight="44.0" prefWidth="171.0" stylesheets="@css/darkmode.css" />
-            <Button id="btscrear" fx:id="btnAddEmpleados" layoutX="1205.0" layoutY="24.0" mnemonicParsing="false" onAction="#pressbtnAddEmpleados" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
+            <Button id="btscrear" fx:id="btnAddEmpleados" layoutX="1205.0" layoutY="24.0" mnemonicParsing="false" onAction="#pressbtnCrearEmpleados" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
                <font>
                   <Font name="Comic Sans MS Bold" size="14.0" />
                </font>
@@ -998,7 +998,7 @@
                </image>
             </ImageView>
             <Button id="botonperfil" fx:id="btnVolverEmpEdit" layoutX="12.0" layoutY="17.0" mnemonicParsing="false" onAction="#pressatras" prefHeight="44.0" prefWidth="171.0" stylesheets="@css/darkmode.css" />
-            <Button id="btscrear" fx:id="btnEditarEmpleados" layoutX="1205.0" layoutY="24.0" mnemonicParsing="false" onAction="#pressbtnEditarEmpleados" stylesheets="@css/darkmode.css" text="EDITAR" textFill="WHITE">
+            <Button id="btscrear" fx:id="btnEditarEmpleados" layoutX="1205.0" layoutY="24.0" mnemonicParsing="false" onAction="#pressbtnCrearEmpleados" stylesheets="@css/darkmode.css" text="EDITAR" textFill="WHITE">
                <font>
                   <Font name="Comic Sans MS Bold" size="14.0" />
                </font>

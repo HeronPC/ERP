@@ -1225,8 +1225,8 @@ public class ERPController {
             //Rellenamos los datos de los pacientes con sus respectivos campos
             ColumProductoExpedic.setCellValueFactory(new PropertyValueFactory<>("nombreproducto"));
             ColumCantidadExpedic.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
-            txtProducto.setText("");
-            txtCantidad.setText("");
+            txtProductoExp.setText("");
+            txtCantidadExp.setText("");
             obsexp.addAll(listexpediciones);
             tablaExp.setItems(obsexp);
             tablaExp.refresh();
@@ -1433,11 +1433,6 @@ public class ERPController {
     }
 
     @FXML
-    void pressbtnAddEmpleados() {
-
-    }
-
-    @FXML
     void pressbtnAddDevoluciones() {
 
     }
@@ -1454,7 +1449,7 @@ public class ERPController {
     }
 
     @FXML
-    void pressbtncrearEmpleados() {
+    void pressbtnAddEmpleados() {
 
     }
 

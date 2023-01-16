@@ -50,6 +50,16 @@ CONSTRAINT Nombre1 FOREIGN KEY (Nombre) REFERENCES clientes (Nombre) ON UPDATE C
 CONSTRAINT Tel1 FOREIGN KEY (Tel) REFERENCES clientes (Tel) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+CREATE OR REPLACE TABLE productosexp(
+Referencia VARCHAR(15),
+Producto VARCHAR(50),
+Cantidad INT,
+CONSTRAINT Referenciaexp FOREIGN KEY (Referencia) 
+REFERENCES expediciones (Referencia)
+ON UPDATE CASCADE
+ON DELETE CASCADE
+);
+
 CREATE OR REPLACE TABLE productosrec(
 Referencia VARCHAR(15),
 Producto VARCHAR(50),
@@ -60,10 +70,10 @@ ON UPDATE CASCADE
 ON DELETE CASCADE
 );
 
-INSERT INTO proveedores VALUES ("CAD87542G", "Iago S.L.", "C/ Calatrava n8", "iago@safareyes.es", "678542987");
+INSERT INTO proveedores VALUES ('CAD87542G', 'Iago S.L.', 'C/ Calatrava n8', 'iago@safareyes.es', '678542987');
 
-INSERT INTO recepciones VALUES ("HSJF", "Iago S.L.", '2020-03-04', "agfg.pdf", "678542987", "En camino");
+INSERT INTO recepciones VALUES ('HSJF', 'Iago S.L.', '2020-03-04', 'agfg.pdf', '678542987', 'En camino');
 
-INSERT INTO productosrec VALUES ("HSJF", "Mueble", 54);
-INSERT INTO productosrec VALUES ("HSJF", "Silla", 34);
-INSERT INTO productosrec VALUES("HSJF", "Cabesona", 34);
+INSERT INTO productosrec VALUES ('HSJF', 'Mueble', 54);
+INSERT INTO productosrec VALUES ('HSJF', 'Silla', 34);
+INSERT INTO productosrec VALUES('HSJF', 'Cabesona', 34);
