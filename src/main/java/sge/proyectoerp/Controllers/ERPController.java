@@ -834,6 +834,7 @@ public class ERPController {
     void pressbtInventario() {
         cambiarpanel(PanelMenuPrincipal, PanelInventarioInicial);
         txtidpagina.setText("INVENTARIO");
+        rellenartablaRecepciones();
     }
 
     @FXML
@@ -1370,5 +1371,6 @@ public class ERPController {
         assert txtProductoExp != null : "fx:id=\"txtProductoExp\" was not injected: check your FXML file 'erp.fxml'.";
         assert ColumExpDoc != null : "fx:id=\"ColumExpDoc\" was not injected: check your FXML file 'erp.fxml'.";
         assert btnFacturacion != null : "fx:id=\"btnFacturacion\" was not injected: check your FXML file 'erp.fxml'.";
+
     }
 }
