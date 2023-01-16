@@ -41,7 +41,7 @@
             </Label>
          </children>
       </Pane>
-      <Pane fx:id="PanelMenuPrincipal" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0" visible="false">
+      <Pane fx:id="PanelMenuPrincipal" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0">
          <children>
             <GridPane alignment="CENTER" layoutX="254.0" layoutY="86.0" prefHeight="489.0" prefWidth="1043.0">
               <columnConstraints>
@@ -317,7 +317,7 @@
             </ImageView>
          </children>
       </Pane>
-      <Pane fx:id="PanelAddExpediciones" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0">
+      <Pane fx:id="PanelAddExpediciones" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0" visible="false">
          <children>
             <GridPane alignment="CENTER" layoutX="153.0" layoutY="87.0" prefHeight="291.0" prefWidth="1052.0">
                <children>
@@ -466,19 +466,23 @@
          <children>
             <GridPane alignment="CENTER" layoutX="153.0" layoutY="87.0" prefHeight="291.0" prefWidth="1052.0">
                <children>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0" GridPane.rowIndex="1">
+                  <HBox alignment="CENTER" prefHeight="91.0" prefWidth="526.0" spacing="50.0">
                      <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Dirección de entrega" textFill="WHITE">
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Referencia" textFill="WHITE">
                            <font>
-                              <Font size="17.0" />
+                              <Font name="Comic Sans MS" size="25.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtRecibirDevoluciones" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
+                        <TextField fx:id="txtReferenciaExpediciones1" prefHeight="64.0" prefWidth="301.0" promptText="RE023" stylesheets="@css/darkmode.css">
+                           <font>
+                              <Font size="34.0" />
+                           </font>
+                        </TextField>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="80.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="80.0" GridPane.rowIndex="1">
                      <children>
-                        <Label alignment="CENTER" text="Fecha prevista" textFill="WHITE">
+                        <Label alignment="CENTER" text="Cliente" textFill="WHITE">
                            <font>
                               <Font name="Comic Sans MS" size="17.0" />
                            </font>
@@ -486,15 +490,9 @@
                               <Insets left="70.0" />
                            </HBox.margin>
                         </Label>
-                        <DatePicker fx:id="dateDevoluciones" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </DatePicker>
+                        <ComboBox prefWidth="150.0" />
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="55.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <HBox alignment="CENTER" prefHeight="91.0" prefWidth="526.0" spacing="50.0" />
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="55.0" GridPane.rowIndex="2">
                      <children>
                         <Label alignment="CENTER" contentDisplay="CENTER" text="Documento origen" textFill="WHITE">
@@ -506,6 +504,19 @@
                            </HBox.margin>
                         </Label>
                         <TextField fx:id="txtDocDevoluciones" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="55.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Estado" textFill="WHITE">
+                           <font>
+                              <Font name="Comic Sans MS" size="17.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="70.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextArea prefHeight="200.0" prefWidth="200.0" stylesheets="@css/darkmode.css" />
                      </children>
                   </HBox>
                </children>
