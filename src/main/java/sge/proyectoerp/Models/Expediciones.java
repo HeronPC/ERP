@@ -10,6 +10,26 @@ public class Expediciones {
     String nombreproducto;
     int cantidad;
 
+    String contacto;
+
+    public String getContacto() {
+        return contacto;
+    }
+
+    public void setContacto(String contacto) {
+        this.contacto = contacto;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    String estado;
+
     public Expediciones(String nombreproducto, int cantidad) {
         this.nombreproducto = nombreproducto;
         this.cantidad = cantidad;
@@ -23,6 +43,14 @@ public class Expediciones {
         this.docorigen = docorigen;
         this.nombreproducto = nombreproducto;
         this.cantidad = cantidad;
+    }
+
+    public Expediciones(String contacto, String referencia, LocalDate dateReferencia, String docorigen, String estado) {
+        this.referencia = referencia;
+        this.contacto = contacto;
+        this.dateReferencia = dateReferencia;
+        this.docorigen = docorigen;
+        this.estado = estado;
     }
 
     public String getReferencia() {

@@ -289,18 +289,18 @@
                   <Font name="Comic Sans MS Bold" size="22.0" />
                </font>
             </Label>
-            <Button id="btscrear" fx:id="btncrearExpediciones" layoutX="158.0" layoutY="93.0" mnemonicParsing="false" onAction="#pressbtncrearExpediciones" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
+            <Button id="btscrear" fx:id="btncrearExpediciones" layoutX="158.0" layoutY="93.0" mnemonicParsing="false" onAction="#pressbtncrear" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE">
                <font>
                   <Font name="Comic Sans MS Bold" size="14.0" />
                </font>
             </Button>
-            <TableView fx:id="TableExpediciones" layoutX="158.0" layoutY="158.0" onMouseClicked="#SelectExpediciones" prefHeight="624.0" prefWidth="1235.0" stylesheets="@css/darkmode.css">
+            <TableView fx:id="TableExpediciones" layoutX="158.0" layoutY="158.0" onMouseClicked="#SelectExpediciones" prefHeight="519.0" prefWidth="1235.0" stylesheets="@css/darkmode.css">
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
                <columns>
-                  <TableColumn fx:id="ColumExpReferencia" editable="false" prefWidth="154.0" sortable="false" styleClass="celdas" text="Referencia" />
                   <TableColumn id="celdas" fx:id="ColumContExpediciones" prefWidth="75.0" text="Contacto" />
+                  <TableColumn fx:id="ColumExpReferencia" editable="false" prefWidth="154.0" sortable="false" styleClass="celdas" text="Referencia" />
                   <TableColumn id="celdas" fx:id="ColumExpFecha" prefWidth="75.0" text="Fecha Prevista" />
                   <TableColumn id="celdas" fx:id="ColumExpDoc" prefWidth="75.0" text="Documento origen" />
                   <TableColumn id="celdas" fx:id="ColumExpEstado" prefWidth="75.0" text="Estado" />
@@ -361,8 +361,20 @@
                         <TextField fx:id="txtDocExp" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="91.0" prefWidth="526.0" spacing="50.0" />
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="55.0" GridPane.rowIndex="2" />
+                  <HBox alignment="CENTER" prefHeight="91.0" prefWidth="526.0" spacing="50.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Referencia" textFill="WHITE">
+                           <font>
+                              <Font name="Comic Sans MS" size="25.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="txtReferenciaExpediciones" prefHeight="64.0" prefWidth="301.0" promptText="MuchoTexto" stylesheets="@css/darkmode.css">
+                           <font>
+                              <Font size="34.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </HBox>
                </children>
                <columnConstraints>
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -374,13 +386,13 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
             </GridPane>
-            <TableView fx:id="tablaExp" editable="true" layoutX="158.0" layoutY="452.0" onMouseClicked="#selectExpediciones" prefHeight="200.0" prefWidth="1043.0">
+            <TableView fx:id="tablaExp" editable="true" layoutX="158.0" layoutY="452.0" onMouseClicked="#selectAddExpediciones" prefHeight="200.0" prefWidth="1043.0">
                <columns>
                   <TableColumn fx:id="ColumProductoExpedic" prefWidth="664.0" text="Producto" />
                   <TableColumn fx:id="ColumCantidadExpedic" prefWidth="378.0" text="Cantidad" />
                </columns>
             </TableView>
-            <Label layoutX="40.0" layoutY="23.0" text="EXPEDICIONES / NUEVO" textAlignment="CENTER" textFill="WHITE">
+            <Label fx:id="lblAtrasExp" layoutX="40.0" layoutY="23.0" text="EXPEDICIONES / NUEVO" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="Comic Sans MS Bold" size="22.0" />
                </font>

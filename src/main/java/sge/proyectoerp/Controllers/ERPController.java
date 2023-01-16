@@ -140,7 +140,7 @@ public class ERPController {
     private Pane PanelInventarioInicial;
 
     @FXML
-    private TableColumn<?, ?> ColumExpFecha;
+    private TableColumn<Expediciones, LocalDate> ColumExpFecha;
 
     @FXML
     private TextField txtNombreEmpleado;
@@ -158,7 +158,7 @@ public class ERPController {
     private Button btnSeleccionarIMG;
 
     @FXML
-    private TableColumn<?, ?> ColumExpEstado;
+    private TableColumn<Expediciones, String> ColumExpEstado;
 
     @FXML
     private DatePicker dateReferencia2;
@@ -197,7 +197,7 @@ public class ERPController {
     private TableView<?> tableDepartamentos;
 
     @FXML
-    private TableView<?> TableExpediciones;
+    private TableView<Expediciones> TableExpediciones;
 
     @FXML
     private TextField txtHorasSemanalesEditarEmpleado;
@@ -215,7 +215,7 @@ public class ERPController {
     private TextField txtTelefonoEditarEmpleado;
 
     @FXML
-    private TableView<?> tablaExp;
+    private TableView<Expediciones> tablaExp;
 
     @FXML
     private Label lblnombreusuario;
@@ -347,6 +347,9 @@ public class ERPController {
     private TextField txtDocumento21212;
 
     @FXML
+    private TextField txtReferenciaExpediciones;
+
+    @FXML
     private TextField txtrecibir;
 
     @FXML
@@ -359,7 +362,7 @@ public class ERPController {
     private Button btnVolverDevolNew;
 
     @FXML
-    private TableColumn<?, ?> ColumExpReferencia;
+    private TableColumn<Expediciones, String> ColumExpReferencia;
 
     @FXML
     private TextField txtDocumentoEditarEmpleado;
@@ -371,7 +374,7 @@ public class ERPController {
     private Button btncrearExpediciones;
 
     @FXML
-    private TableColumn<?, ?> ColumContExpediciones;
+    private TableColumn<Expediciones, String> ColumContExpediciones;
 
     @FXML
     private Button btnVolverDevoluciones;
@@ -425,7 +428,7 @@ public class ERPController {
     private TextField txtProductoExp;
 
     @FXML
-    private TableColumn<?, ?> ColumExpDoc;
+    private TableColumn<Expediciones, String> ColumExpDoc;
 
     @FXML
     private Button btnFacturacion;
@@ -465,6 +468,9 @@ public class ERPController {
 
     @FXML
     private Label txtidpagina1;
+
+    @FXML
+    private Label lblAtrasExp;
 
     @FXML
     private Pane Pbasesdedatos;
@@ -837,6 +843,7 @@ public class ERPController {
         cambiarpanel(PanelMenuPrincipal, PanelInventarioInicial);
         txtidpagina.setText("INVENTARIO");
         rellenartablaRecepciones();
+        rellenartablaExpediciones();
     }
 
     @FXML
@@ -881,6 +888,10 @@ public class ERPController {
             btnCrearRecepciones.setText("CREAR");
             clearRecepciones();
         } else if (PanelExpediciones.isVisible()) {
+            DateExpediciones.setValue(LocalDate.now());
+            lblAtrasExp.setText("EXPEDICIONES / CREAR");
+            txtReferenciaExpediciones.setDisable(false);
+            btnCrearExpediciones.setText("CREAR");
             cambiarpanel(PanelExpediciones, PanelAddExpediciones);
         } else if (PanelDevoluciones.isVisible()) {
             cambiarpanel(PanelDevoluciones, PanelAddDevoluciones);
@@ -1157,9 +1168,263 @@ public class ERPController {
         }
     }
 
+    //Expediciones
+    void rellenartablaExpediciones() {
+        Connection conexion = null;
+        //Ejecutamos el código en un try para controlar las excepciones
+        try {
+            //Creamos la conexion
+            conexion = DriverManager.getConnection(cadconexion, user, pswd);
+            Statement st = conexion.createStatement();
+            TableExpediciones.getItems().clear();
+            //Creamos la consulta
+            String consulta = "SELECT Tel, Referencia, FechaPrevista, Documento, Estado FROM expediciones";
+            //Guardamos la ejecución de la consulta en la variable rs
+            ResultSet rs = st.executeQuery(consulta);
+            //Bucle para seguir importando datos mientras los haya
+            ObservableList<Expediciones> obsexp = FXCollections.observableArrayList();
+            while (rs.next()) {
+                //ObservableList para guardar dentro el paciente correspondiente para añadirlo a las columnas
+                //Creamos un paciente, con los campos obtenidos de la consulta
+                obsexp.add(new Expediciones(rs.getString(1),
+                        rs.getString(2),
+                        rs.getDate(3).toLocalDate(),
+                        rs.getString(4),
+                        rs.getString(5))
+                );
+                //Relacionamos la columna con el campo del constructor correcto
+                ColumContExpediciones.setCellValueFactory(new PropertyValueFactory<>("contacto"));
+                ColumExpReferencia.setCellValueFactory(new PropertyValueFactory<>("referencia"));
+                ColumExpFecha.setCellValueFactory(new PropertyValueFactory<>("dateReferencia"));
+                ColumExpDoc.setCellValueFactory(new PropertyValueFactory<>("docorigen"));
+                ColumExpEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+                //Metemos dentro la tabla paciente la lista creada anteriormente
+                TableExpediciones.setItems(obsexp);
+            }
+            //Refrescamos la tabla paciente
+            TableExpediciones.refresh();
+            //Controlamos las excepciones mostrándolas por la terminal
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //Controlamos que la connexion sea null, en el caso contrario lo definiremos como tal
+            try {
+                assert conexion != null;
+                conexion.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    void rellenartablaAddExcepciones() {
+        //Ejecutamos el código en un try para controlar las excepciones
+        tablaExp.getItems().clear();
+        try {
+            ObservableList<Expediciones> obsexp = FXCollections.observableArrayList();
+            //Rellenamos los datos de los pacientes con sus respectivos campos
+            ColumProductoExpedic.setCellValueFactory(new PropertyValueFactory<>("nombreproducto"));
+            ColumCantidadExpedic.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+            txtProducto.setText("");
+            txtCantidad.setText("");
+            obsexp.addAll(listexpediciones);
+            tablaExp.setItems(obsexp);
+            tablaExp.refresh();
+            //Controlamos las excepciones mostrándolas por la terminal
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void pressbtnExpAdd() {
+        //Ejecutamos el código en un try para controlar las excepciones
+        try {
+            listexpediciones.add(new Expediciones(txtProductoExp.getText(), Integer.parseInt(txtCantidadExp.getText())));
+            txtProducto.clear();
+            txtCantidad.clear();
+            rellenartablaAddExcepciones();
+
+            //Controlamos las excepciones mostrándolas por la terminal
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     void pressbtnCrearExpediciones() {
+        if (Objects.equals(btncrearExpediciones.getText(), "EDITAR")){
+            //Creamos conexión null por si tuviéramos otra conexión cerrarla
+            Connection conexion = null;
+            //Ejecutamos dentro de un try para controlar todas las excepciones posibles
+            try {
+                //Creamos la conexión con la base de datos
+                conexion = DriverManager.getConnection(cadconexionps, user, pswd);
+                //Utilizamos un PreparedStatement para la consulta para mayor seguridad
 
+                Statement st = conexion.createStatement();
+                //Parseamos la fecha
+                String fecha = DateExpediciones.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                LocalDate localdate = parse(fecha);
+
+                String consulta = String.format("UPDATE expediciones SET Nombre = '%s', " +
+                                "FechaPrevista = '%s', " +
+                                "Direccion = '%s', " +
+                                "Documento = '%s' " +
+                                "WHERE Referencia = '%s'", txtrecibir.getText(), //Cambiar por campo Nombre
+                        Date.valueOf(localdate), txtdireccionExpediciones.getText(),
+                        txtDocExp.getText(),
+                        txtReferenciaExpediciones.getText());
+
+                //Creamos una ventana de confirmacion para la modificacion del ingreso
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setHeaderText(null);
+                alert.setTitle("Confirmación");
+                alert.setContentText("Recuerde presionar en añadir producto para completar la edicion del producto");
+                Optional<ButtonType> action = alert.showAndWait();
+                //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+                if (action.orElseThrow() == ButtonType.OK) {
+                    st.executeUpdate(consulta);
+                    //Creamos el Statement con la conexion
+                    for (Expediciones listexp : listexpediciones) {
+                        String consulta2 = String.format("Update productosexp set Referencia = '%s', Producto = '%s', Cantidad = %s",
+                                txtReferenciaExpediciones.getText(),
+                                listexp.getNombreproducto(),
+                                listexp.getCantidad());
+                        st.execute(consulta2);
+                    }
+                    crearalertainfo("Expedicion editada");
+                    rellenartablaExpediciones();
+                    cambiarpanel(panelactual, PanelExpediciones);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if(Objects.equals(btnCrearExpediciones.getText(), "CREAR")){
+            //Creamos conexión null por si tuviéramos otra conexión cerrarla
+            Connection conexion = null;
+            //Ejecutamos dentro de un try para controlar todas las excepciones posibles
+            try {
+                //Creamos la conexión con la base de datos
+                conexion = DriverManager.getConnection(cadconexionps, user, pswd);
+                //Utilizamos un PreparedStatement para la consulta para mayor seguridad
+                PreparedStatement ps = conexion.prepareStatement("INSERT INTO expediciones (Referencia, Direccion, FechaPrevista, Documento) VALUES  (?, ?, ?, ?)");
+
+                ps.setString(1, txtReferenciaExpediciones.getText());
+                ps.setString(2, txtdireccionExpediciones.getText());
+                //Parseamos la fecha
+                String fecha = DateExpediciones.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                LocalDate localdate = parse(fecha);
+                ps.setDate(3, Date.valueOf(localdate));
+                ps.setString(4, txtDocExp.getText());
+                //Creamos una ventana de confirmacion para la modificacion del ingreso
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setHeaderText(null);
+                alert.setTitle("Confirmación");
+                alert.setContentText("Recuerde presionar en añadir producto para completar la insercion del producto");
+                Optional<ButtonType> action = alert.showAndWait();
+                //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+                if (action.orElseThrow() == ButtonType.OK) {
+                    ps.executeUpdate();
+                    //Creamos el Statement con la conexion
+                    Statement st = conexion.createStatement();
+                    for (Expediciones listexp : listexpediciones) {
+                        String consulta = String.format("insert into productosexp values ('%s', '%s', %s)",
+                                txtReferenciaExpediciones.getText(),
+                                listexp.getNombreproducto(),
+                                listexp.getCantidad());
+                        st.execute(consulta);
+                    }
+                    crearalertainfo("Expedicion creada");
+                    rellenartablaExpediciones();
+                    cambiarpanel(panelactual, PanelExpediciones);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    @FXML
+    void SelectExpediciones() {
+        //Definimos el campo de conexion como null
+        Connection conexion = null;
+        //Ejecutamos dentro de un try para controlar las excepciones
+        try {
+            tablaExp.getItems().clear();
+            //Creamos un paciente con los datos extraidos del campo seleccionado de la tabla
+            Expediciones exp = TableExpediciones.getSelectionModel().getSelectedItem();
+            //Creamos la conexion
+            conexion = DriverManager.getConnection(cadconexion, user, pswd);
+            //Creamos el correspondiente Statement con nuestra conexion anterior
+            Statement st = conexion.createStatement();
+            //Creamos la consulta
+            referenciaactual = exp.getReferencia();
+            String consulta2 = String.format("Select * from expediciones where referencia = '%s'", exp.getReferencia());
+            ResultSet rs = st.executeQuery(consulta2);
+            if (rs.next()) {
+                txtReferenciaExpediciones.setText(exp.getReferencia());
+                txtdireccionExpediciones.setText(rs.getString(2));
+                DateExpediciones.setValue(rs.getDate(4).toLocalDate());
+                txtDocExp.setText(rs.getString(5));
+            }
+            rellenartablaAddExcepciones();
+            lblAtrasExp.setText("EXCEPCIONES / EDITAR");
+            txtReferenciaExpediciones.setDisable(true);
+            btnCrearExpediciones.setText("EDITAR");
+            cambiarpanel(panelactual, PanelAddExpediciones);
+            //Controlamos las excepciones con los catch
+        } catch (NullPointerException pi) {
+            System.out.print("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //Comprobamos que la conexion sea null, en caso de que no lo sea la cerramos
+            try {
+                assert conexion != null;
+                conexion.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    void selectAddExpediciones() {
+        Connection conexion = null;
+        //Ejecutaremos el codigo dentro de un try para controlar las excepciones
+        try {
+            //Creamos un médico con los datos selecionados de la tabla
+            Expediciones exp = tablaExp.getSelectionModel().getSelectedItem();
+            //Creamos la conexion
+            conexion = DriverManager.getConnection(cadconexion, user, pswd);
+            //Creamos el Statement con la conexion
+            Statement st = conexion.createStatement();
+            //Creamos la consulta
+            String consulta = "Select Producto, Cantidad from productosexp";
+            //Guardamos dentro del ResulSet la ejecucion de la consulta con la conexion anterior
+            ResultSet rs = st.executeQuery(consulta);
+            //Con un if comprobamos que los datos sean validos
+            while (rs.next()) {
+                if (Objects.equals(rs.getString(1), exp.getNombreproducto())) {
+                    txtProductoExp.setText(rs.getString(1));
+                    txtCantidadExp.setText(String.valueOf(rs.getInt(2)));
+                    break;
+                }
+            }
+
+            String consulta2 = String.format("Select Producto, Cantidad from productosrexp where referencia = '%s'", referenciaactual);
+            //Guardamos dentro del ResulSet la ejecucion de la consulta con la conexion anterior
+            ResultSet rs2 = st.executeQuery(consulta2);
+            listexpediciones.clear();
+            while (rs2.next()) {
+                listexpediciones.add(new Expediciones(rs2.getString(1), rs2.getInt(2)));
+            }
+            //Controlamos las excepciones mostrandolas por la terminal
+        } catch (NullPointerException pi) {
+            System.out.print("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -1169,26 +1434,6 @@ public class ERPController {
 
     @FXML
     void pressbtnAddEmpleados() {
-
-    }
-
-    @FXML
-    void pressbtncrearExpediciones() {
-
-    }
-
-    @FXML
-    void SelectExpediciones() {
-
-    }
-
-    @FXML
-    void selectExpediciones() {
-
-    }
-
-    @FXML
-    void pressbtnExpAdd() {
 
     }
 
