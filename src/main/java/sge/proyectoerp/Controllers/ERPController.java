@@ -90,9 +90,6 @@ public class ERPController {
     private TableColumn<?, ?> Fechacolumn;
 
     @FXML
-    private Label lblAtrasExpediciones;
-
-    @FXML
     private DatePicker dateReferencia;
 
     @FXML
@@ -195,9 +192,6 @@ public class ERPController {
     private TableColumn<?, ?> Referenciacolumn;
 
     @FXML
-    private Label lblAtrasDevoluciones;
-
-    @FXML
     private TableView<?> tableDepartamentos;
 
     @FXML
@@ -222,7 +216,7 @@ public class ERPController {
     private TableView<?> tablaExp;
 
     @FXML
-    private Label nombreusuario;
+    private Label lblnombreusuario;
 
     @FXML
     private TextField txtemailEmpleado;
@@ -435,9 +429,6 @@ public class ERPController {
     private Button btnFacturacion;
 
     @FXML
-    private Label lblnombreusuario;
-
-    @FXML
     private Pane BarraSuperior1;
 
     @FXML
@@ -568,7 +559,6 @@ public class ERPController {
     String nombd;
     Stage stageerp = new Stage();
 
-    ObservableList<String> items1 = FXCollections.observableArrayList();
     @FXML
     public void pressbtnewbd(){
         Pnewbd.setVisible(false);
@@ -721,12 +711,9 @@ public class ERPController {
                 cambiarpanel(PanelEmpleados,PanelEditEmpleados);
             }
         });
-        bteliminar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                //pressbtnCrearEmpleados();
-                //Eliminar de la base de datos el nombre de la persona que es el id el boton pulsado y usar la funcion para que se vuelva a rellenar el gridpane
-            }
+        bteliminar.addActionListener(e -> {
+            //pressbtnCrearEmpleados();
+            //Eliminar de la base de datos el nombre de la persona que es el id el boton pulsado y usar la funcion para que se vuelva a rellenar el gridpane
         });
         //Establecemos la posicion en el panel de cada objeto
         newpane.add(btpane, BorderLayout.EAST);
@@ -743,7 +730,9 @@ public class ERPController {
             cols=-1;
             filas++;
         }
-        if(filas==5 && cols==5){}//debes deshabilitar el método cuandotodo el gripane esta lleno
+        if(filas==5 && cols==5){
+
+        }//debes deshabilitar el método cuandotodo el gripane esta lleno
         cols++;
         counter++;
     }
@@ -967,7 +956,7 @@ public class ERPController {
 
             String consulta2 = String.format("Select Producto, Cantidad from productosrec where referencia = '%s'", referenciaactual);
             //Guardamos dentro del ResulSet la ejecucion de la consulta con la conexion anterior
-            ResultSet rs2 = st.executeQuery(consulta);
+            ResultSet rs2 = st.executeQuery(consulta2);
             listrecepciones.clear();
             while (rs2.next()) {
                 listrecepciones.add(new Recepciones(rs2.getString(1), rs2.getInt(2)));
@@ -1262,7 +1251,6 @@ public class ERPController {
         assert PanelEmpleados != null : "fx:id=\"PanelEmpleados\" was not injected: check your FXML file 'erp.fxml'.";
         assert txtDocumento212131 != null : "fx:id=\"txtDocumento212131\" was not injected: check your FXML file 'erp.fxml'.";
         assert Fechacolumn != null : "fx:id=\"Fechacolumn\" was not injected: check your FXML file 'erp.fxml'.";
-        assert lblAtrasExpediciones != null : "fx:id=\"lblAtrasExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
         assert dateReferencia != null : "fx:id=\"dateReferencia\" was not injected: check your FXML file 'erp.fxml'.";
         assert txtReferencia != null : "fx:id=\"txtReferencia\" was not injected: check your FXML file 'erp.fxml'.";
         assert btnAddDevoluciones != null : "fx:id=\"btnAddDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
@@ -1296,7 +1284,6 @@ public class ERPController {
         assert txtDocExp != null : "fx:id=\"txtDocExp\" was not injected: check your FXML file 'erp.fxml'.";
         assert btnEditarEmpleados != null : "fx:id=\"btnEditarEmpleados\" was not injected: check your FXML file 'erp.fxml'.";
         assert Referenciacolumn != null : "fx:id=\"Referenciacolumn\" was not injected: check your FXML file 'erp.fxml'.";
-        assert lblAtrasDevoluciones != null : "fx:id=\"lblAtrasDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
         assert tableDepartamentos != null : "fx:id=\"tableDepartamentos\" was not injected: check your FXML file 'erp.fxml'.";
         assert TableExpediciones != null : "fx:id=\"TableExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
         assert txtHorasSemanalesEditarEmpleado != null : "fx:id=\"txtHorasSemanalesEditarEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
@@ -1305,7 +1292,6 @@ public class ERPController {
         assert btnVolverEmpEdit != null : "fx:id=\"btnVolverEmpEdit\" was not injected: check your FXML file 'erp.fxml'.";
         assert txtTelefonoEditarEmpleado != null : "fx:id=\"txtTelefonoEditarEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
         assert tablaExp != null : "fx:id=\"tablaExp\" was not injected: check your FXML file 'erp.fxml'.";
-        assert nombreusuario != null : "fx:id=\"nombreusuario\" was not injected: check your FXML file 'erp.fxml'.";
         assert txtemailEmpleado != null : "fx:id=\"txtemailEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
         assert btnExpAdd != null : "fx:id=\"btnExpAdd\" was not injected: check your FXML file 'erp.fxml'.";
         assert tableDevoluciones != null : "fx:id=\"tableDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
