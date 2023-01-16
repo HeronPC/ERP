@@ -3,11 +3,11 @@ package sge.proyectoerp.Models;
 import java.time.LocalDate;
 
 public class Devoluciones {
-    String recibir;
-    LocalDate date;
     String docorigen;
     String nombreproducto;
-    String tipo;
+    String contacto;
+    String referencia;
+    String motivo;
     int cantidad;
 
     public Devoluciones(String nombreproducto, int cantidad) {
@@ -15,26 +15,28 @@ public class Devoluciones {
         this.cantidad = cantidad;
     }
 
-
-    public Devoluciones(String recibir, LocalDate date, String tipo, String docorigen, String nombreproducto, int cantidad) {
-        this.recibir = recibir;
-        this.date = date;
-        this.tipo = tipo;
+    public Devoluciones(String docorigen, String nombreproducto, String contacto, String referencia, String motivo, int cantidad) {
         this.docorigen = docorigen;
         this.nombreproducto = nombreproducto;
+        this.contacto = contacto;
+        this.referencia = referencia;
+        this.motivo = motivo;
         this.cantidad = cantidad;
     }
 
-    public String getTipo() {
-        return tipo;
+    public Devoluciones(String contacto, String referencia, String docorigen, String motivo) {
+        this.contacto = contacto;
+        this.referencia = referencia;
+        this.docorigen = docorigen;
+        this.motivo = motivo;
     }
 
-    public String getRecibir() {
-        return recibir;
+    public String getContacto() {
+        return contacto;
     }
 
-    public LocalDate getDateReferencia() {
-        return date;
+    public String getReferencia() {
+        return referencia;
     }
 
     public String getDocorigen() {

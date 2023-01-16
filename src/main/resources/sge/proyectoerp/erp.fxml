@@ -41,7 +41,7 @@
             </Label>
          </children>
       </Pane>
-      <Pane fx:id="PanelMenuPrincipal" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0">
+      <Pane fx:id="PanelMenuPrincipal" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0" visible="false">
          <children>
             <GridPane alignment="CENTER" layoutX="254.0" layoutY="86.0" prefHeight="489.0" prefWidth="1043.0">
               <columnConstraints>
@@ -317,7 +317,7 @@
             </ImageView>
          </children>
       </Pane>
-      <Pane fx:id="PanelAddExpediciones" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0" visible="false">
+      <Pane fx:id="PanelAddExpediciones" layoutY="83.0" prefHeight="707.0" prefWidth="1536.0">
          <children>
             <GridPane alignment="CENTER" layoutX="153.0" layoutY="87.0" prefHeight="291.0" prefWidth="1052.0">
                <children>
@@ -373,6 +373,16 @@
                               <Font size="34.0" />
                            </font>
                         </TextField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0" GridPane.columnIndex="1">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Nombre" textFill="WHITE">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="txtnombreExpediciones" prefHeight="31.0" prefWidth="179.0" stylesheets="@css/darkmode.css" />
                      </children>
                   </HBox>
                </children>

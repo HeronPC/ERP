@@ -275,7 +275,7 @@ public class ERPController {
     private ImageView imgperfil1122;
 
     @FXML
-    private TableView<?> TableDevoluciones;
+    private TableView<Devoluciones> TableDevoluciones;
 
     @FXML
     private ImageView imgperfil1121;
@@ -1241,8 +1241,8 @@ public class ERPController {
         //Ejecutamos el código en un try para controlar las excepciones
         try {
             listexpediciones.add(new Expediciones(txtProductoExp.getText(), Integer.parseInt(txtCantidadExp.getText())));
-            txtProducto.clear();
-            txtCantidad.clear();
+            txtProductoExp.clear();
+            txtCantidadExp.clear();
             rellenartablaAddExcepciones();
 
             //Controlamos las excepciones mostrándolas por la terminal
@@ -1253,7 +1253,7 @@ public class ERPController {
 
     @FXML
     void pressbtnCrearExpediciones() {
-        if (Objects.equals(btncrearExpediciones.getText(), "EDITAR")){
+        if (Objects.equals(btnCrearExpediciones.getText(), "EDITAR")){
             //Creamos conexión null por si tuviéramos otra conexión cerrarla
             Connection conexion = null;
             //Ejecutamos dentro de un try para controlar todas las excepciones posibles
@@ -1427,6 +1427,7 @@ public class ERPController {
         }
     }
 
+    //Devoluciones
     @FXML
     void pressbtnCrearDevoluciones() {
 
@@ -1435,6 +1436,53 @@ public class ERPController {
     @FXML
     void pressbtnAddDevoluciones() {
 
+    }
+
+    void rellenaTableDevoluciones() {
+        Connection conexion = null;
+        //Ejecutamos el código en un try para controlar las excepciones
+        try {
+            //Creamos la conexion
+            conexion = DriverManager.getConnection(cadconexion, user, pswd);
+            Statement st = conexion.createStatement();
+            TableDevoluciones.getItems().clear();
+            //Creamos la consulta
+            String consulta = "SELECT Tel, Referencia, FechaPrevista, Documento, Estado FROM expediciones";
+            //Guardamos la ejecución de la consulta en la variable rs
+            ResultSet rs = st.executeQuery(consulta);
+            //Bucle para seguir importando datos mientras los haya
+            ObservableList<Devoluciones> obsdev = FXCollections.observableArrayList();
+            while (rs.next()) {
+                //ObservableList para guardar dentro el paciente correspondiente para añadirlo a las columnas
+                //Creamos un paciente, con los campos obtenidos de la consulta
+                obsdev.add(new Devoluciones(rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4)
+                ));
+                //Relacionamos la columna con el campo del constructor correcto
+                ColumContExpediciones.setCellValueFactory(new PropertyValueFactory<>("contacto"));
+                ColumExpReferencia.setCellValueFactory(new PropertyValueFactory<>("referencia"));
+                ColumExpFecha.setCellValueFactory(new PropertyValueFactory<>("dateReferencia"));
+                ColumExpDoc.setCellValueFactory(new PropertyValueFactory<>("docorigen"));
+                ColumExpEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+                //Metemos dentro la tabla paciente la lista creada anteriormente
+                TableDevoluciones.setItems(obsdev);
+            }
+            //Refrescamos la tabla paciente
+            TableDevoluciones.refresh();
+            //Controlamos las excepciones mostrándolas por la terminal
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //Controlamos que la connexion sea null, en el caso contrario lo definiremos como tal
+            try {
+                assert conexion != null;
+                conexion.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
@@ -1458,10 +1506,7 @@ public class ERPController {
 
     }
 
-    @FXML
-    void pressbtnEditarEmpleados() {
 
-    }
     @FXML
     void initialize() {
         assert lblnombreusuario != null : "fx:id=\"lblnombreusuario\" was not injected: check your FXML file 'bd.fxml'.";
