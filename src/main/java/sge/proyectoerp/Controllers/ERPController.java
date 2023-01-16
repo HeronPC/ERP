@@ -20,6 +20,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import sge.proyectoerp.ERPApplication;
 import sge.proyectoerp.Models.Devoluciones;
 import sge.proyectoerp.Models.Expediciones;
@@ -31,6 +32,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.sql.*;
@@ -537,6 +539,8 @@ public class ERPController {
         Scene scene= new Scene(root, 1068, 700);
         stagebd.setScene(scene);
         stagebd.centerOnScreen();
+        stagebd.initStyle(StageStyle.DECORATED);
+        stagebd.initStyle(StageStyle.TRANSPARENT);
         stagebd.show();
         ((Node)(event.getSource())).getScene().getWindow().hide();
         Label myLabel = (Label) root.lookup("#lblnombreusuario");
@@ -586,10 +590,10 @@ public class ERPController {
         Panelbd.add(Panelizq,BorderLayout.WEST);
         Panelbd.add(btentrar,BorderLayout.EAST);
         btel.addActionListener(new ActionListener() {
-           @Override
-           public void actionPerformed(java.awt.event.ActionEvent el) {
-               //Metodo para eliminar las base de datos añadidas en el usuario, para eliminarlas deberas hacer un delete a la base de datos y luego llamar al metodo para que recarge los paneles de las base de datos
-           }
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent el) {
+                //Metodo para eliminar las base de datos añadidas en el usuario, para eliminarlas deberas hacer un delete a la base de datos y luego llamar al metodo para que recarge los paneles de las base de datos
+            }
         });
 
         btentrar.addActionListener(new ActionListener() {
@@ -603,10 +607,13 @@ public class ERPController {
                             Scene scene= new Scene(root, 1536, 790);
                             stageerp.setScene(scene);
                             stageerp.centerOnScreen();
+                            stageerp.setMaximized(true);
                             stageerp.show();
                             Label myLabel = (Label) root.lookup("#lblnombreusuario");
                             usuario = lblnombreusuario.getText();
                             myLabel.setText(usuario);
+                        } catch (MalformedURLException ex) {
+                            throw new RuntimeException(ex);
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
                         }
@@ -620,8 +627,8 @@ public class ERPController {
         filas++;
         if(filas==4){btaddbd.setDisable(true);}//debes deshabilitar el método cuandotodo el gripane esta lleno
         counter++;
-
     }
+
 
     @FXML
     public void presscerrar(){
@@ -790,7 +797,13 @@ public class ERPController {
             PanelMenuPrincipal.setVisible(true);
         }
     }
-
+    @FXML
+    void pressatrasinicio(ActionEvent event){
+        if(PRegistro.isVisible()){
+            ((Node)(event.getSource())).getScene().getWindow().hide();
+            app.start(new Stage());
+        }
+    }
     @FXML
     void pressatras() {
         if (PanelRecepciones.isVisible() || PanelExpediciones.isVisible() || PanelDevoluciones.isVisible()) {
