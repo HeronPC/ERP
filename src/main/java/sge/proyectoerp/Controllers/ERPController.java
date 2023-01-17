@@ -615,6 +615,8 @@ public class ERPController {
                             stageerp.centerOnScreen();
                             stageerp.setMaximized(true);
                             stageerp.show();
+                            Pane myPanel = (Pane) root.lookup("#PanelMenuPrincipal");
+                            myPanel.setMaxSize(1500,790);
                             Label myLabel = (Label) root.lookup("#lblnombreusuario");
                             usuario = lblnombreusuario.getText();
                             myLabel.setText(usuario);
