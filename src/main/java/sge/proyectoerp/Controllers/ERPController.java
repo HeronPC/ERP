@@ -491,7 +491,7 @@ public class ERPController {
     private ImageView imgperfil1111;
 
     @FXML
-    private TextField txtcontrasena12;
+    private TextField txtemailregister;
 
     @FXML
     private TextField txtcontrasena11;
@@ -500,7 +500,7 @@ public class ERPController {
     private TextField txtcontrasena1;
 
     @FXML
-    private TextField txtcontrasena13;
+    private TextField txttelregister;
 
     @FXML
     private Pane PRegistro;
@@ -556,9 +556,49 @@ public class ERPController {
         usuario = txtusuario.getText();
         return usuario;
     };
+
+    boolean complogin = true;
+
+    private void comprobarlogin(){
+
+    }
     @FXML
     public void pressbtnregistrarse(){
+        //Definimos conexion como null
+        Connection conexion = null;
+        //Ejecutamos el comprobarlogin para controlar posibles fallos a la hora de hacer la consulta
+        comprobarlogin();
+        //Comprobamos que la variable complogin sea true
+        if (complogin) {
+            //Ejecutamos dentro de un try para controlar posibles excepciones
+            try {
+                conexion = DriverManager.getConnection(cadconexion, user, pswd);
+                //Creamos la consulta con PreparedStatement
+                PreparedStatement ps2 = conexion.prepareStatement("insert into usuarios VALUES (?, ?, ?, ?, ?)");
+                ps2.setString(1, txtusuario1.getText());
+                ps2.setString(2, txtcontrasena1.getText());
+                ps2.setString(3, txtemailregister.getText());
+                ps2.setString(4, txttelregister.getText());
+                ps2.setString(5, "macaco.png");
+                //Ejecutamos la consulta
 
+                if(Objects.equals(txtcontrasena1.getText(), txtcontrasena11.getText())){
+                    ps2.executeUpdate();
+                    crearalertainfo("Usuario Registrado");
+                }
+                //Controlamos la excepciones
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }finally {
+                try {
+                    //Cerramos la conexion para ahorrar recursos
+                    assert conexion != null;
+                    conexion.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
     @FXML
     public void pressaddbd(){
@@ -615,8 +655,9 @@ public class ERPController {
                             stageerp.centerOnScreen();
                             stageerp.setMaximized(true);
                             stageerp.show();
-                            Pane myPanel = (Pane) root.lookup("#PanelMenuPrincipal");
-                            myPanel.setMaxSize(1500,790);
+                            Pane myPanel = (Pane) root.lookup("#Menu");
+                            myPanel.setLayoutX(0);
+                            myPanel.setLayoutY(100);
                             Label myLabel = (Label) root.lookup("#lblnombreusuario");
                             usuario = lblnombreusuario.getText();
                             myLabel.setText(usuario);
@@ -1530,10 +1571,10 @@ public class ERPController {
         assert txtusuario != null : "fx:id=\"txtusuario\" was not injected: check your FXML file 'inicio.fxml'.";
         assert txtcontrasena != null : "fx:id=\"txtcontrasena\" was not injected: check your FXML file 'inicio.fxml'.";
         assert imgperfil1111 != null : "fx:id=\"imgperfil1111\" was not injected: check your FXML file 'register.fxml'.";
-        assert txtcontrasena12 != null : "fx:id=\"txtcontrasena12\" was not injected: check your FXML file 'register.fxml'.";
+        assert txtemailregister != null : "fx:id=\"txtemailregister\" was not injected: check your FXML file 'register.fxml'.";
         assert txtcontrasena11 != null : "fx:id=\"txtcontrasena11\" was not injected: check your FXML file 'register.fxml'.";
         assert txtcontrasena1 != null : "fx:id=\"txtcontrasena1\" was not injected: check your FXML file 'register.fxml'.";
-        assert txtcontrasena13 != null : "fx:id=\"txtcontrasena13\" was not injected: check your FXML file 'register.fxml'.";
+        assert txttelregister != null : "fx:id=\"txttelregister\" was not injected: check your FXML file 'register.fxml'.";
         assert PRegistro != null : "fx:id=\"PRegistro\" was not injected: check your FXML file 'register.fxml'.";
         assert txtusuario1 != null : "fx:id=\"txtusuario1\" was not injected: check your FXML file 'register.fxml'.";
         assert btcuenta1111 != null : "fx:id=\"btcuenta1111\" was not injected: check your FXML file 'register.fxml'.";

@@ -1,6 +1,6 @@
-CREATE DATABASE if NOT EXISTS ERP;
+CREATE DATABASE if NOT EXISTS PruebaScript;
 
-USE ERP;
+USE PruebaScript;
 
 CREATE OR REPLACE TABLE proveedores(
 CIF CHAR(9) PRIMARY KEY,
@@ -23,11 +23,19 @@ CONSTRAINT Tel FOREIGN KEY (Tel) REFERENCES proveedores (Tel)
 
 CREATE OR REPLACE TABLE devoluciones(
 Referencia VARCHAR(15) PRIMARY KEY,
-Proveedor VARCHAR(50),
-FechaPrevista DATE,
+Cliente VARCHAR(50),
 Documento VARCHAR(100),
-NombreProducto VARCHAR(50),
-Cantidad INT
+Estado VARCHAR(100)
+);
+
+CREATE OR REPLACE TABLE productosdev(
+Referencia VARCHAR(15),
+Producto VARCHAR(50),
+Cantidad INT,
+CONSTRAINT Referenciadev FOREIGN KEY (Referencia) 
+REFERENCES devoluciones (Referencia)
+ON UPDATE CASCADE
+ON DELETE CASCADE
 );
 
 CREATE OR REPLACE TABLE clientes(
