@@ -14,7 +14,6 @@ import java.util.Objects;
 public class ERPApplication extends Application {
     Scene scene;
     public Parent root;
-    public Stage primaryStage;
     @Override
     public void start(Stage primaryStage){
         try {
