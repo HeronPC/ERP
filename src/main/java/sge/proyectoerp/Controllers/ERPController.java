@@ -503,6 +503,9 @@ public class ERPController {
     private TextField txttelregister;
 
     @FXML
+    private ImageView imgusuario;
+
+    @FXML
     private Pane PRegistro;
 
     @FXML
@@ -724,7 +727,12 @@ public class ERPController {
         if (file != null) {
             image = file.getPath();
             imagenem = new Image(image);
-            imgempleado.setImage(imagenem);
+            if(PRegistro.isVisible()){
+                imgusuario.setImage(imagenem);
+            }else if(PanelAddEmpleados.isVisible()){
+                imgempleado.setImage(imagenem);
+            }
+
         }
     }
     //Metodo que crea los paneles de cada empleado
