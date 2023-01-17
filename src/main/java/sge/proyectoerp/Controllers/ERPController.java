@@ -41,6 +41,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Handler;
 
 import static java.time.LocalDate.parse;
 
@@ -517,6 +518,8 @@ public class ERPController {
     //Variables nuevas
     private Pane panelactual;
 
+    private boolean usuarioact = false;
+
     private ArrayList<Recepciones> listrecepciones = new ArrayList<>();
     private final ArrayList<Expediciones> listexpediciones = new ArrayList<>();
     private final ArrayList<Devoluciones> listdevoluciones = new ArrayList<>();
@@ -542,31 +545,6 @@ public class ERPController {
     String usuario;
     @FXML
     public void pressbtnacceder(ActionEvent event) throws IOException {
-        setUser();
-        URL url = Paths.get("./src/main/resources/sge/proyectoerp/bd.fxml").toUri().toURL();
-        Pane root = FXMLLoader.load(url);
-        Scene scene= new Scene(root, 1068, 700);
-        stagebd.setScene(scene);
-        stagebd.centerOnScreen();
-        stagebd.initStyle(StageStyle.DECORATED);
-        stagebd.initStyle(StageStyle.TRANSPARENT);
-        stagebd.show();
-        ((Node)(event.getSource())).getScene().getWindow().hide();
-        Label myLabel = (Label) root.lookup("#lblnombreusuario");
-        myLabel.setText(setUser());
-    }
-    public String setUser(){
-        usuario = txtusuario.getText();
-        return usuario;
-    };
-
-    boolean complogin = true;
-
-    private void comprobarlogin(){
-
-    }
-    @FXML
-    public void pressbtnregistrarse(){
         //Definimos conexion como null
         Connection conexion = null;
         //Ejecutamos el comprobarlogin para controlar posibles fallos a la hora de hacer la consulta
@@ -577,18 +555,163 @@ public class ERPController {
             try {
                 conexion = DriverManager.getConnection(cadconexion, user, pswd);
                 //Creamos la consulta con PreparedStatement
+                PreparedStatement ps2 = conexion.prepareStatement("select usuario from usuarios");
+                //Ejecutamos la consulta
+                ResultSet rs2 = ps2.executeQuery();
+                //Comprobamos que la consulta tenga datos
+                while (rs2.next()) {
+                    //Comparamos que el usuario escrito exista en la base de datos
+                    if (Objects.equals(rs2.getString(1), txtusuario.getText()) && complogin) {
+                        //Si existe definimos que usuarioact es true
+                        usuarioact = true;
+                        //Creamos la consulta con PreparedStatement
+                        PreparedStatement ps = conexion.prepareStatement("select Passwd from usuarios where usuario= ? ");
+                        ps.setString(1, txtusuario.getText());
+
+                        //Ejecutamos la consulta
+                        ResultSet rs = ps.executeQuery();
+
+                        //Comprobamos que la consulta tenga datos
+                        if (rs.next()) {
+                            //Comparamos los datos introducidos por el usuario con la contraseña que nos ha dado la consulta anterior
+                            if (Objects.equals(rs.getString(1), txtcontrasena.getText())) {
+                                //Abrimos la ventana principal
+                                setUser();
+                                URL url = Paths.get("./src/main/resources/sge/proyectoerp/bd.fxml").toUri().toURL();
+                                Pane root = FXMLLoader.load(url);
+                                Scene scene= new Scene(root, 1068, 700);
+                                stagebd.setScene(scene);
+                                stagebd.centerOnScreen();
+                                stagebd.initStyle(StageStyle.DECORATED);
+                                stagebd.initStyle(StageStyle.TRANSPARENT);
+                                stagebd.show();
+                                ((Node)(event.getSource())).getScene().getWindow().hide();
+                                Label myLabel = (Label) root.lookup("#lblnombreusuario");
+                                myLabel.setText(setUser());
+
+                            } else {
+                                //Informamos al usuario
+                                crearalertaerror("La contraseña para este usuario es incorrecta");
+                            }
+                        }
+                    } else {
+                        //Definimos que la variable usuarioact es false
+                        usuarioact = false;
+                    }
+                }
+                //Comprobamos si la variable usuarioact es false
+                if (!usuarioact) {
+                    //Informamos al usuario
+                    crearalertaerror("Usuario no registrado");
+                }
+
+                //Controlamos la excepciones
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+
+    public String setUser(){
+        usuario = txtusuario.getText();
+        return usuario;
+    };
+
+    private boolean compregister;
+
+    private boolean complogin;
+
+    private void comprobarlogin(){
+        //Definimos complogin como false
+        complogin = false;
+        //Comprobamos que los datos no esten en blanco
+        if (Objects.equals(txtusuario.getText(), "") || Objects.equals(txtcontrasena.getText(), "")) {
+            crearalertaerror("Debe rellenar los dos campos");
+            //Comprobamos que los datos del usuario no sobrepasen los 20 caracteres
+        } else if (txtusuario.getLength() > 20) {
+            crearalertaerror("El usuario no puede tener más de 20 caracteres");
+            //Comprobamos que el campo de contraseña no tenga una longitud mayor de 16 caracteres
+        } else if (txtcontrasena.getLength() > 16) {
+            crearalertaerror("La contraseña no puede tener más de 16 caracteres");
+            //Definimos true la variable complogin en caso de no haber ningun fallo en la comprobación
+        } else {
+            complogin = true;
+        }
+    }
+
+    private static boolean isNumeric(String cadena) {
+        //Lo ejecutamos dentro del try para controlar las excepciones
+        try {
+            //Intentamos parsearlo a Long
+            Long.parseLong(cadena);
+            //Si lo consigue, nos devuelve true
+            return true;
+            //Controlamos la excepcion correspondiente
+        } catch (NumberFormatException nfe) {
+            //En caso de que no podamos transformar el numero, devolvera false
+            return false;
+        }
+    }
+
+    private void comprobrarregister(){
+        compregister = false;
+        if(Objects.equals(txtusuario1.getText(), "") ||
+                Objects.equals(txtcontrasena1.getText(), "") ||
+                Objects.equals(txtcontrasena11.getText(), "") ||
+                Objects.equals(txtemailregister.getText(), "") ||
+                Objects.equals(txttelregister.getText(), "")){
+            crearalertaerror("Debe rellenar todos los campos");
+        } else if (txtusuario1.getLength() > 20){
+            crearalertaerror("El usuario no puede tener más de 20 caracteres");
+        } else if (!Objects.equals(txtcontrasena1.getText(), txtcontrasena11.getText())){
+            crearalertaerror("Las contraseñas no coinciden");
+        } else if (txtcontrasena1.getLength() > 16){
+            crearalertaerror("La contraseña no puede tener más de 16 caracteres");
+        } else if (txttelregister.getLength() != 9){
+            crearalertaerror("El telefono debe tener una longitud de 9 digitos");
+        } else if (!isNumeric(txttelregister.getText())){
+            crearalertaerror("El número de telefono no pueden ser letras");
+        } else if (!imgrellena){
+            crearalertaerror("Rellenar una foto de perfil");
+        } else {
+            compregister = true;
+        }
+    }
+
+    private void clearRegistro(){
+        txtusuario1.clear();
+        txtcontrasena1.clear();
+        txtcontrasena11.clear();
+        txtemailregister.clear();
+        txttelregister.clear();
+        Image imguser = new Image("src/main/resources/sge/proyectoerp/img/usuarioblanco.png");
+        imgusuario.setImage(imguser);
+    }
+
+    @FXML
+    public void pressbtnregistrarse(){
+        //Definimos conexion como null
+        Connection conexion = null;
+        //Ejecutamos el comprobarlogin para controlar posibles fallos a la hora de hacer la consulta
+        comprobrarregister();
+        //Comprobamos que la variable complogin sea true
+        if (compregister) {
+
+            //Ejecutamos dentro de un try para controlar posibles excepciones
+            try {
+                conexion = DriverManager.getConnection(cadconexion, user, pswd);
+                //Creamos la consulta con PreparedStatement
                 PreparedStatement ps2 = conexion.prepareStatement("insert into usuarios VALUES (?, ?, ?, ?, ?)");
                 ps2.setString(1, txtusuario1.getText());
                 ps2.setString(2, txtcontrasena1.getText());
                 ps2.setString(3, txtemailregister.getText());
                 ps2.setString(4, txttelregister.getText());
                 ps2.setString(5, "macaco.png");
-                //Ejecutamos la consulta
+                ps2.executeUpdate();
+                crearalertainfo("Usuario Registrado");
+                clearRegistro();
 
-                if(Objects.equals(txtcontrasena1.getText(), txtcontrasena11.getText())){
-                    ps2.executeUpdate();
-                    crearalertainfo("Usuario Registrado");
-                }
                 //Controlamos la excepciones
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -712,6 +835,8 @@ public class ERPController {
     String image;
     Image imagenem;
 
+    private boolean imgrellena;
+
     //Obtiene la imagen a la hora de crear un empleado
     @FXML
     void seleccionarimg(){
@@ -729,6 +854,7 @@ public class ERPController {
             imagenem = new Image(image);
             if(PRegistro.isVisible()){
                 imgusuario.setImage(imagenem);
+                imgrellena = true;
             }else if(PanelAddEmpleados.isVisible()){
                 imgempleado.setImage(imagenem);
             }
