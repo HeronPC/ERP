@@ -25,6 +25,7 @@ import sge.proyectoerp.ERPApplication;
 import sge.proyectoerp.Models.Devoluciones;
 import sge.proyectoerp.Models.Expediciones;
 import sge.proyectoerp.Models.Recepciones;
+import sge.proyectoerp.Models.UsuarioActual;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -528,10 +529,8 @@ public class ERPController {
 
     private String bd;
     //Creamos la cadena con la que tenemos la direccion de la base de datos
-    private final String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",bd);
     private final String conexionerp = "jdbc:mysql://localhost:3306/erp";
 
-    private final String conexionerppss = "jdbc:mysql://localhost:3306/erp?useServerPrepStmts=true";
     //Esta variable tiene el usuario con el que nos conectaremos a la base de datos
     private final String user = "root";
     //Esta es la contraseña del usuario anterior para conectarnos a la base de datos
@@ -552,7 +551,26 @@ public class ERPController {
 
     private boolean imgrellena;
 
-    String crearbd = "CREATE OR REPLACE TABLE proveedores( CIF CHAR(9) PRIMARY KEY, Nombre VARCHAR(50) UNIQUE, Direccion VARCHAR(100), Email VARCHAR(50), Tel CHAR(9) UNIQUE);";
+    String tabla1 = "CREATE OR REPLACE TABLE proveedores( CIF CHAR(9) PRIMARY KEY, Nombre VARCHAR(50) UNIQUE, " +
+            "Direccion VARCHAR(100), Email VARCHAR(50), Tel CHAR(9) UNIQUE);";
+    String tabla2 = "CREATE OR REPLACE TABLE recepciones(Referencia VARCHAR(15) PRIMARY KEY, Nombre VARCHAR(50), " +
+            "FechaPrevista DATE, Documento VARCHAR(100), Tel CHAR(9), Estado VARCHAR(100), " +
+            "CONSTRAINT Nombre FOREIGN KEY (Nombre) REFERENCES proveedores (Nombre)," +
+            "CONSTRAINT Tel FOREIGN KEY (Tel) REFERENCES proveedores (TEl));";
+    String tabla3 = "CREATE OR REPLACE TABLE devoluciones(Referencia VARCHAR(15) PRIMARY KEY, Proveedor VARCHAR(50)," +
+            "FechaPrevista DATE, Documento VARCHAR(100), NombreProducto VARCHAR(50), Cantidad INT);";
+    String tabla5 = "CREATE OR REPLACE TABLE expediciones(Referencia CHAR(15) PRIMARY KEY, Direccion VARCHAR(50), Nombre VARCHAR(50), " +
+            "FechaPrevista DATE, Documento VARCHAR(100), Tel CHAR(9), Estado VARCHAR(100)," +
+            "FOREIGN KEY (Nombre) REFERENCES clientes (Nombre)," +
+            "FOREIGN KEY (Tel) REFERENCES clientes (Tel));";
+    String tabla4 = "CREATE OR REPLACE TABLE clientes( CIF CHAR(9) PRIMARY KEY, Nombre VARCHAR(50) UNIQUE," +
+            "Direccion VARCHAR(100), Email VARCHAR(50), Tel CHAR(9) UNIQUE);";
+
+    String tabla6 = "CREATE OR REPLACE Table productosexp(Referencia VARCHAR(15), Producto VARCHAR(50), Cantidad INT," +
+            "CONSTRAINT Referenciaexp FOREIGN KEY (Referencia) REFERENCES expediciones (Referencia));";
+
+    String tabla7 = "CREATE OR REPLACE Table productosrec(Referencia VARCHAR(15), Producto VARCHAR(50), Cantidad INT, " +
+            "CONSTRAINT Referencia FOREIGN KEY (Referencia) REFERENCES Recepciones (Referencia));";
 
     //CAMBIOS
     ERPApplication app = new ERPApplication();
@@ -566,6 +584,8 @@ public class ERPController {
     };
 
     private boolean compregister;
+
+    UsuarioActual useract = new UsuarioActual();
 
     private boolean complogin;
 
@@ -631,6 +651,7 @@ public class ERPController {
                                 ((Node)(event.getSource())).getScene().getWindow().hide();
                                 Label myLabel = (Label) root.lookup("#lblnombreusuario");
                                 myLabel.setText(setUser());
+                                rellenartablasbd();
                             } else {
                                 //Informamos al usuario
                                 crearalertaerror("La contraseña para este usuario es incorrecta");
@@ -653,6 +674,68 @@ public class ERPController {
             }
         }
     }
+
+    private void rellenartablasbd(){
+        pruebauser = txtusuario.getText();
+        try {
+            Connection conexion;
+            conexion = DriverManager.getConnection(conexionerp, user, pswd);
+            //Creamos la consulta con PreparedStatement
+            Statement st = conexion.createStatement();
+            String consulta = String.format("Select nombre from bds where usuario = '%s'", pruebauser);
+            ResultSet rs = st.executeQuery(consulta);
+            while (rs.next()){
+                JButton btel = new JButton();
+                JButton btentrar = new JButton("Acceder");
+                SwingNode node2 = new SwingNode();
+                JPanel Panelbd = new JPanel(new BorderLayout());//Creamos el panel que se va a añadir multiples veces
+                JPanel Panelizq = new JPanel(new FlowLayout(FlowLayout.CENTER,10,3));
+                nombd = rs.getString(1);
+
+                Panelizq.setBackground(new java.awt.Color(41, 45, 45));
+                Panelizq.setSize(100,30);
+                Panelbd.setBorder(new EmptyBorder(40, 30, 30, 30));
+                Panelbd.setBackground(new java.awt.Color(41, 45, 45));
+                JLabel nombrebd = new JLabel(nombd);//Aqui aparecerá el nombre de los empleados con respecto a la base de datos
+                nombrebd.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
+                nombrebd.setForeground (Color.white);
+                btel.setBackground(new java.awt.Color(41, 45, 45));
+                ImageIcon iconoeliminar= new ImageIcon("src/main/resources/sge/proyectoerp/img/eliminar.png");
+                java.awt.Image newimgeliminar = iconoeliminar.getImage().getScaledInstance(7, 7,  java.awt.Image.SCALE_SMOOTH);
+                iconoeliminar = new ImageIcon(newimgeliminar);
+                btel.setIcon(iconoeliminar);
+                btentrar.setBackground(new java.awt.Color(41, 184, 78));
+                Panelizq.add(btel);
+                Panelizq.add(nombrebd);
+                Panelbd.add(Panelizq,BorderLayout.WEST);
+                Panelbd.add(btentrar,BorderLayout.EAST);
+                try {
+                    URL url = Paths.get("./src/main/resources/sge/proyectoerp/bd.fxml").toUri().toURL();
+                    Pane root = FXMLLoader.load(url);
+                    GridPane myLabel = (GridPane) root.lookup("#Pgridbd");
+
+                    btentrar.setName("bte"+rs.getString(1));
+                    node2.setContent(Panelbd);//Añade el contenido al nodeswing
+                    node2.setId("node"+nombd);
+
+                    Button mybutton = (Button) root.lookup("#btaddbd");
+                    myLabel.add(node2,cols,filas);//Va añadiendo los nodeswing al gridpane sumando filas y columnas
+                    filas++;
+                    if(filas==4){
+                        //mybutton.setDisable(true);
+                    }//debes deshabilitar el método cuandotodo el gripane esta lleno
+                    counter++;
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            //Controlamos la excepciones
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void comprobarlogin(){
         //Definimos complogin como false
         complogin = false;
@@ -766,6 +849,11 @@ public class ERPController {
 
     @FXML
     public void pressbtnewbd(){
+        JButton btel = new JButton();
+        JButton btentrar = new JButton("Acceder");
+        SwingNode node2 = new SwingNode();
+        JPanel Panelbd = new JPanel(new BorderLayout());//Creamos el panel que se va a añadir multiples veces
+        JPanel Panelizq = new JPanel(new FlowLayout(FlowLayout.CENTER,10,3));
         try{
             Connection conexion;
             Connection conexion2;
@@ -778,59 +866,56 @@ public class ERPController {
             Statement st = conexion.createStatement();
 
             ResultSet rs = st.executeQuery(consulta);
+
             if (rs.next()){
                 if(Objects.equals(bd, rs.getString(1))){
                     crearalertaerror("Este nombre ya se esta usando en una base de datos");
                     comnombrebd = false;
                 }
             }
+
             if (comnombrebd){
-                System.out.println(bd);
-                System.out.println(pruebauser);
                 String consulta2 = String.format("INSERT INTO bds values ('%s', '%s')", bd, pruebauser);
                 st.execute(consulta2);
-                System.out.println("He insertado");
                 String crearbddd = String.format("Create Database %S", bd+pruebauser.substring(0,3));
                 st.execute(crearbddd);
                 String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",bd+pruebauser.substring(0,3));
                 conexion2=DriverManager.getConnection(conexionbdusuario, user, pswd);
-                System.out.println("Ha creado la base de datos");
                 Statement st2 = conexion2.createStatement();
-                st2.executeUpdate(crearbd);
-                System.out.println("Ha creado las tablas");
+                st2.executeUpdate(tabla1);
+                st2.executeUpdate(tabla2);
+                st2.executeUpdate(tabla3);
+                st2.executeUpdate(tabla4);
+                st2.executeUpdate(tabla5);
+                st2.executeUpdate(tabla6);
+                st2.executeUpdate(tabla7);
 
+                Pnewbd.setVisible(false);
+                nombd = txtnombd.getText();
+
+                Panelizq.setBackground(new java.awt.Color(41, 45, 45));
+                Panelizq.setSize(100,30);
+                Panelbd.setBorder(new EmptyBorder(40, 30, 30, 30));
+                Panelbd.setBackground(new java.awt.Color(41, 45, 45));
+                JLabel nombrebd = new JLabel(nombd);//Aqui aparecerá el nombre de los empleados con respecto a la base de datos
+                nombrebd.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
+                nombrebd.setForeground (Color.white);
+                btel.setBackground(new java.awt.Color(41, 45, 45));
+                ImageIcon iconoeliminar= new ImageIcon("src/main/resources/sge/proyectoerp/img/eliminar.png");
+                java.awt.Image newimgeliminar = iconoeliminar.getImage().getScaledInstance(7, 7,  java.awt.Image.SCALE_SMOOTH);
+                iconoeliminar = new ImageIcon(newimgeliminar);
+                btel.setIcon(iconoeliminar);
+                btentrar.setBackground(new java.awt.Color(41, 184, 78));
+                Panelizq.add(btel);
+                Panelizq.add(nombrebd);
+                Panelbd.add(Panelizq,BorderLayout.WEST);
+                Panelbd.add(btentrar,BorderLayout.EAST);
             }
 
         } catch(Exception e){
             e.printStackTrace();
         }
 
-
-
-        Pnewbd.setVisible(false);
-        nombd = txtnombd.getText();
-        SwingNode node2 = new SwingNode();
-        JPanel Panelbd = new JPanel(new BorderLayout());//Creamos el panel que se va a añadir multiples veces
-        JPanel Panelizq = new JPanel(new FlowLayout(FlowLayout.CENTER,10,3));
-        Panelizq.setBackground(new java.awt.Color(41, 45, 45));
-        Panelizq.setSize(100,30);
-        Panelbd.setBorder(new EmptyBorder(40, 30, 30, 30));
-        Panelbd.setBackground(new java.awt.Color(41, 45, 45));
-        JLabel nombrebd = new JLabel(nombd);//Aqui aparecerá el nombre de los empleados con respecto a la base de datos
-        nombrebd.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
-        nombrebd.setForeground (Color.white);
-        JButton btel = new JButton();
-        btel.setBackground(new java.awt.Color(41, 45, 45));
-        ImageIcon iconoeliminar= new ImageIcon("src/main/resources/sge/proyectoerp/img/eliminar.png");
-        java.awt.Image newimgeliminar = iconoeliminar.getImage().getScaledInstance(7, 7,  java.awt.Image.SCALE_SMOOTH);
-        iconoeliminar = new ImageIcon(newimgeliminar);
-        btel.setIcon(iconoeliminar);
-        JButton btentrar = new JButton("Acceder");
-        btentrar.setBackground(new java.awt.Color(41, 184, 78));
-        Panelizq.add(btel);
-        Panelizq.add(nombrebd);
-        Panelbd.add(Panelizq,BorderLayout.WEST);
-        Panelbd.add(btentrar,BorderLayout.EAST);
         btel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent el) {
@@ -838,40 +923,55 @@ public class ERPController {
             }
         });
 
-        btentrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e){
-                Platform.runLater(new Runnable() {
-                    public void run() {
-                        try {
-                            URL url = Paths.get("./src/main/resources/sge/proyectoerp/erp.fxml").toUri().toURL();
-                            Pane root = FXMLLoader.load(url);
-                            Scene scene= new Scene(root, 1536, 790);
-                            stageerp.setScene(scene);
-                            stageerp.centerOnScreen();
-                            stageerp.setMaximized(true);
-                            stageerp.show();
-                            Pane myPanel = (Pane) root.lookup("#Menu");
-                            myPanel.setLayoutX(0);
-                            myPanel.setLayoutY(100);
-                            Label myLabel = (Label) root.lookup("#lblnombreusuario");
-                            usuario = lblnombreusuario.getText();
-                            myLabel.setText(usuario);
-                        } catch (MalformedURLException ex) {
-                            throw new RuntimeException(ex);
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
+        btentrar.addActionListener(e -> Platform.runLater(() -> {
+            useract.setBdusuario(btentrar.getName().substring(3));
+            try {
+                System.out.println("Declarado: " + useract.getBdusuario());
+                System.out.println("Nombre del boton: " + btentrar.getName());
+                URL url = Paths.get("./src/main/resources/sge/proyectoerp/erp.fxml").toUri().toURL();
+                Pane root = FXMLLoader.load(url);
+                Scene scene= new Scene(root, 1536, 790);
+                stageerp.setScene(scene);
+                stageerp.centerOnScreen();
+                stageerp.setMaximized(true);
+                stageerp.show();
+                /*
+                Pane myPanel = (Pane) root.lookup("#Menu");
+                myPanel.setLayoutX(0);
+                myPanel.setLayoutY(100);
+                */
+                Label myLabel = (Label) root.lookup("#lblnombreusuario");
+                usuario = lblnombreusuario.getText();
+                myLabel.setText(usuario);
+                try{
+                    Connection conexion;
+                    conexion = DriverManager.getConnection(conexionerp, user, pswd);
+                    //Creamos la consulta con PreparedStatement
+                    Statement st = conexion.createStatement();
+                    String consulta = String.format("Select nombre from bds where usuario = '%s'", pruebauser);
+                    ResultSet rs = st.executeQuery(consulta);
+                    while (rs.next()){
+                        if(Objects.equals(btentrar.getName(), "bt"+rs.getString(1))){
+
                         }
                     }
-                });
+                } catch (Exception eo){
+                    eo.printStackTrace();
+                }
+
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
             }
-        });
+        }));
+
+        btentrar.setName("bte"+bd+pruebauser.substring(0,3));
         node2.setContent(Panelbd);//Añade el contenido al nodeswing
         node2.setId("node"+nombd);//Cambia el nombre del nodo con respecto al nombre del empleado, deberas hacer que cambie con los nombres que vaya cogiendo de la base de datos
         Pgridbd.add(node2,cols,filas);//Va añadiendo los nodeswing al gridpane sumando filas y columnas
         filas++;
         if(filas==4){btaddbd.setDisable(true);}//debes deshabilitar el método cuandotodo el gripane esta lleno
         counter++;
+
     }
 
 
@@ -1140,6 +1240,7 @@ public class ERPController {
             tableRecepciones.getItems().clear();
             //Creamos un paciente con los datos extraidos del campo seleccionado de la tabla
             Recepciones rec = tableInventarioRecep.getSelectionModel().getSelectedItem();
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",useract.getBdusuario());
             //Creamos la conexion
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             //Creamos el correspondiente Statement con nuestra conexion anterior
@@ -1182,6 +1283,7 @@ public class ERPController {
         try {
             //Creamos un médico con los datos selecionados de la tabla
             Recepciones rec = tableRecepciones.getSelectionModel().getSelectedItem();
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",useract.getBdusuario());
             //Creamos la conexion
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             //Creamos el Statement con la conexion
@@ -1222,7 +1324,8 @@ public class ERPController {
             //Ejecutamos dentro de un try para controlar todas las excepciones posibles
             try {
                 //Creamos la conexión con la base de datos
-                conexion = DriverManager.getConnection(conexionerppss, user, pswd);
+                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true",useract.getBdusuario());
+                conexion = DriverManager.getConnection(conexionerpsusuario, user, pswd);
                 //Utilizamos un PreparedStatement para la consulta para mayor seguridad
 
                 Statement st = conexion.createStatement();
@@ -1267,7 +1370,8 @@ public class ERPController {
             //Ejecutamos dentro de un try para controlar todas las excepciones posibles
             try {
                 //Creamos la conexión con la base de datos
-                conexion = DriverManager.getConnection(conexionerppss, user, pswd);
+                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true",useract.getBdusuario());
+                conexion = DriverManager.getConnection(conexionerpsusuario, user, pswd);
                 //Utilizamos un PreparedStatement para la consulta para mayor seguridad
                 PreparedStatement ps = conexion.prepareStatement("INSERT INTO recepciones (Referencia, Nombre, FechaPrevista, Documento) VALUES  (?, ?, ?, ?)");
 
@@ -1311,6 +1415,8 @@ public class ERPController {
         //Ejecutamos el código en un try para controlar las excepciones
         try {
             //Creamos la conexion
+            System.out.println("Base De Datos Rellenar Tabla: " + useract.getBdusuario());
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",useract.getBdusuario());
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             Statement st = conexion.createStatement();
             tableRecepciones.getItems().clear();
@@ -1342,16 +1448,7 @@ public class ERPController {
             tableInventarioRecep.refresh();
             //Controlamos las excepciones mostrándolas por la terminal
         } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            //Controlamos que la connexion sea null, en el caso contrario lo definiremos como tal
-            try {
-                assert conexion != null;
-                conexion.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+            e.printStackTrace();        }
     }
 
     void rellenartablaAddRecepciones() {
@@ -1395,11 +1492,13 @@ public class ERPController {
         //Ejecutamos el código en un try para controlar las excepciones
         try {
             //Creamos la conexion
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",useract.getBdusuario());
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             Statement st = conexion.createStatement();
             TableExpediciones.getItems().clear();
             //Creamos la consulta
             String consulta = "SELECT Tel, Referencia, FechaPrevista, Documento, Estado FROM expediciones";
+            System.out.println("Conexion: "+ conexionbdusuario);
             //Guardamos la ejecución de la consulta en la variable rs
             ResultSet rs = st.executeQuery(consulta);
             //Bucle para seguir importando datos mientras los haya
@@ -1427,14 +1526,6 @@ public class ERPController {
             //Controlamos las excepciones mostrándolas por la terminal
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            //Controlamos que la connexion sea null, en el caso contrario lo definiremos como tal
-            try {
-                assert conexion != null;
-                conexion.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -1480,7 +1571,8 @@ public class ERPController {
             //Ejecutamos dentro de un try para controlar todas las excepciones posibles
             try {
                 //Creamos la conexión con la base de datos
-                conexion = DriverManager.getConnection(conexionerppss, user, pswd);
+                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true",useract.getBdusuario());
+                conexion = DriverManager.getConnection(conexionerpsusuario, user, pswd);
                 //Utilizamos un PreparedStatement para la consulta para mayor seguridad
 
                 Statement st = conexion.createStatement();
@@ -1527,7 +1619,8 @@ public class ERPController {
             //Ejecutamos dentro de un try para controlar todas las excepciones posibles
             try {
                 //Creamos la conexión con la base de datos
-                conexion = DriverManager.getConnection(conexionerppss, user, pswd);
+                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true",useract.getBdusuario());
+                conexion = DriverManager.getConnection(conexionerpsusuario, user, pswd);
                 //Utilizamos un PreparedStatement para la consulta para mayor seguridad
                 PreparedStatement ps = conexion.prepareStatement("INSERT INTO expediciones (Referencia, Direccion, FechaPrevista, Documento) VALUES  (?, ?, ?, ?)");
 
@@ -1574,6 +1667,7 @@ public class ERPController {
             tablaExp.getItems().clear();
             //Creamos un paciente con los datos extraidos del campo seleccionado de la tabla
             Expediciones exp = TableExpediciones.getSelectionModel().getSelectedItem();
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",useract.getBdusuario());
             //Creamos la conexion
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             //Creamos el correspondiente Statement con nuestra conexion anterior
@@ -1616,6 +1710,7 @@ public class ERPController {
         try {
             //Creamos un médico con los datos selecionados de la tabla
             Expediciones exp = tablaExp.getSelectionModel().getSelectedItem();
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",useract.getBdusuario());
             //Creamos la conexion
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             //Creamos el Statement con la conexion
@@ -1664,6 +1759,7 @@ public class ERPController {
         //Ejecutamos el código en un try para controlar las excepciones
         try {
             //Creamos la conexion
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",useract.getBdusuario());
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             Statement st = conexion.createStatement();
             TableDevoluciones.getItems().clear();

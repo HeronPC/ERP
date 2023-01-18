@@ -17,5 +17,4 @@ FOREIGN KEY (Usuario) REFERENCES usuarios (Usuario)
 );
 
 INSERT INTO usuarios VALUES ("root", "root", "", "", "");
-INSERT INTO bds VALUES ("mono", "root");
-INSERT INTO bds VALUES ("culo", "root");
+INSERT INTO bds VALUES ("heron","root");
