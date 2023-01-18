@@ -15,3 +15,7 @@ Nombre VARCHAR(50),
 Usuario VARCHAR(50),
 FOREIGN KEY (Usuario) REFERENCES usuarios (Usuario)
 );
+
+INSERT INTO usuarios VALUES ("root", "root", "", "", "");
+INSERT INTO bds VALUES ("mono", "root");
+INSERT INTO bds VALUES ("culo", "root");

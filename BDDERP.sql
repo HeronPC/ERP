@@ -23,19 +23,11 @@ CONSTRAINT Tel FOREIGN KEY (Tel) REFERENCES proveedores (Tel)
 
 CREATE OR REPLACE TABLE devoluciones(
 Referencia VARCHAR(15) PRIMARY KEY,
-Cliente VARCHAR(50),
+Proveedor VARCHAR(50),
+FechaPrevista DATE,
 Documento VARCHAR(100),
-Estado VARCHAR(100)
-);
-
-CREATE OR REPLACE TABLE productosdev(
-Referencia VARCHAR(15),
-Producto VARCHAR(50),
-Cantidad INT,
-CONSTRAINT Referenciadev FOREIGN KEY (Referencia) 
-REFERENCES devoluciones (Referencia)
-ON UPDATE CASCADE
-ON DELETE CASCADE
+NombreProducto VARCHAR(50),
+Cantidad INT
 );
 
 CREATE OR REPLACE TABLE clientes(
@@ -54,8 +46,8 @@ FechaPrevista DATE,
 Documento VARCHAR(100),
 Tel CHAR(9),
 Estado VARCHAR(100),
-CONSTRAINT Nombre1 FOREIGN KEY (Nombre) REFERENCES clientes (Nombre),
-CONSTRAINT Tel1 FOREIGN KEY (Tel) REFERENCES clientes (Tel)
+FOREIGN KEY (Nombre) REFERENCES clientes (Nombre),
+FOREIGN KEY (Tel) REFERENCES clientes (Tel)
 );
 
 CREATE OR REPLACE TABLE productosexp(

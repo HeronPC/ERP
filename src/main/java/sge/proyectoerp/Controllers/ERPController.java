@@ -520,15 +520,62 @@ public class ERPController {
 
     private boolean usuarioact = false;
 
-    private ArrayList<Recepciones> listrecepciones = new ArrayList<>();
+    private final ArrayList<Recepciones> listrecepciones = new ArrayList<>();
     private final ArrayList<Expediciones> listexpediciones = new ArrayList<>();
     private final ArrayList<Devoluciones> listdevoluciones = new ArrayList<>();
 
+    //CAMBIOS
+
+    private String bd;
+    //Creamos la cadena con la que tenemos la direccion de la base de datos
+    private final String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",bd);
+    private final String conexionerp = "jdbc:mysql://localhost:3306/erp";
+
+    private final String conexionerppss = "jdbc:mysql://localhost:3306/erp?useServerPrepStmts=true";
+    //Esta variable tiene el usuario con el que nos conectaremos a la base de datos
+    private final String user = "root";
+    //Esta es la contraseña del usuario anterior para conectarnos a la base de datos
+    private final String pswd = "root";
+
+    //Debes crear otro método que añada los distintos departamentos que se vayan creando en la base de datos y se rellenen los gridlayout de los distintos departamentos
+    int counter = 0;
+    int filas = 0;
+    int cols = 0;
+
+    Stage selec = new Stage();
+    String referenciaactual;
+
+    // create a File chooser
+    FileChooser fil_chooser = new FileChooser();
+    String image;
+    Image imagenem;
+
+    private boolean imgrellena;
+
+    String crearbd = "CREATE OR REPLACE TABLE proveedores( CIF CHAR(9) PRIMARY KEY, Nombre VARCHAR(50) UNIQUE, Direccion VARCHAR(100), Email VARCHAR(50), Tel CHAR(9) UNIQUE);";
 
     //CAMBIOS
     ERPApplication app = new ERPApplication();
 
     Stage stagere = new Stage();
+
+
+    public String setUser(){
+        usuario = txtusuario.getText();
+        return usuario;
+    };
+
+    private boolean compregister;
+
+    private boolean complogin;
+
+    Stage stagebd = new Stage();
+    String usuario;
+
+    String pruebauser;
+
+    String nombd;
+    Stage stageerp = new Stage();
     @FXML
     public void pressregistro(ActionEvent event) throws IOException {
         URL url = Paths.get("./src/main/resources/sge/proyectoerp/register.fxml").toUri().toURL();
@@ -540,9 +587,6 @@ public class ERPController {
 
         ((Node)(event.getSource())).getScene().getWindow().hide();
     }
-
-    Stage stagebd = new Stage();
-    String usuario;
     @FXML
     public void pressbtnacceder(ActionEvent event) throws IOException {
         //Definimos conexion como null
@@ -553,7 +597,7 @@ public class ERPController {
         if (complogin) {
             //Ejecutamos dentro de un try para controlar posibles excepciones
             try {
-                conexion = DriverManager.getConnection(cadconexion, user, pswd);
+                conexion = DriverManager.getConnection(conexionerp, user, pswd);
                 //Creamos la consulta con PreparedStatement
                 PreparedStatement ps2 = conexion.prepareStatement("select usuario from usuarios");
                 //Ejecutamos la consulta
@@ -567,7 +611,6 @@ public class ERPController {
                         //Creamos la consulta con PreparedStatement
                         PreparedStatement ps = conexion.prepareStatement("select Passwd from usuarios where usuario= ? ");
                         ps.setString(1, txtusuario.getText());
-
                         //Ejecutamos la consulta
                         ResultSet rs = ps.executeQuery();
 
@@ -588,7 +631,6 @@ public class ERPController {
                                 ((Node)(event.getSource())).getScene().getWindow().hide();
                                 Label myLabel = (Label) root.lookup("#lblnombreusuario");
                                 myLabel.setText(setUser());
-
                             } else {
                                 //Informamos al usuario
                                 crearalertaerror("La contraseña para este usuario es incorrecta");
@@ -611,17 +653,6 @@ public class ERPController {
             }
         }
     }
-
-
-    public String setUser(){
-        usuario = txtusuario.getText();
-        return usuario;
-    };
-
-    private boolean compregister;
-
-    private boolean complogin;
-
     private void comprobarlogin(){
         //Definimos complogin como false
         complogin = false;
@@ -700,7 +731,7 @@ public class ERPController {
 
             //Ejecutamos dentro de un try para controlar posibles excepciones
             try {
-                conexion = DriverManager.getConnection(cadconexion, user, pswd);
+                conexion = DriverManager.getConnection(conexionerp, user, pswd);
                 //Creamos la consulta con PreparedStatement
                 PreparedStatement ps2 = conexion.prepareStatement("insert into usuarios VALUES (?, ?, ?, ?, ?)");
                 ps2.setString(1, txtusuario1.getText());
@@ -732,11 +763,50 @@ public class ERPController {
         Pnewbd.setVisible(true);
 
     }
-    String nombd;
-    Stage stageerp = new Stage();
 
     @FXML
     public void pressbtnewbd(){
+        try{
+            Connection conexion;
+            Connection conexion2;
+            bd = txtnombd.getText();
+            pruebauser = lblnombreusuario.getText();
+            boolean comnombrebd = true;
+            conexion=DriverManager.getConnection(conexionerp, user, pswd);
+
+            String consulta = String.format("Select Nombre from bds where Usuario = '%s'", pruebauser);
+            Statement st = conexion.createStatement();
+
+            ResultSet rs = st.executeQuery(consulta);
+            if (rs.next()){
+                if(Objects.equals(bd, rs.getString(1))){
+                    crearalertaerror("Este nombre ya se esta usando en una base de datos");
+                    comnombrebd = false;
+                }
+            }
+            if (comnombrebd){
+                System.out.println(bd);
+                System.out.println(pruebauser);
+                String consulta2 = String.format("INSERT INTO bds values ('%s', '%s')", bd, pruebauser);
+                st.execute(consulta2);
+                System.out.println("He insertado");
+                String crearbddd = String.format("Create Database %S", bd+pruebauser.substring(0,3));
+                st.execute(crearbddd);
+                String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",bd+pruebauser.substring(0,3));
+                conexion2=DriverManager.getConnection(conexionbdusuario, user, pswd);
+                System.out.println("Ha creado la base de datos");
+                Statement st2 = conexion2.createStatement();
+                st2.executeUpdate(crearbd);
+                System.out.println("Ha creado las tablas");
+
+            }
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
+
+
         Pnewbd.setVisible(false);
         nombd = txtnombd.getText();
         SwingNode node2 = new SwingNode();
@@ -810,32 +880,6 @@ public class ERPController {
         txtnombd.setText(null);
         Pnewbd.setVisible(false);
     }
-    public String bd = "erp";
-    //CAMBIOS
-
-    //Creamos la cadena con la que tenemos la direccion de la base de datos
-    private final String cadconexion = String.format("jdbc:mysql://localhost:3306/%s",bd);
-
-    private final String cadconexionps = "jdbc:mysql://localhost:3306/erp?useServerPrepStmts=true";
-    //Esta variable tiene el usuario con el que nos conectaremos a la base de datos
-    private final String user = "root";
-    //Esta es la contraseña del usuario anterior para conectarnos a la base de datos
-    private final String pswd = "root";
-
-    //Debes crear otro método que añada los distintos departamentos que se vayan creando en la base de datos y se rellenen los gridlayout de los distintos departamentos
-    int counter = 0;
-    int filas = 0;
-    int cols = 0;
-
-    Stage selec = new Stage();
-    String referenciaactual;
-
-    // create a File chooser
-    FileChooser fil_chooser = new FileChooser();
-    String image;
-    Image imagenem;
-
-    private boolean imgrellena;
 
     //Obtiene la imagen a la hora de crear un empleado
     @FXML
@@ -1097,7 +1141,7 @@ public class ERPController {
             //Creamos un paciente con los datos extraidos del campo seleccionado de la tabla
             Recepciones rec = tableInventarioRecep.getSelectionModel().getSelectedItem();
             //Creamos la conexion
-            conexion = DriverManager.getConnection(cadconexion, user, pswd);
+            conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             //Creamos el correspondiente Statement con nuestra conexion anterior
             Statement st = conexion.createStatement();
             //Creamos la consulta
@@ -1139,7 +1183,7 @@ public class ERPController {
             //Creamos un médico con los datos selecionados de la tabla
             Recepciones rec = tableRecepciones.getSelectionModel().getSelectedItem();
             //Creamos la conexion
-            conexion = DriverManager.getConnection(cadconexion, user, pswd);
+            conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             //Creamos el Statement con la conexion
             Statement st = conexion.createStatement();
             //Creamos la consulta
@@ -1178,7 +1222,7 @@ public class ERPController {
             //Ejecutamos dentro de un try para controlar todas las excepciones posibles
             try {
                 //Creamos la conexión con la base de datos
-                conexion = DriverManager.getConnection(cadconexionps, user, pswd);
+                conexion = DriverManager.getConnection(conexionerppss, user, pswd);
                 //Utilizamos un PreparedStatement para la consulta para mayor seguridad
 
                 Statement st = conexion.createStatement();
@@ -1223,7 +1267,7 @@ public class ERPController {
             //Ejecutamos dentro de un try para controlar todas las excepciones posibles
             try {
                 //Creamos la conexión con la base de datos
-                conexion = DriverManager.getConnection(cadconexionps, user, pswd);
+                conexion = DriverManager.getConnection(conexionerppss, user, pswd);
                 //Utilizamos un PreparedStatement para la consulta para mayor seguridad
                 PreparedStatement ps = conexion.prepareStatement("INSERT INTO recepciones (Referencia, Nombre, FechaPrevista, Documento) VALUES  (?, ?, ?, ?)");
 
@@ -1267,7 +1311,7 @@ public class ERPController {
         //Ejecutamos el código en un try para controlar las excepciones
         try {
             //Creamos la conexion
-            conexion = DriverManager.getConnection(cadconexion, user, pswd);
+            conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             Statement st = conexion.createStatement();
             tableRecepciones.getItems().clear();
             //Creamos la consulta
@@ -1351,7 +1395,7 @@ public class ERPController {
         //Ejecutamos el código en un try para controlar las excepciones
         try {
             //Creamos la conexion
-            conexion = DriverManager.getConnection(cadconexion, user, pswd);
+            conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             Statement st = conexion.createStatement();
             TableExpediciones.getItems().clear();
             //Creamos la consulta
@@ -1436,7 +1480,7 @@ public class ERPController {
             //Ejecutamos dentro de un try para controlar todas las excepciones posibles
             try {
                 //Creamos la conexión con la base de datos
-                conexion = DriverManager.getConnection(cadconexionps, user, pswd);
+                conexion = DriverManager.getConnection(conexionerppss, user, pswd);
                 //Utilizamos un PreparedStatement para la consulta para mayor seguridad
 
                 Statement st = conexion.createStatement();
@@ -1483,7 +1527,7 @@ public class ERPController {
             //Ejecutamos dentro de un try para controlar todas las excepciones posibles
             try {
                 //Creamos la conexión con la base de datos
-                conexion = DriverManager.getConnection(cadconexionps, user, pswd);
+                conexion = DriverManager.getConnection(conexionerppss, user, pswd);
                 //Utilizamos un PreparedStatement para la consulta para mayor seguridad
                 PreparedStatement ps = conexion.prepareStatement("INSERT INTO expediciones (Referencia, Direccion, FechaPrevista, Documento) VALUES  (?, ?, ?, ?)");
 
@@ -1531,7 +1575,7 @@ public class ERPController {
             //Creamos un paciente con los datos extraidos del campo seleccionado de la tabla
             Expediciones exp = TableExpediciones.getSelectionModel().getSelectedItem();
             //Creamos la conexion
-            conexion = DriverManager.getConnection(cadconexion, user, pswd);
+            conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             //Creamos el correspondiente Statement con nuestra conexion anterior
             Statement st = conexion.createStatement();
             //Creamos la consulta
@@ -1573,7 +1617,7 @@ public class ERPController {
             //Creamos un médico con los datos selecionados de la tabla
             Expediciones exp = tablaExp.getSelectionModel().getSelectedItem();
             //Creamos la conexion
-            conexion = DriverManager.getConnection(cadconexion, user, pswd);
+            conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             //Creamos el Statement con la conexion
             Statement st = conexion.createStatement();
             //Creamos la consulta
@@ -1620,7 +1664,7 @@ public class ERPController {
         //Ejecutamos el código en un try para controlar las excepciones
         try {
             //Creamos la conexion
-            conexion = DriverManager.getConnection(cadconexion, user, pswd);
+            conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             Statement st = conexion.createStatement();
             TableDevoluciones.getItems().clear();
             //Creamos la consulta
