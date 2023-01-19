@@ -503,6 +503,9 @@ public class ERPController {
     private TextField txttelregister;
 
     @FXML
+    private TextField txtnombreExpediciones;
+
+    @FXML
     private ImageView imgusuario;
 
     @FXML
@@ -581,7 +584,7 @@ public class ERPController {
     public String setUser(){
         usuario = txtusuario.getText();
         return usuario;
-    };
+    }
 
     private boolean compregister;
 
@@ -1584,7 +1587,7 @@ public class ERPController {
                                 "FechaPrevista = '%s', " +
                                 "Direccion = '%s', " +
                                 "Documento = '%s' " +
-                                "WHERE Referencia = '%s'", txtrecibir.getText(), //Cambiar por campo Nombre
+                                "WHERE Referencia = '%s'", txtnombreExpediciones.getText(),
                         Date.valueOf(localdate), txtdireccionExpediciones.getText(),
                         txtDocExp.getText(),
                         txtReferenciaExpediciones.getText());
@@ -1617,20 +1620,28 @@ public class ERPController {
             //Creamos conexión null por si tuviéramos otra conexión cerrarla
             Connection conexion = null;
             //Ejecutamos dentro de un try para controlar todas las excepciones posibles
+            try{
+                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true",singleton.getUsuario());
+                conexion = DriverManager.getConnection(conexionerpsusuario, user, pswd);
+                PreparedStatement ps2 = conexion.prepareStatement("Select Nombre, Tel from Telefono where ");
+            } catch (Exception e){
+                e.printStackTrace();
+            }
             try {
                 //Creamos la conexión con la base de datos
                 String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true",singleton.getUsuario());
                 conexion = DriverManager.getConnection(conexionerpsusuario, user, pswd);
                 //Utilizamos un PreparedStatement para la consulta para mayor seguridad
-                PreparedStatement ps = conexion.prepareStatement("INSERT INTO expediciones (Referencia, Direccion, FechaPrevista, Documento) VALUES  (?, ?, ?, ?)");
+                PreparedStatement ps = conexion.prepareStatement("INSERT INTO expediciones (Referencia, Nombre, Direccion, FechaPrevista, Documento) VALUES  (?, ?, ?, ?, ?)");
 
                 ps.setString(1, txtReferenciaExpediciones.getText());
-                ps.setString(2, txtdireccionExpediciones.getText());
+                ps.setString(2, txtnombreExpediciones.getText());
+                ps.setString(3, txtdireccionExpediciones.getText());
                 //Parseamos la fecha
                 String fecha = DateExpediciones.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 LocalDate localdate = parse(fecha);
-                ps.setDate(3, Date.valueOf(localdate));
-                ps.setString(4, txtDocExp.getText());
+                ps.setDate(4, Date.valueOf(localdate));
+                ps.setString(5, txtDocExp.getText());
                 //Creamos una ventana de confirmacion para la modificacion del ingreso
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setHeaderText(null);
