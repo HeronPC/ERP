@@ -18,3 +18,5 @@ FOREIGN KEY (Usuario) REFERENCES usuarios (Usuario)
 
 INSERT INTO usuarios VALUES ("root", "root", "", "", "");
 INSERT INTO bds VALUES ("heron","root");
+
+INSERT INTO proveedores VALUES ("CAD87542G", "Prueba", "Calatrava", "erpbdsiago@safareyes.es", "645342345");

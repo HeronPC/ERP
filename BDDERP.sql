@@ -70,6 +70,10 @@ ON UPDATE CASCADE
 ON DELETE CASCADE
 );
 
+CREATE OR REPLACE TABLE ventas(
+CIF VARCHAR(9),
+
+);
 INSERT INTO proveedores VALUES ('CAD87542G', 'Iago S.L.', 'C/ Calatrava n8', 'iago@safareyes.es', '678542987');
 
 INSERT INTO recepciones VALUES ('HSJF', 'Iago S.L.', '2020-03-04', 'agfg.pdf', '678542987', 'En camino');
