@@ -25,7 +25,7 @@ import sge.proyectoerp.ERPApplication;
 import sge.proyectoerp.Models.Devoluciones;
 import sge.proyectoerp.Models.Expediciones;
 import sge.proyectoerp.Models.Recepciones;
-import sge.proyectoerp.Models.UsuarioActual;
+import sge.proyectoerp.Models.Singleton;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -33,7 +33,6 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.sql.*;
@@ -42,7 +41,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.logging.Handler;
 
 import static java.time.LocalDate.parse;
 
@@ -572,6 +570,8 @@ public class ERPController {
     String tabla7 = "CREATE OR REPLACE Table productosrec(Referencia VARCHAR(15), Producto VARCHAR(50), Cantidad INT, " +
             "CONSTRAINT Referencia FOREIGN KEY (Referencia) REFERENCES Recepciones (Referencia));";
 
+    String tabla8 = "INSERT INTO proveedores VALUES ('CAD87542G', 'Prueba', 'Calatrava', 'iago@safareyes.es', '645342345');";
+
     //CAMBIOS
     ERPApplication app = new ERPApplication();
 
@@ -585,7 +585,7 @@ public class ERPController {
 
     private boolean compregister;
 
-    UsuarioActual useract = new UsuarioActual();
+    static Singleton singleton = new Singleton();
 
     private boolean complogin;
 
@@ -677,6 +677,7 @@ public class ERPController {
 
     private void rellenartablasbd(){
         pruebauser = txtusuario.getText();
+        int cont = 0;
         try {
             Connection conexion;
             conexion = DriverManager.getConnection(conexionerp, user, pswd);
@@ -691,6 +692,8 @@ public class ERPController {
                 JPanel Panelbd = new JPanel(new BorderLayout());//Creamos el panel que se va a añadir multiples veces
                 JPanel Panelizq = new JPanel(new FlowLayout(FlowLayout.CENTER,10,3));
                 nombd = rs.getString(1);
+                System.out.println("Base de datos " +cont+ rs.getString(1));
+                cont++;
 
                 Panelizq.setBackground(new java.awt.Color(41, 45, 45));
                 Panelizq.setSize(100,30);
@@ -729,7 +732,6 @@ public class ERPController {
                     e.printStackTrace();
                 }
             }
-
             //Controlamos la excepciones
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -776,14 +778,16 @@ public class ERPController {
                 Objects.equals(txtemailregister.getText(), "") ||
                 Objects.equals(txttelregister.getText(), "")){
             crearalertaerror("Debe rellenar todos los campos");
-        } else if (txtusuario1.getLength() > 20){
-            crearalertaerror("El usuario no puede tener más de 20 caracteres");
+        } else if (txtusuario1.getLength() > 20) {
+            crearalertaerror("El usuario no puede tener más de 20 carácteres");
+        } else if (txtusuario1.getLength() < 4){
+                crearalertaerror("El usuario no puede tener menos de 4 carácteres");
         } else if (!Objects.equals(txtcontrasena1.getText(), txtcontrasena11.getText())){
             crearalertaerror("Las contraseñas no coinciden");
         } else if (txtcontrasena1.getLength() > 16){
-            crearalertaerror("La contraseña no puede tener más de 16 caracteres");
+            crearalertaerror("La contraseña no puede tener más de 16 carácteres");
         } else if (txttelregister.getLength() != 9){
-            crearalertaerror("El telefono debe tener una longitud de 9 digitos");
+            crearalertaerror("El teléfono debe tener una longitud de 9 dígitos");
         } else if (!isNumeric(txttelregister.getText())){
             crearalertaerror("El número de telefono no pueden ser letras");
         } else if (!imgrellena){
@@ -889,6 +893,7 @@ public class ERPController {
                 st2.executeUpdate(tabla5);
                 st2.executeUpdate(tabla6);
                 st2.executeUpdate(tabla7);
+                st2.executeUpdate(tabla8);
 
                 Pnewbd.setVisible(false);
                 nombd = txtnombd.getText();
@@ -924,9 +929,9 @@ public class ERPController {
         });
 
         btentrar.addActionListener(e -> Platform.runLater(() -> {
-            useract.setBdusuario(btentrar.getName().substring(3));
+            singleton.setUsuario(btentrar.getName().substring(3));
             try {
-                System.out.println("Declarado: " + useract.getBdusuario());
+                System.out.println("Declarado: " + singleton.getUsuario());
                 System.out.println("Nombre del boton: " + btentrar.getName());
                 URL url = Paths.get("./src/main/resources/sge/proyectoerp/erp.fxml").toUri().toURL();
                 Pane root = FXMLLoader.load(url);
@@ -935,11 +940,6 @@ public class ERPController {
                 stageerp.centerOnScreen();
                 stageerp.setMaximized(true);
                 stageerp.show();
-                /*
-                Pane myPanel = (Pane) root.lookup("#Menu");
-                myPanel.setLayoutX(0);
-                myPanel.setLayoutY(100);
-                */
                 Label myLabel = (Label) root.lookup("#lblnombreusuario");
                 usuario = lblnombreusuario.getText();
                 myLabel.setText(usuario);
@@ -1240,7 +1240,7 @@ public class ERPController {
             tableRecepciones.getItems().clear();
             //Creamos un paciente con los datos extraidos del campo seleccionado de la tabla
             Recepciones rec = tableInventarioRecep.getSelectionModel().getSelectedItem();
-            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",useract.getBdusuario());
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",singleton.getUsuario());
             //Creamos la conexion
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             //Creamos el correspondiente Statement con nuestra conexion anterior
@@ -1283,7 +1283,7 @@ public class ERPController {
         try {
             //Creamos un médico con los datos selecionados de la tabla
             Recepciones rec = tableRecepciones.getSelectionModel().getSelectedItem();
-            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",useract.getBdusuario());
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",singleton.getUsuario());
             //Creamos la conexion
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             //Creamos el Statement con la conexion
@@ -1324,7 +1324,7 @@ public class ERPController {
             //Ejecutamos dentro de un try para controlar todas las excepciones posibles
             try {
                 //Creamos la conexión con la base de datos
-                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true",useract.getBdusuario());
+                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true",singleton.getUsuario());
                 conexion = DriverManager.getConnection(conexionerpsusuario, user, pswd);
                 //Utilizamos un PreparedStatement para la consulta para mayor seguridad
 
@@ -1370,7 +1370,7 @@ public class ERPController {
             //Ejecutamos dentro de un try para controlar todas las excepciones posibles
             try {
                 //Creamos la conexión con la base de datos
-                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true",useract.getBdusuario());
+                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true",singleton.getUsuario());
                 conexion = DriverManager.getConnection(conexionerpsusuario, user, pswd);
                 //Utilizamos un PreparedStatement para la consulta para mayor seguridad
                 PreparedStatement ps = conexion.prepareStatement("INSERT INTO recepciones (Referencia, Nombre, FechaPrevista, Documento) VALUES  (?, ?, ?, ?)");
@@ -1415,8 +1415,8 @@ public class ERPController {
         //Ejecutamos el código en un try para controlar las excepciones
         try {
             //Creamos la conexion
-            System.out.println("Base De Datos Rellenar Tabla: " + useract.getBdusuario());
-            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",useract.getBdusuario());
+            System.out.println("Base De Datos Rellenar Tabla: " + singleton.getUsuario());
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",singleton.getUsuario());
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             Statement st = conexion.createStatement();
             tableRecepciones.getItems().clear();
@@ -1492,7 +1492,7 @@ public class ERPController {
         //Ejecutamos el código en un try para controlar las excepciones
         try {
             //Creamos la conexion
-            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",useract.getBdusuario());
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",singleton.getUsuario());
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             Statement st = conexion.createStatement();
             TableExpediciones.getItems().clear();
@@ -1571,7 +1571,7 @@ public class ERPController {
             //Ejecutamos dentro de un try para controlar todas las excepciones posibles
             try {
                 //Creamos la conexión con la base de datos
-                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true",useract.getBdusuario());
+                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true",singleton.getUsuario());
                 conexion = DriverManager.getConnection(conexionerpsusuario, user, pswd);
                 //Utilizamos un PreparedStatement para la consulta para mayor seguridad
 
@@ -1619,7 +1619,7 @@ public class ERPController {
             //Ejecutamos dentro de un try para controlar todas las excepciones posibles
             try {
                 //Creamos la conexión con la base de datos
-                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true",useract.getBdusuario());
+                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true",singleton.getUsuario());
                 conexion = DriverManager.getConnection(conexionerpsusuario, user, pswd);
                 //Utilizamos un PreparedStatement para la consulta para mayor seguridad
                 PreparedStatement ps = conexion.prepareStatement("INSERT INTO expediciones (Referencia, Direccion, FechaPrevista, Documento) VALUES  (?, ?, ?, ?)");
@@ -1667,7 +1667,7 @@ public class ERPController {
             tablaExp.getItems().clear();
             //Creamos un paciente con los datos extraidos del campo seleccionado de la tabla
             Expediciones exp = TableExpediciones.getSelectionModel().getSelectedItem();
-            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",useract.getBdusuario());
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",singleton.getUsuario());
             //Creamos la conexion
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             //Creamos el correspondiente Statement con nuestra conexion anterior
@@ -1710,7 +1710,7 @@ public class ERPController {
         try {
             //Creamos un médico con los datos selecionados de la tabla
             Expediciones exp = tablaExp.getSelectionModel().getSelectedItem();
-            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",useract.getBdusuario());
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",singleton.getUsuario());
             //Creamos la conexion
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             //Creamos el Statement con la conexion
@@ -1759,7 +1759,7 @@ public class ERPController {
         //Ejecutamos el código en un try para controlar las excepciones
         try {
             //Creamos la conexion
-            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",useract.getBdusuario());
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s",singleton.getUsuario());
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             Statement st = conexion.createStatement();
             TableDevoluciones.getItems().clear();
