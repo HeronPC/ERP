@@ -748,7 +748,7 @@ public class ERPController {
                     myLabel.add(node2, cols, filas);//Va añadiendo los nodeswing al gridpane sumando filas y columnas
                     filas++;
                     if (filas == 4) {
-                        //mybutton.setDisable(true);
+                        mybutton.setDisable(true);
                     }//debes deshabilitar el método cuandotodo el gripane esta lleno
                     counter++;
                 } catch (Exception e) {
@@ -916,44 +916,47 @@ public class ERPController {
             }
 
             if (comnombrebd) {
-                String consulta34 = String.format("CREATE DATABASE IF NOT EXISTS %s;", bd + pruebauser.substring(0,3));
-                st.execute(consulta34);
-                String consulta2 = String.format("INSERT INTO bds values ('%s', '%s')", bd, pruebauser);
-                st.execute(consulta2);
-                String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", bd + pruebauser.substring(0, 3));
-                conexion2 = DriverManager.getConnection(conexionbdusuario, user, pswd);
-                Statement st2 = conexion2.createStatement();
-                st2.executeUpdate(tabla1);
-                st2.executeUpdate(tabla2);
-                st2.executeUpdate(tabla3);
-                st2.executeUpdate(tabla4);
-                st2.executeUpdate(tabla5);
-                st2.executeUpdate(tabla6);
-                st2.executeUpdate(tabla7);
-                st2.executeUpdate(tabla8);
+                try {
+                    String consulta34 = String.format("CREATE DATABASE IF NOT EXISTS %s;", bd + pruebauser.substring(0, 3));
+                    st.execute(consulta34);
+                    String consulta2 = String.format("INSERT INTO bds values ('%s', '%s')", bd, pruebauser);
+                    st.execute(consulta2);
+                    String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", bd + pruebauser.substring(0, 3));
+                    conexion2 = DriverManager.getConnection(conexionbdusuario, user, pswd);
+                    Statement st2 = conexion2.createStatement();
+                    st2.executeUpdate(tabla1);
+                    st2.executeUpdate(tabla2);
+                    st2.executeUpdate(tabla3);
+                    st2.executeUpdate(tabla4);
+                    st2.executeUpdate(tabla5);
+                    st2.executeUpdate(tabla6);
+                    st2.executeUpdate(tabla7);
+                    st2.executeUpdate(tabla8);
 
-                Pnewbd.setVisible(false);
-                nombd = txtnombd.getText();
+                    Pnewbd.setVisible(false);
+                    nombd = txtnombd.getText();
 
-                Panelizq.setBackground(new java.awt.Color(41, 45, 45));
-                Panelizq.setSize(100, 30);
-                Panelbd.setBorder(new EmptyBorder(40, 30, 30, 30));
-                Panelbd.setBackground(new java.awt.Color(41, 45, 45));
-                JLabel nombrebd = new JLabel(nombd);//Aqui aparecerá el nombre de los empleados con respecto a la base de datos
-                nombrebd.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
-                nombrebd.setForeground(Color.white);
-                btel.setBackground(new java.awt.Color(41, 45, 45));
-                ImageIcon iconoeliminar = new ImageIcon("src/main/resources/sge/proyectoerp/img/eliminar.png");
-                java.awt.Image newimgeliminar = iconoeliminar.getImage().getScaledInstance(7, 7, java.awt.Image.SCALE_SMOOTH);
-                iconoeliminar = new ImageIcon(newimgeliminar);
-                btel.setIcon(iconoeliminar);
-                btentrar.setBackground(new java.awt.Color(41, 184, 78));
-                Panelizq.add(btel);
-                Panelizq.add(nombrebd);
-                Panelbd.add(Panelizq, BorderLayout.WEST);
-                Panelbd.add(btentrar, BorderLayout.EAST);
+                    Panelizq.setBackground(new java.awt.Color(41, 45, 45));
+                    Panelizq.setSize(100, 30);
+                    Panelbd.setBorder(new EmptyBorder(40, 30, 30, 30));
+                    Panelbd.setBackground(new java.awt.Color(41, 45, 45));
+                    JLabel nombrebd = new JLabel(nombd);//Aqui aparecerá el nombre de los empleados con respecto a la base de datos
+                    nombrebd.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
+                    nombrebd.setForeground(Color.white);
+                    btel.setBackground(new java.awt.Color(41, 45, 45));
+                    ImageIcon iconoeliminar = new ImageIcon("src/main/resources/sge/proyectoerp/img/eliminar.png");
+                    java.awt.Image newimgeliminar = iconoeliminar.getImage().getScaledInstance(7, 7, java.awt.Image.SCALE_SMOOTH);
+                    iconoeliminar = new ImageIcon(newimgeliminar);
+                    btel.setIcon(iconoeliminar);
+                    btentrar.setBackground(new java.awt.Color(41, 184, 78));
+                    Panelizq.add(btel);
+                    Panelizq.add(nombrebd);
+                    Panelbd.add(Panelizq, BorderLayout.WEST);
+                    Panelbd.add(btentrar, BorderLayout.EAST);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1249,13 +1252,13 @@ public class ERPController {
         if (PanelRecepciones.isVisible()) {
             cambiarpanel(PanelRecepciones, PanelAddRecepciones);
             dateReferencia.setValue(LocalDate.now());
-            lblAtrasRecepciones.setText("RECEPCIONES / CREAR");
+            lblAtrasRecepciones.setText("/ CREAR");
             txtReferencia.setDisable(false);
             btnCrearRecepciones.setText("CREAR");
             clearRecepciones();
         } else if (PanelExpediciones.isVisible()) {
             DateExpediciones.setValue(LocalDate.now());
-            lblAtrasExp.setText("EXPEDICIONES / CREAR");
+            lblAtrasExp.setText("/ CREAR");
             txtReferenciaExpediciones.setDisable(false);
             btnCrearExpediciones.setText("CREAR");
             cambiarpanel(PanelExpediciones, PanelAddExpediciones);
