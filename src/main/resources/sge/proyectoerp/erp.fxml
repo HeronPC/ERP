@@ -57,7 +57,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="PanelMenuPrincipal" layoutX="-4.0" layoutY="83.0" prefHeight="815.0" prefWidth="1737.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="83.0">
+      <AnchorPane fx:id="PanelMenuPrincipal" layoutX="-4.0" layoutY="83.0" prefHeight="815.0" prefWidth="1737.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="83.0">
          <children>
             <GridPane alignment="CENTER" layoutX="443.0" layoutY="259.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="492.0" prefWidth="1044.0" vgap="10.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="100.0">
               <columnConstraints>
@@ -684,7 +684,7 @@
       </AnchorPane>
       <AnchorPane fx:id="PanelEmpleados" layoutY="83.0" prefHeight="710.0" prefWidth="1536.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="83.0">
          <children>
-            <AnchorPane id="panelempleados" fx:id="superiorempleados" prefHeight="83.0" prefWidth="1536.0" stylesheets="@css/darkmode.css">
+            <AnchorPane id="panelempleados" fx:id="superiorempleados" prefHeight="83.0" prefWidth="1536.0" stylesheets="@css/darkmode.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <Button id="btscrear" fx:id="btnCrearEmpleados" layoutX="23.0" layoutY="27.0" mnemonicParsing="false" onAction="#pressbtncrear" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="23.0" AnchorPane.topAnchor="27.0">
                      <font>
@@ -737,58 +737,6 @@
             </Button>
          </children>
       </VBox>
-      <AnchorPane fx:id="PanelVentas" layoutX="10.0" layoutY="93.0" prefHeight="1007.0" prefWidth="1930.0" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="83.0">
-         <children>
-            <TableView fx:id="tableInventarioRecep1" layoutX="151.0" layoutY="196.0" onMouseClicked="#selectInventario" prefHeight="678.0" prefWidth="1629.0" stylesheets="@css/darkmode.css" AnchorPane.bottomAnchor="133.0" AnchorPane.leftAnchor="151.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="196.0">
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-               <columns>
-                  <TableColumn fx:id="contactocolumn1" editable="false" prefWidth="154.0" sortable="false" styleClass="celdas" text="Número" />
-                  <TableColumn id="celdas" fx:id="Referenciacolumn1" prefWidth="75.0" text="Fecha de Creación" />
-                  <TableColumn id="celdas" fx:id="Fechacolumn1" prefWidth="75.0" text="Cliente" />
-                  <TableColumn id="celdas" fx:id="Documentocolumn1" prefWidth="75.0" text="Total" />
-                  <TableColumn id="celdas" fx:id="Estadocolumn1" prefWidth="75.0" text="Estado" />
-               </columns>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </TableView>
-            <AnchorPane id="panelsmenu" fx:id="BarraSuperior1" layoutX="151.0" layoutY="880.0" prefHeight="31.0" prefWidth="1235.0" stylesheets="@css/darkmode.css" AnchorPane.bottomAnchor="96.0" AnchorPane.leftAnchor="151.0" AnchorPane.rightAnchor="150.0">
-               <children>
-                  <Label fx:id="lblnombreusuario1" alignment="CENTER_RIGHT" layoutX="928.0" prefHeight="28.0" prefWidth="56.0" text="Total:" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="3.0">
-                     <font>
-                        <Font name="Comic Sans MS" size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lbltotalventas" alignment="CENTER" layoutX="995.0" layoutY="3.0" prefHeight="28.0" prefWidth="284.0" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="3.0">
-                     <font>
-                        <Font name="Comic Sans MS" size="20.0" />
-                     </font>
-                  </Label>
-               </children>
-            </AnchorPane>
-            <Button id="btscrear" fx:id="btnCrearEmpleados1" layoutX="27.0" layoutY="100.0" mnemonicParsing="false" onAction="#pressbtncrear" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="100.0">
-               <font>
-                  <Font name="Comic Sans MS Bold" size="14.0" />
-               </font>
-            </Button>
-            <AnchorPane id="panelempleados" prefHeight="83.0" prefWidth="1930.0" stylesheets="@css/darkmode.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-2.0">
-               <children>
-                  <Label fx:id="lblnombreusuario11" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="23.0" prefHeight="37.0" prefWidth="161.0" text="Presupuestos" textFill="WHITE" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="23.0">
-                     <font>
-                        <Font name="Comic Sans MS" size="26.0" />
-                     </font>
-                  </Label>
-                  <Button id="botonperfil" fx:id="btnVolverEmpEdit1" layoutX="1774.0" layoutY="14.0" mnemonicParsing="false" onAction="#pressatras" prefHeight="55.0" prefWidth="142.0" stylesheets="@css/darkmode.css" text="Clientes" textFill="WHITE" AnchorPane.bottomAnchor="13.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
-                     <font>
-                        <Font name="Comic Sans MS" size="26.0" />
-                     </font>
-                  </Button>
-               </children>
-            </AnchorPane>
-         </children>
-      </AnchorPane>
       <AnchorPane id="paneles" fx:id="PanelAddEmpleados" layoutX="10.0" layoutY="10.0" prefHeight="707.0" prefWidth="1536.0" stylesheets="@css/darkmode.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="83.0">
          <children>
             <ScrollPane cache="true" cacheHint="SCALE" fitToHeight="true" fitToWidth="true" hmax="2.0" hvalue="0.3" layoutY="83.0" prefHeight="924.0" prefWidth="1930.0" stylesheets="@css/darkmode.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="83.0">
@@ -1373,6 +1321,58 @@
                   </AnchorPane>
                </content>
             </ScrollPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="PanelVentas" layoutX="10.0" layoutY="93.0" prefHeight="1007.0" prefWidth="1930.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="83.0">
+         <children>
+            <TableView fx:id="tableInventarioRecep1" layoutX="151.0" layoutY="196.0" onMouseClicked="#selectInventario" prefHeight="678.0" prefWidth="1629.0" stylesheets="@css/darkmode.css" AnchorPane.bottomAnchor="133.0" AnchorPane.leftAnchor="151.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="196.0">
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+               <columns>
+                  <TableColumn fx:id="contactocolumn1" editable="false" prefWidth="154.0" sortable="false" styleClass="celdas" text="Número" />
+                  <TableColumn id="celdas" fx:id="Referenciacolumn1" prefWidth="75.0" text="Fecha de Creación" />
+                  <TableColumn id="celdas" fx:id="Fechacolumn1" prefWidth="75.0" text="Cliente" />
+                  <TableColumn id="celdas" fx:id="Documentocolumn1" prefWidth="75.0" text="Total" />
+                  <TableColumn id="celdas" fx:id="Estadocolumn1" prefWidth="75.0" text="Estado" />
+               </columns>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </TableView>
+            <AnchorPane id="panelsmenu" fx:id="BarraSuperior1" layoutX="151.0" layoutY="880.0" prefHeight="31.0" prefWidth="1235.0" stylesheets="@css/darkmode.css" AnchorPane.bottomAnchor="96.0" AnchorPane.leftAnchor="151.0" AnchorPane.rightAnchor="150.0">
+               <children>
+                  <Label fx:id="lblnombreusuario1" alignment="CENTER_RIGHT" layoutX="929.0" layoutY="-1.0" prefHeight="28.0" prefWidth="56.0" text="Total:" textFill="WHITE" AnchorPane.bottomAnchor="4.0" AnchorPane.topAnchor="-1.0">
+                     <font>
+                        <Font name="Comic Sans MS" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lbltotalventas" alignment="CENTER" layoutX="995.0" layoutY="3.0" prefHeight="28.0" prefWidth="284.0" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="3.0">
+                     <font>
+                        <Font name="Comic Sans MS" size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <Button id="btscrear" fx:id="btnCrearEmpleados1" layoutX="27.0" layoutY="100.0" mnemonicParsing="false" onAction="#pressbtncrear" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="100.0">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="14.0" />
+               </font>
+            </Button>
+            <AnchorPane id="panelempleados" prefHeight="83.0" prefWidth="1930.0" stylesheets="@css/darkmode.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label fx:id="lblnombreusuario11" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="23.0" prefHeight="37.0" prefWidth="161.0" text="Presupuestos" textFill="WHITE" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="23.0">
+                     <font>
+                        <Font name="Comic Sans MS" size="26.0" />
+                     </font>
+                  </Label>
+                  <Button id="botonescp" fx:id="btnClientes" layoutX="1774.0" layoutY="17.0" mnemonicParsing="false" onAction="#pressbtclientes" prefHeight="57.0" prefWidth="162.0" stylesheets="@css/darkmode.css" text="Clientes" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="16.0">
+                     <font>
+                        <Font name="Comic Sans MS Bold" size="26.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </children>

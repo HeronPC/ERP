@@ -517,6 +517,14 @@ public class ERPController {
     @FXML
     private Button btcuenta1111;
 
+    //Ventas
+
+    @FXML
+    private Pane PanelVentas;
+
+    @FXML
+    public void pressbtclientes(){};
+
     //Variables nuevas
     private Pane panelactual;
 
@@ -535,7 +543,7 @@ public class ERPController {
     //Esta variable tiene el usuario con el que nos conectaremos a la base de datos
     private final String user = "root";
     //Esta es la contraseña del usuario anterior para conectarnos a la base de datos
-    private final String pswd = "root";
+    private final String pswd = "1492";
 
     //Debes crear otro método que añada los distintos departamentos que se vayan creando en la base de datos y se rellenen los gridlayout de los distintos departamentos
     int counter = 0;
@@ -1041,7 +1049,8 @@ public class ERPController {
             if (PRegistro.isVisible()) {
                 imgusuario.setImage(imagenem);
                 imgrellena = true;
-            } else if (PanelAddEmpleados.isVisible()) {
+            }
+                if (PanelAddEmpleados.isVisible()) {
                 imgempleado.setImage(imagenem);
             }
 
@@ -1200,6 +1209,7 @@ public class ERPController {
 
     @FXML
     void pressbtventas() {
+        cambiarpanel(PanelMenuPrincipal, PanelVentas);
     }
 
     @FXML
