@@ -517,13 +517,12 @@ public class ERPController {
     @FXML
     private Button btcuenta1111;
 
-    //Ventas
-
     @FXML
     private Pane PanelVentas;
 
-    @FXML
-    public void pressbtclientes(){};
+
+    public void pressbtclientes() {
+    }
 
     //Variables nuevas
     private Pane panelactual;
@@ -1049,8 +1048,7 @@ public class ERPController {
             if (PRegistro.isVisible()) {
                 imgusuario.setImage(imagenem);
                 imgrellena = true;
-            }
-                if (PanelAddEmpleados.isVisible()) {
+            } else if (PanelAddEmpleados.isVisible()) {
                 imgempleado.setImage(imagenem);
             }
 

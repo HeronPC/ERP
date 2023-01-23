@@ -684,7 +684,7 @@
       </AnchorPane>
       <AnchorPane fx:id="PanelEmpleados" layoutY="83.0" prefHeight="710.0" prefWidth="1536.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="83.0">
          <children>
-            <AnchorPane id="panelempleados" fx:id="superiorempleados" prefHeight="83.0" prefWidth="1536.0" stylesheets="@css/darkmode.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane id="panelempleados" fx:id="superiorempleados" prefHeight="83.0" prefWidth="1536.0" stylesheets="@css/darkmode.css">
                <children>
                   <Button id="btscrear" fx:id="btnCrearEmpleados" layoutX="23.0" layoutY="27.0" mnemonicParsing="false" onAction="#pressbtncrear" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="23.0" AnchorPane.topAnchor="27.0">
                      <font>
@@ -723,20 +723,6 @@
             </GridPane>
          </children>
       </AnchorPane>
-      <VBox id="panelsmenu" fx:id="Pperfil" layoutX="1380.0" layoutY="85.0" onMouseExited="#cerrarperfil" prefHeight="102.0" prefWidth="154.0" stylesheets="@css/darkmode.css" visible="false" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="86.0">
-         <children>
-            <Button id="botonperfil" fx:id="btaddbd11" mnemonicParsing="false" onAction="#pressaddbd" prefHeight="50.0" prefWidth="157.0" stylesheets="@css/darkmode.css" text="EDITAR PERFIL" textFill="WHITE">
-               <font>
-                  <Font name="Comic Sans MS" size="15.0" />
-               </font>
-            </Button>
-            <Button id="botonperfil" fx:id="btaddbd1" mnemonicParsing="false" onAction="#presscerrarbd" prefHeight="50.0" prefWidth="157.0" stylesheets="@css/darkmode.css" text="SALIR" textFill="RED">
-               <font>
-                  <Font name="Comic Sans MS" size="15.0" />
-               </font>
-            </Button>
-         </children>
-      </VBox>
       <AnchorPane id="paneles" fx:id="PanelAddEmpleados" layoutX="10.0" layoutY="10.0" prefHeight="707.0" prefWidth="1536.0" stylesheets="@css/darkmode.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="83.0">
          <children>
             <ScrollPane cache="true" cacheHint="SCALE" fitToHeight="true" fitToWidth="true" hmax="2.0" hvalue="0.3" layoutY="83.0" prefHeight="924.0" prefWidth="1930.0" stylesheets="@css/darkmode.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="83.0">
@@ -1342,12 +1328,12 @@
             </TableView>
             <AnchorPane id="panelsmenu" fx:id="BarraSuperior1" layoutX="151.0" layoutY="880.0" prefHeight="31.0" prefWidth="1235.0" stylesheets="@css/darkmode.css" AnchorPane.bottomAnchor="96.0" AnchorPane.leftAnchor="151.0" AnchorPane.rightAnchor="150.0">
                <children>
-                  <Label fx:id="lblnombreusuario1" alignment="CENTER_RIGHT" layoutX="929.0" layoutY="-1.0" prefHeight="28.0" prefWidth="56.0" text="Total:" textFill="WHITE" AnchorPane.bottomAnchor="4.0" AnchorPane.topAnchor="-1.0">
+                  <Label fx:id="lbltotalventas" alignment="CENTER" layoutX="977.0" minHeight="-Infinity" prefHeight="28.0" prefWidth="302.0" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="977.0" AnchorPane.rightAnchor="350.0">
                      <font>
                         <Font name="Comic Sans MS" size="20.0" />
                      </font>
                   </Label>
-                  <Label fx:id="lbltotalventas" alignment="CENTER" layoutX="995.0" layoutY="3.0" prefHeight="28.0" prefWidth="284.0" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="3.0">
+                  <Label fx:id="lblnombreusuario1" alignment="CENTER_RIGHT" layoutX="904.0" layoutY="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="58.0" text="Total:" textFill="WHITE" AnchorPane.leftAnchor="904.0000000000001" AnchorPane.rightAnchor="667.0">
                      <font>
                         <Font name="Comic Sans MS" size="20.0" />
                      </font>
@@ -1359,21 +1345,35 @@
                   <Font name="Comic Sans MS Bold" size="14.0" />
                </font>
             </Button>
-            <AnchorPane id="panelempleados" prefHeight="83.0" prefWidth="1930.0" stylesheets="@css/darkmode.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane id="panelempleados" prefHeight="83.0" prefWidth="1930.0" stylesheets="@css/darkmode.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-2.0">
                <children>
                   <Label fx:id="lblnombreusuario11" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="23.0" prefHeight="37.0" prefWidth="161.0" text="Presupuestos" textFill="WHITE" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="23.0">
                      <font>
                         <Font name="Comic Sans MS" size="26.0" />
                      </font>
                   </Label>
-                  <Button id="botonescp" fx:id="btnClientes" layoutX="1774.0" layoutY="17.0" mnemonicParsing="false" onAction="#pressbtclientes" prefHeight="57.0" prefWidth="162.0" stylesheets="@css/darkmode.css" text="Clientes" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="16.0">
+                  <Button id="botonescp" fx:id="btnVolverEmpEdit1" layoutX="1774.0" layoutY="14.0" mnemonicParsing="false" onAction="#pressbtclientes" prefHeight="55.0" prefWidth="142.0" stylesheets="@css/darkmode.css" text="Clientes" textFill="WHITE" AnchorPane.bottomAnchor="13.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
                      <font>
-                        <Font name="Comic Sans MS Bold" size="26.0" />
+                        <Font name="Comic Sans MS" size="26.0" />
                      </font>
                   </Button>
                </children>
             </AnchorPane>
          </children>
       </AnchorPane>
+      <VBox id="panelsmenu" fx:id="Pperfil" layoutX="1380.0" layoutY="85.0" onMouseExited="#cerrarperfil" prefHeight="102.0" prefWidth="154.0" stylesheets="@css/darkmode.css" visible="false" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="86.0">
+         <children>
+            <Button id="botonperfil" fx:id="btaddbd11" mnemonicParsing="false" onAction="#pressaddbd" prefHeight="50.0" prefWidth="157.0" stylesheets="@css/darkmode.css" text="EDITAR PERFIL" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS" size="15.0" />
+               </font>
+            </Button>
+            <Button id="botonperfil" fx:id="btaddbd1" mnemonicParsing="false" onAction="#presscerrarbd" prefHeight="50.0" prefWidth="157.0" stylesheets="@css/darkmode.css" text="SALIR" textFill="RED">
+               <font>
+                  <Font name="Comic Sans MS" size="15.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>
