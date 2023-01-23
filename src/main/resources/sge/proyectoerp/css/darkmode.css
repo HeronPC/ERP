@@ -87,7 +87,7 @@
 }
 
 .table-view{
-    -fx-background-color: transparent;
+    -fx-background-color: blue;
 }
 .table-view .label{
     -fx-text-fill: white;
