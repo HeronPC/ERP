@@ -542,7 +542,7 @@ public class ERPController {
     //Esta variable tiene el usuario con el que nos conectaremos a la base de datos
     private final String user = "root";
     //Esta es la contraseña del usuario anterior para conectarnos a la base de datos
-    private final String pswd = "1492";
+    private final String pswd = "root";
 
     //Debes crear otro método que añada los distintos departamentos que se vayan creando en la base de datos y se rellenen los gridlayout de los distintos departamentos
     int counter = 0;
@@ -668,7 +668,6 @@ public class ERPController {
                                 ((Node) (event.getSource())).getScene().getWindow().hide();
                                 Label myLabel = (Label) root.lookup("#lblnombreusuario");
                                 myLabel.setText(setUser());
-                                rellenartablasbd();
                             } else {
                                 //Informamos al usuario
                                 crearalertaerror("La contraseña para este usuario es incorrecta");
@@ -706,14 +705,38 @@ public class ERPController {
     }
 
     private void rellenartablasbd() {
-        pruebauser = txtusuario.getText();
+        pruebauser = "root";
+        crearpaneles(pruebauser);
+
+
+    }
+
+    private void comprobarlogin() {
+        //Definimos complogin como false
+        complogin = false;
+        //Comprobamos que los datos no esten en blanco
+        if (Objects.equals(txtusuario.getText(), "") || Objects.equals(txtcontrasena.getText(), "")) {
+            crearalertaerror("Debe rellenar los dos campos");
+            //Comprobamos que los datos del usuario no sobrepasen los 20 caracteres
+        } else if (txtusuario.getLength() > 20) {
+            crearalertaerror("El usuario no puede tener más de 20 caracteres");
+            //Comprobamos que el campo de contraseña no tenga una longitud mayor de 16 caracteres
+        } else if (txtcontrasena.getLength() > 16) {
+            crearalertaerror("La contraseña no puede tener más de 16 caracteres");
+            //Definimos true la variable complogin en caso de no haber ningun fallo en la comprobación
+        } else {
+            complogin = true;
+        }
+    }
+
+    private void crearpaneles(String prubuser) {
         int cont = 0;
         try {
             Connection conexion;
             conexion = DriverManager.getConnection(conexionerp, user, pswd);
             //Creamos la consulta con PreparedStatement
             Statement st = conexion.createStatement();
-            String consulta = String.format("Select nombre from bds where usuario = '%s'", pruebauser);
+            String consulta = String.format("Select nombre from bds where usuario = '%s'", prubuser);
             ResultSet rs = st.executeQuery(consulta);
             while (rs.next()) {
                 JButton btel = new JButton();
@@ -742,6 +765,7 @@ public class ERPController {
                 Panelizq.add(nombrebd);
                 Panelbd.add(Panelizq, BorderLayout.WEST);
                 Panelbd.add(btentrar, BorderLayout.EAST);
+
                 try {
                     URL url = Paths.get("./src/main/resources/sge/proyectoerp/bd.fxml").toUri().toURL();
                     Pane root = FXMLLoader.load(url);
@@ -761,6 +785,80 @@ public class ERPController {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+                //Metodo para eliminar las base de datos añadidas en el usuario, para eliminarlas deberas hacer un delete a la base de datos y luego llamar al metodo para que recarge los paneles de las base de datos
+                btel.addActionListener(el -> {
+                    try {
+                        Connection conexion1;
+                        conexion1 = DriverManager.getConnection(conexionerp, user, pswd);
+                        //Creamos la consulta con PreparedStatement
+                        Statement st1 = conexion1.createStatement();
+                        String consulta5 = String.format("delete from bds where usuario = '%s' and nombre = '%s'", prubuser, nombd);
+                        String consulta2 = String.format("DROP DATABASE %s", nombd);
+
+                        //Creamos una ventana de confirmacion para la modificacion del ingreso
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setHeaderText(null);
+                        alert.setTitle("Confirmación");
+                        alert.setContentText("¿Está seguro de qué quiere borrar esta base de datos?");
+                        Optional<ButtonType> action = alert.showAndWait();
+                        //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+                        if (action.orElseThrow() == ButtonType.OK) {
+                            st1.executeUpdate(consulta5);
+                            st1.executeUpdate(consulta2);
+                            crearalertainfo("Base de datos eliminada");
+                            rellenartablasbd();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+
+                btentrar.addActionListener(e -> Platform.runLater(() -> {
+                    singleton.setUsuario(btentrar.getName().substring(3));
+                    try {
+                        System.out.println("Declarado: " + singleton.getUsuario());
+                        System.out.println("Nombre del boton: " + btentrar.getName());
+                        URL url = Paths.get("./src/main/resources/sge/proyectoerp/erp.fxml").toUri().toURL();
+                        Pane root = FXMLLoader.load(url);
+                        Scene scene = new Scene(root, 1536, 790);
+                        stageerp.setScene(scene);
+                        stageerp.centerOnScreen();
+                        stageerp.setMaximized(true);
+                        stageerp.show();
+                        Label myLabel = (Label) root.lookup("#lblnombreusuario");
+                        usuario = lblnombreusuario.getText();
+                        myLabel.setText(usuario);
+                        try {
+                            Connection conexion2;
+                            conexion2 = DriverManager.getConnection(conexionerp, user, pswd);
+                            //Creamos la consulta con PreparedStatement
+                            Statement st2 = conexion2.createStatement();
+                            String consulta2 = String.format("Select nombre from bds where usuario = '%s'", prubuser);
+                            ResultSet rs2 = st2.executeQuery(consulta2);
+                            while (rs2.next()) {
+                                if (Objects.equals(btentrar.getName(), "bt" + rs2.getString(1))) {
+
+                                }
+                            }
+                        } catch (Exception eo) {
+                            eo.printStackTrace();
+                        }
+
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }));
+
+                btentrar.setName("bte" + bd + prubuser.substring(0, 3));
+                node2.setContent(Panelbd);//Añade el contenido al nodeswing
+                node2.setId("node" + nombd);//Cambia el nombre del nodo con respecto al nombre del empleado, deberas hacer que cambie con los nombres que vaya cogiendo de la base de datos
+                Pgridbd.add(node2, cols, filas);//Va añadiendo los nodeswing al gridpane sumando filas y columnas
+                filas++;
+                if (filas >= 4) {
+                    btaddbd.setDisable(true);
+                }//debes deshabilitar el método cuandotodo el gripane esta lleno
+                counter++;
             }
             //Controlamos la excepciones
         } catch (SQLException e) {
@@ -768,23 +866,6 @@ public class ERPController {
         }
     }
 
-    private void comprobarlogin() {
-        //Definimos complogin como false
-        complogin = false;
-        //Comprobamos que los datos no esten en blanco
-        if (Objects.equals(txtusuario.getText(), "") || Objects.equals(txtcontrasena.getText(), "")) {
-            crearalertaerror("Debe rellenar los dos campos");
-            //Comprobamos que los datos del usuario no sobrepasen los 20 caracteres
-        } else if (txtusuario.getLength() > 20) {
-            crearalertaerror("El usuario no puede tener más de 20 caracteres");
-            //Comprobamos que el campo de contraseña no tenga una longitud mayor de 16 caracteres
-        } else if (txtcontrasena.getLength() > 16) {
-            crearalertaerror("La contraseña no puede tener más de 16 caracteres");
-            //Definimos true la variable complogin en caso de no haber ningun fallo en la comprobación
-        } else {
-            complogin = true;
-        }
-    }
 
     private static boolean isNumeric(String cadena) {
         //Lo ejecutamos dentro del try para controlar las excepciones
@@ -897,11 +978,6 @@ public class ERPController {
 
     @FXML
     public void pressbtnewbd() {
-        JButton btel = new JButton();
-        JButton btentrar = new JButton("Acceder");
-        SwingNode node2 = new SwingNode();
-        JPanel Panelbd = new JPanel(new BorderLayout());//Creamos el panel que se va a añadir multiples veces
-        JPanel Panelizq = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 3));
         try {
             Connection conexion;
             Connection conexion2;
@@ -942,24 +1018,8 @@ public class ERPController {
 
                     Pnewbd.setVisible(false);
                     nombd = txtnombd.getText();
+                    rellenartablasbd();
 
-                    Panelizq.setBackground(new java.awt.Color(41, 45, 45));
-                    Panelizq.setSize(100, 30);
-                    Panelbd.setBorder(new EmptyBorder(40, 30, 30, 30));
-                    Panelbd.setBackground(new java.awt.Color(41, 45, 45));
-                    JLabel nombrebd = new JLabel(nombd);//Aqui aparecerá el nombre de los empleados con respecto a la base de datos
-                    nombrebd.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
-                    nombrebd.setForeground(Color.white);
-                    btel.setBackground(new java.awt.Color(41, 45, 45));
-                    ImageIcon iconoeliminar = new ImageIcon("src/main/resources/sge/proyectoerp/img/eliminar.png");
-                    java.awt.Image newimgeliminar = iconoeliminar.getImage().getScaledInstance(7, 7, java.awt.Image.SCALE_SMOOTH);
-                    iconoeliminar = new ImageIcon(newimgeliminar);
-                    btel.setIcon(iconoeliminar);
-                    btentrar.setBackground(new java.awt.Color(41, 184, 78));
-                    Panelizq.add(btel);
-                    Panelizq.add(nombrebd);
-                    Panelbd.add(Panelizq, BorderLayout.WEST);
-                    Panelbd.add(btentrar, BorderLayout.EAST);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -967,60 +1027,6 @@ public class ERPController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        btel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent el) {
-                //Metodo para eliminar las base de datos añadidas en el usuario, para eliminarlas deberas hacer un delete a la base de datos y luego llamar al metodo para que recarge los paneles de las base de datos
-            }
-        });
-
-        btentrar.addActionListener(e -> Platform.runLater(() -> {
-            singleton.setUsuario(btentrar.getName().substring(3));
-            try {
-                System.out.println("Declarado: " + singleton.getUsuario());
-                System.out.println("Nombre del boton: " + btentrar.getName());
-                URL url = Paths.get("./src/main/resources/sge/proyectoerp/erp.fxml").toUri().toURL();
-                Pane root = FXMLLoader.load(url);
-                Scene scene = new Scene(root, 1536, 790);
-                stageerp.setScene(scene);
-                stageerp.centerOnScreen();
-                stageerp.setMaximized(true);
-                stageerp.show();
-                Label myLabel = (Label) root.lookup("#lblnombreusuario");
-                usuario = lblnombreusuario.getText();
-                myLabel.setText(usuario);
-                try {
-                    Connection conexion;
-                    conexion = DriverManager.getConnection(conexionerp, user, pswd);
-                    //Creamos la consulta con PreparedStatement
-                    Statement st = conexion.createStatement();
-                    String consulta = String.format("Select nombre from bds where usuario = '%s'", pruebauser);
-                    ResultSet rs = st.executeQuery(consulta);
-                    while (rs.next()) {
-                        if (Objects.equals(btentrar.getName(), "bt" + rs.getString(1))) {
-
-                        }
-                    }
-                } catch (Exception eo) {
-                    eo.printStackTrace();
-                }
-
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        }));
-
-        btentrar.setName("bte" + bd + pruebauser.substring(0, 3));
-        node2.setContent(Panelbd);//Añade el contenido al nodeswing
-        node2.setId("node" + nombd);//Cambia el nombre del nodo con respecto al nombre del empleado, deberas hacer que cambie con los nombres que vaya cogiendo de la base de datos
-        Pgridbd.add(node2, cols, filas);//Va añadiendo los nodeswing al gridpane sumando filas y columnas
-        filas++;
-        if (filas == 4) {
-            btaddbd.setDisable(true);
-        }//debes deshabilitar el método cuandotodo el gripane esta lleno
-        counter++;
-
     }
 
 
@@ -1412,10 +1418,10 @@ public class ERPController {
                                 listrecepcione.getNombreproducto(),
                                 listrecepcione.getCantidad());
                         st.execute(consulta2);
+                        crearalertainfo("Recepcion editada");
+                        rellenartablaRecepciones();
+                        cambiarpanel(PanelAddRecepciones, PanelRecepciones);
                     }
-                    crearalertainfo("Recepcion editada");
-                    rellenartablaRecepciones();
-                    cambiarpanel(PanelAddRecepciones, PanelRecepciones);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
