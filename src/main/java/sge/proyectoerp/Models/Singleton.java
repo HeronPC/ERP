@@ -2,7 +2,17 @@ package sge.proyectoerp.Models;
 
 public class Singleton {
     private static Singleton instance;
-    private String Usuario;
+    private static String Usuario;
+
+    private static String titstage;
+
+    public String getTitstage() {
+        return titstage;
+    }
+
+    public void setTitstage(String titstage) {
+        Singleton.titstage = titstage;
+    }
 
     public Singleton() {
         // constructor privado para evitar la creación de nuevas instancias
@@ -20,7 +30,7 @@ public class Singleton {
     }
 
     public void setUsuario(String Usuario) {
-        this.Usuario = Usuario;
+        Singleton.Usuario = Usuario;
     }
 }
 

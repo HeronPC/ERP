@@ -1,6 +1,5 @@
 package sge.proyectoerp.Controllers;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
@@ -31,6 +30,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -238,6 +238,10 @@ public class ERPController {
     @FXML
     private TextField txtDocumento212121;
 
+
+    @FXML
+    private Pane panelcontrol;
+
     @FXML
     private Pane PanelRecepciones;
 
@@ -296,7 +300,19 @@ public class ERPController {
     private DatePicker dateDevoluciones;
 
     @FXML
+    private DatePicker dateFecNa;
+
+    @FXML
     private TextField txtGerenteEmpleado;
+
+    @FXML
+    private TextField txtDireccionPersonal;
+
+    @FXML
+    private TextField txtNumeroCuenta;
+
+    @FXML
+    private TextField txtDNI;
 
     @FXML
     private TableColumn<?, ?> ColumCantidadExpedic;
@@ -428,6 +444,9 @@ public class ERPController {
     private TextField txtProductoExp;
 
     @FXML
+    private TextField txtGeneroEmpleado;
+
+    @FXML
     private TableColumn<Expediciones, String> ColumExpDoc;
 
     @FXML
@@ -464,10 +483,44 @@ public class ERPController {
     private ImageView imgperfil12;
 
     @FXML
-    private Button btaddbd1;
+    private Button btaccederbd1;
+
+    @FXML
+    private Button btaccederbd2;
+
+    @FXML
+    private Button btaccederbd3;
+
+    @FXML
+    private Button btaccederbd4;
+
+    @FXML
+    private Button bteliminarbd1;
+
+    @FXML
+    private Button bteliminarbd2;
+
+    @FXML
+    private Button bteliminarbd3;
+
+    @FXML
+    private Button bteliminarbd4;
+
 
     @FXML
     private Label txtidpagina1;
+
+    @FXML
+    private Label labelbd1;
+
+    @FXML
+    private Label labelbd2;
+
+    @FXML
+    private Label labelbd3;
+
+    @FXML
+    private Label labelbd4;
 
     @FXML
     private Label lblAtrasExp;
@@ -520,18 +573,20 @@ public class ERPController {
     @FXML
     private Pane PanelVentas;
 
-
-    public void pressbtclientes() {
-    }
-
     //Variables nuevas
     private Pane panelactual;
 
     private boolean usuarioact = false;
 
+    private String imageruta;
+
     private final ArrayList<Recepciones> listrecepciones = new ArrayList<>();
     private final ArrayList<Expediciones> listexpediciones = new ArrayList<>();
     private final ArrayList<Devoluciones> listdevoluciones = new ArrayList<>();
+
+    ArrayList<Button> listabotonesacceder = new ArrayList<>();
+    ArrayList<Button> listabotoneliminar = new ArrayList<>();
+    ArrayList<Label> listalabels = new ArrayList<>();
 
     //CAMBIOS
 
@@ -559,26 +614,21 @@ public class ERPController {
 
     private boolean imgrellena;
 
-    String tabla1 = "CREATE OR REPLACE TABLE proveedores( CIF CHAR(9) PRIMARY KEY, Nombre VARCHAR(50) UNIQUE, " +
-            "Direccion VARCHAR(100), Email VARCHAR(50), Tel CHAR(9) UNIQUE);";
-    String tabla2 = "CREATE OR REPLACE TABLE recepciones(Referencia VARCHAR(15) PRIMARY KEY, Nombre VARCHAR(50), " +
-            "FechaPrevista DATE, Documento VARCHAR(100), Tel CHAR(9), Estado VARCHAR(100), " +
-            "CONSTRAINT Nombre FOREIGN KEY (Nombre) REFERENCES proveedores (Nombre)," +
-            "CONSTRAINT Tel FOREIGN KEY (Tel) REFERENCES proveedores (TEl));";
-    String tabla3 = "CREATE OR REPLACE TABLE devoluciones(Referencia VARCHAR(15) PRIMARY KEY, Proveedor VARCHAR(50)," +
-            "FechaPrevista DATE, Documento VARCHAR(100), NombreProducto VARCHAR(50), Cantidad INT);";
-    String tabla5 = "CREATE OR REPLACE TABLE expediciones(Referencia CHAR(15) PRIMARY KEY, Direccion VARCHAR(50), Nombre VARCHAR(50), " +
-            "FechaPrevista DATE, Documento VARCHAR(100), Tel CHAR(9), Estado VARCHAR(100)," +
-            "FOREIGN KEY (Nombre) REFERENCES clientes (Nombre)," +
-            "FOREIGN KEY (Tel) REFERENCES clientes (Tel));";
-    String tabla4 = "CREATE OR REPLACE TABLE clientes( CIF CHAR(9) PRIMARY KEY, Nombre VARCHAR(50) UNIQUE," +
-            "Direccion VARCHAR(100), Email VARCHAR(50), Tel CHAR(9) UNIQUE);";
+    String tabla1 = "CREATE OR REPLACE TABLE proveedores( CIF CHAR(9) PRIMARY KEY, Nombre VARCHAR(50) UNIQUE, " + "Direccion VARCHAR(100), Email VARCHAR(50), Tel CHAR(9) UNIQUE);";
+    String tabla2 = "CREATE OR REPLACE TABLE recepciones(Referencia VARCHAR(15) PRIMARY KEY, Nombre VARCHAR(50), " + "FechaPrevista DATE, Documento VARCHAR(100), Tel CHAR(9), Estado VARCHAR(100), " + "CONSTRAINT Nombre FOREIGN KEY (Nombre) REFERENCES proveedores (Nombre)," + "CONSTRAINT Tel FOREIGN KEY (Tel) REFERENCES proveedores (TEl));";
+    String tabla3 = "CREATE OR REPLACE TABLE devoluciones(Referencia VARCHAR(15) PRIMARY KEY, Proveedor VARCHAR(50)," + "FechaPrevista DATE, Documento VARCHAR(100), NombreProducto VARCHAR(50), Cantidad INT);";
+    String tabla5 = "CREATE OR REPLACE TABLE expediciones(Referencia CHAR(15) PRIMARY KEY, Direccion VARCHAR(50), Nombre VARCHAR(50), " + "FechaPrevista DATE, Documento VARCHAR(100), Tel CHAR(9), Estado VARCHAR(100)," + "FOREIGN KEY (Nombre) REFERENCES clientes (Nombre)," + "FOREIGN KEY (Tel) REFERENCES clientes (Tel));";
+    String tabla4 = "CREATE OR REPLACE TABLE clientes( CIF CHAR(9) PRIMARY KEY, Nombre VARCHAR(50) UNIQUE," + "Direccion VARCHAR(100), Email VARCHAR(50), Tel CHAR(9) UNIQUE);";
 
-    String tabla6 = "CREATE OR REPLACE Table productosexp(Referencia VARCHAR(15), Producto VARCHAR(50), Cantidad INT," +
-            "CONSTRAINT Referenciaexp FOREIGN KEY (Referencia) REFERENCES expediciones (Referencia));";
+    String tabla9 = "CREATE OR REPLACE TABLE empleados(Nombre VARCHAR(50) NOT NULL, PuestoEmpresa VARCHAR(50) NOT NULL, Telefono CHAR(9) NULL, emaillaboral VARCHAR(100) NOT NULL, Departamento VARCHAR(50) NOT NULL, " +
+            "Gerente VARCHAR(50) NOT NULL, Foto VARCHAR(255), DireccionLaboral VARCHAR(100), HorarioLaboral VARCHAR(50), DireccionPersonal VARCHAR(150), NumeroCuentaBancaria CHAR(24), " +
+            "DNI CHAR(9), Genero VARCHAR(50), FechaNacimiento DATE );";
 
-    String tabla7 = "CREATE OR REPLACE Table productosrec(Referencia VARCHAR(15), Producto VARCHAR(50), Cantidad INT, " +
-            "CONSTRAINT Referencia FOREIGN KEY (Referencia) REFERENCES Recepciones (Referencia));";
+    String tabla10 = "CREATE OR REPLACE TABLE imgempleados(Foto VARCHAR(255), image BLOB (524288000));";
+
+    String tabla6 = "CREATE OR REPLACE Table productosexp(Referencia VARCHAR(15), Producto VARCHAR(50), Cantidad INT," + "CONSTRAINT Referenciaexp FOREIGN KEY (Referencia) REFERENCES expediciones (Referencia));";
+
+    String tabla7 = "CREATE OR REPLACE Table productosrec(Referencia VARCHAR(15), Producto VARCHAR(50), Cantidad INT, " + "CONSTRAINT Referencia FOREIGN KEY (Referencia) REFERENCES Recepciones (Referencia));";
 
     String tabla8 = "INSERT INTO proveedores VALUES ('CAD87542G', 'Prueba', 'Calatrava', 'iago@safareyes.es', '645342345');";
 
@@ -593,24 +643,29 @@ public class ERPController {
     Stage stagere = new Stage();
 
 
-    public String setUser() {
-        usuario = txtusuario.getText();
-        return usuario;
-    }
-
     private boolean compregister;
 
     static Singleton singleton = new Singleton();
 
     private boolean complogin;
 
-    Stage stagebd = new Stage();
+    static Stage stagebd = new Stage();
+    String tituloboton;
     String usuario;
 
     String pruebauser;
 
     String nombd;
     Stage stageerp = new Stage();
+    ArrayList<String> listabds = new ArrayList<>();
+
+    public void pressbtclientes() {
+    }
+
+    public String setUser() {
+        usuario = txtusuario.getText();
+        return usuario;
+    }
 
     @FXML
     public void pressregistro(ActionEvent event) throws IOException {
@@ -636,17 +691,18 @@ public class ERPController {
             try {
                 conexion = DriverManager.getConnection(conexionerp, user, pswd);
                 //Creamos la consulta con PreparedStatement
-                PreparedStatement ps2 = conexion.prepareStatement("select usuario from usuarios");
+                PreparedStatement ps2 = conexion.prepareStatement("select usuario from usuarios where usuario = ?");
+                ps2.setString(1, txtusuario.getText());
                 //Ejecutamos la consulta
                 ResultSet rs2 = ps2.executeQuery();
                 //Comprobamos que la consulta tenga datos
-                while (rs2.next()) {
+                if (rs2.next()) {
                     //Comparamos que el usuario escrito exista en la base de datos
                     if (Objects.equals(rs2.getString(1), txtusuario.getText()) && complogin) {
                         //Si existe definimos que usuarioact es true
                         usuarioact = true;
                         //Creamos la consulta con PreparedStatement
-                        PreparedStatement ps = conexion.prepareStatement("select Passwd from usuarios where usuario= ? ");
+                        PreparedStatement ps = conexion.prepareStatement("select Passwd from usuarios where usuario = ? ");
                         ps.setString(1, txtusuario.getText());
                         //Ejecutamos la consulta
                         ResultSet rs = ps.executeQuery();
@@ -661,13 +717,18 @@ public class ERPController {
                                 Pane root = FXMLLoader.load(url);
                                 Scene scene = new Scene(root, 1068, 700);
                                 stagebd.setScene(scene);
+                                singleton.setTitstage("Bases de Datos");
+                                tituloboton = singleton.getTitstage();
+                                stagebd.setTitle("Bases de Datos");
                                 stagebd.centerOnScreen();
                                 stagebd.initStyle(StageStyle.DECORATED);
                                 stagebd.initStyle(StageStyle.TRANSPARENT);
                                 stagebd.show();
+                                System.out.println(singleton.getTitstage());
                                 ((Node) (event.getSource())).getScene().getWindow().hide();
                                 Label myLabel = (Label) root.lookup("#lblnombreusuario");
                                 myLabel.setText(setUser());
+                                singleton.setUsuario(txtusuario.getText());
                             } else {
                                 //Informamos al usuario
                                 crearalertaerror("La contraseña para este usuario es incorrecta");
@@ -705,10 +766,9 @@ public class ERPController {
     }
 
     private void rellenartablasbd() {
-        pruebauser = "root";
+        pruebauser = lblnombreusuario.getText();
+        System.out.println("Prueba User: " + pruebauser);
         crearpaneles(pruebauser);
-
-
     }
 
     private void comprobarlogin() {
@@ -729,6 +789,90 @@ public class ERPController {
         }
     }
 
+    @FXML
+    public void borrarbd() {
+        int n = 0;
+        String nombrebd = listabotonesacceder.get(n).getId();
+        if (Objects.equals(nombrebd, "bteliminar" + nombd)) {
+            try {
+                Connection conexion1;
+                conexion1 = DriverManager.getConnection(conexionerp, user, pswd);
+                //Creamos la consulta con PreparedStatement
+                Statement st1 = conexion1.createStatement();
+                String consulta5 = String.format("delete from bds where usuario = '%s' and nombre = '%s'", usuario, nombrebd);
+                String consulta2 = String.format("DROP DATABASE %s", nombrebd);
+
+                //Creamos una ventana de confirmacion para la modificacion del ingreso
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setHeaderText(null);
+                alert.setTitle("Confirmación");
+                alert.setContentText("¿Está seguro de qué quiere borrar esta base de datos?");
+                Optional<ButtonType> action = alert.showAndWait();
+                //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+                if (action.orElseThrow() == ButtonType.OK) {
+                    st1.executeUpdate(consulta5);
+                    st1.executeUpdate(consulta2);
+                    crearalertainfo("Base de datos eliminada");
+                    rellenartablasbd();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void cargarerp(Pane root, String nombrebd) throws IOException {
+        pruebauser = txtusuario.getText();
+        System.out.println("Prueba User: " + pruebauser);
+        URL url;
+        singleton.setUsuario(pruebauser);
+        System.out.println("Declarado: " + singleton.getUsuario());
+        System.out.println("Nombre del boton: " + nombrebd);
+        Label myLabel = (Label) root.lookup("#lblnombreusuario");
+        url = Paths.get("./src/main/resources/sge/proyectoerp/erp.fxml").toUri().toURL();
+        root = FXMLLoader.load(url);
+        Scene scene = new Scene(root, 1536, 790);
+        stageerp.setScene(scene);
+        stageerp.centerOnScreen();
+        stageerp.setMaximized(true);
+        stageerp.show();
+        usuario = lblnombreusuario.getText();
+        myLabel.setText(usuario);
+    }
+
+    @FXML
+    public void accederbd1() throws IOException {
+        URL url = Paths.get("./src/main/resources/sge/proyectoerp/bd.fxml").toUri().toURL();
+        Pane root = FXMLLoader.load(url);
+        String nombrebd = listabotonesacceder.get(0).getId();
+        cargarerp(root, nombrebd);
+    }
+
+
+    @FXML
+    public void accederbd2() throws IOException {
+        URL url = Paths.get("./src/main/resources/sge/proyectoerp/bd.fxml").toUri().toURL();
+        Pane root = FXMLLoader.load(url);
+        String nombrebd = listabotonesacceder.get(1).getId();
+        cargarerp(root, nombrebd);
+    }
+
+    @FXML
+    public void accederbd3() throws IOException {
+        URL url = Paths.get("./src/main/resources/sge/proyectoerp/bd.fxml").toUri().toURL();
+        Pane root = FXMLLoader.load(url);
+        String nombrebd = listabotonesacceder.get(2).getId();
+        cargarerp(root, nombrebd);
+    }
+
+    @FXML
+    public void accederbd4() throws IOException {
+        URL url = Paths.get("./src/main/resources/sge/proyectoerp/bd.fxml").toUri().toURL();
+        Pane root = FXMLLoader.load(url);
+        String nombrebd = listabotonesacceder.get(3).getId();
+        cargarerp(root, nombrebd);
+    }
+
     private void crearpaneles(String prubuser) {
         int cont = 0;
         try {
@@ -736,8 +880,30 @@ public class ERPController {
             conexion = DriverManager.getConnection(conexionerp, user, pswd);
             //Creamos la consulta con PreparedStatement
             Statement st = conexion.createStatement();
-            String consulta = String.format("Select nombre from bds where usuario = '%s'", prubuser);
+            String consulta = String.format("Select nombre, usuario from bds where usuario = '%s'", prubuser);
             ResultSet rs = st.executeQuery(consulta);
+
+            adddirbotones(listabotonesacceder, btaccederbd1, btaccederbd2, btaccederbd3, btaccederbd4);
+
+            adddirbotones(listabotoneliminar, bteliminarbd1, bteliminarbd2, bteliminarbd3, bteliminarbd4);
+
+            addlabels();
+            listabds.clear();
+            while (rs.next()) {
+                listabotonesacceder.get(cont).setId(rs.getString(1) + rs.getString(2).substring(0, 3));
+                listabotonesacceder.get(cont).setVisible(true);
+                listabotoneliminar.get(cont).setId(rs.getString(1) + rs.getString(2).substring(0, 3));
+                listabotoneliminar.get(cont).setVisible(true);
+                listalabels.get(cont).setId(rs.getString(1) + rs.getString(2).substring(0, 3));
+                listalabels.get(cont).setVisible(true);
+                cont++;
+            }
+
+            /*
+            URL url = Paths.get("./src/main/resources/sge/proyectoerp/bd.fxml").toUri().toURL();
+            Pane root = FXMLLoader.load(url);
+            GridPane myPanel = (GridPane) root.lookup("#Pgridbd");
+            myPanel.getChildren().clear();
             while (rs.next()) {
                 JButton btel = new JButton();
                 JButton btentrar = new JButton("Acceder");
@@ -755,102 +921,89 @@ public class ERPController {
                 JLabel nombrebd = new JLabel(nombd);//Aqui aparecerá el nombre de los empleados con respecto a la base de datos
                 nombrebd.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
                 nombrebd.setForeground(Color.white);
-                btel.setBackground(new java.awt.Color(41, 45, 45));
-                ImageIcon iconoeliminar = new ImageIcon("src/main/resources/sge/proyectoerp/img/eliminar.png");
-                java.awt.Image newimgeliminar = iconoeliminar.getImage().getScaledInstance(7, 7, java.awt.Image.SCALE_SMOOTH);
-                iconoeliminar = new ImageIcon(newimgeliminar);
-                btel.setIcon(iconoeliminar);
+                asignarJButton(btel);
                 btentrar.setBackground(new java.awt.Color(41, 184, 78));
                 Panelizq.add(btel);
                 Panelizq.add(nombrebd);
                 Panelbd.add(Panelizq, BorderLayout.WEST);
                 Panelbd.add(btentrar, BorderLayout.EAST);
 
-                try {
-                    URL url = Paths.get("./src/main/resources/sge/proyectoerp/bd.fxml").toUri().toURL();
-                    Pane root = FXMLLoader.load(url);
-                    GridPane myLabel = (GridPane) root.lookup("#Pgridbd");
+                btentrar.setName("bte" + rs.getString(1));
+                btel.setName("btel" + rs.getString(1));
+                node2.setContent(Panelbd);//Añade el contenido al nodeswing
+                node2.setId("node" + nombd);
 
-                    btentrar.setName("bte" + rs.getString(1));
-                    node2.setContent(Panelbd);//Añade el contenido al nodeswing
-                    node2.setId("node" + nombd);
+                Button mybutton = (Button) root.lookup("#btaddbd");
+                myPanel.add(node2, cols, filas);//Va añadiendo los nodeswing al gridpane sumando filas y columnas
+                filas++;
+                if (filas == 4) {
+                    mybutton.setDisable(true);
+                }//debes deshabilitar el método cuandotodo el gripane esta lleno
+                counter++;
 
-                    Button mybutton = (Button) root.lookup("#btaddbd");
-                    myLabel.add(node2, cols, filas);//Va añadiendo los nodeswing al gridpane sumando filas y columnas
-                    filas++;
-                    if (filas == 4) {
-                        mybutton.setDisable(true);
-                    }//debes deshabilitar el método cuandotodo el gripane esta lleno
-                    counter++;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
                 //Metodo para eliminar las base de datos añadidas en el usuario, para eliminarlas deberas hacer un delete a la base de datos y luego llamar al metodo para que recarge los paneles de las base de datos
                 btel.addActionListener(el -> {
-                    try {
-                        Connection conexion1;
-                        conexion1 = DriverManager.getConnection(conexionerp, user, pswd);
-                        //Creamos la consulta con PreparedStatement
-                        Statement st1 = conexion1.createStatement();
-                        String consulta5 = String.format("delete from bds where usuario = '%s' and nombre = '%s'", prubuser, nombd);
-                        String consulta2 = String.format("DROP DATABASE %s", nombd);
+                    if (Objects.equals(btel.getName(), "bteliminar" + nombd)) {
+                        try {
+                            Connection conexion1;
+                            conexion1 = DriverManager.getConnection(conexionerp, user, pswd);
+                            //Creamos la consulta con PreparedStatement
+                            Statement st1 = conexion1.createStatement();
+                            String consulta5 = String.format("delete from bds where usuario = '%s' and nombre = '%s'", prubuser, nombd);
+                            String consulta2 = String.format("DROP DATABASE %s", nombd);
 
-                        //Creamos una ventana de confirmacion para la modificacion del ingreso
-                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                        alert.setHeaderText(null);
-                        alert.setTitle("Confirmación");
-                        alert.setContentText("¿Está seguro de qué quiere borrar esta base de datos?");
-                        Optional<ButtonType> action = alert.showAndWait();
-                        //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
-                        if (action.orElseThrow() == ButtonType.OK) {
-                            st1.executeUpdate(consulta5);
-                            st1.executeUpdate(consulta2);
-                            crearalertainfo("Base de datos eliminada");
-                            rellenartablasbd();
+                            //Creamos una ventana de confirmacion para la modificacion del ingreso
+                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                            alert.setHeaderText(null);
+                            alert.setTitle("Confirmación");
+                            alert.setContentText("¿Está seguro de qué quiere borrar esta base de datos?");
+                            Optional<ButtonType> action = alert.showAndWait();
+                            //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+                            if (action.orElseThrow() == ButtonType.OK) {
+                                st1.executeUpdate(consulta5);
+                                st1.executeUpdate(consulta2);
+                                crearalertainfo("Base de datos eliminada");
+                                rellenartablasbd();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
                 });
 
                 btentrar.addActionListener(e -> Platform.runLater(() -> {
                     singleton.setUsuario(btentrar.getName().substring(3));
+                    System.out.println("Declarado: " + singleton.getUsuario());
+                    System.out.println("Nombre del boton: " + btentrar.getName());
+                    Scene scene = new Scene(root, 1536, 790);
+                    stageerp.setScene(scene);
+                    stageerp.centerOnScreen();
+                    stageerp.setMaximized(true);
+                    stageerp.show();
+                    Label myLabel = (Label) root.lookup("#lblnombreusuario");
+                    usuario = lblnombreusuario.getText();
+                    myLabel.setText(usuario);
                     try {
-                        System.out.println("Declarado: " + singleton.getUsuario());
-                        System.out.println("Nombre del boton: " + btentrar.getName());
-                        URL url = Paths.get("./src/main/resources/sge/proyectoerp/erp.fxml").toUri().toURL();
-                        Pane root = FXMLLoader.load(url);
-                        Scene scene = new Scene(root, 1536, 790);
-                        stageerp.setScene(scene);
-                        stageerp.centerOnScreen();
-                        stageerp.setMaximized(true);
-                        stageerp.show();
-                        Label myLabel = (Label) root.lookup("#lblnombreusuario");
-                        usuario = lblnombreusuario.getText();
-                        myLabel.setText(usuario);
-                        try {
-                            Connection conexion2;
-                            conexion2 = DriverManager.getConnection(conexionerp, user, pswd);
-                            //Creamos la consulta con PreparedStatement
-                            Statement st2 = conexion2.createStatement();
-                            String consulta2 = String.format("Select nombre from bds where usuario = '%s'", prubuser);
-                            ResultSet rs2 = st2.executeQuery(consulta2);
-                            while (rs2.next()) {
-                                if (Objects.equals(btentrar.getName(), "bt" + rs2.getString(1))) {
+                        Connection conexion2;
+                        conexion2 = DriverManager.getConnection(conexionerp, user, pswd);
+                        //Creamos la consulta con PreparedStatement
+                        Statement st2 = conexion2.createStatement();
+                        String consulta2 = String.format("Select nombre from bds where usuario = '%s'", prubuser);
+                        ResultSet rs2 = st2.executeQuery(consulta2);
+                        while (rs2.next()) {
+                            if (Objects.equals(btentrar.getName(), "bt" + rs2.getString(1))) {
 
-                                }
                             }
-                        } catch (Exception eo) {
-                            eo.printStackTrace();
                         }
-
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
+                    } catch (Exception eo) {
+                        eo.printStackTrace();
                     }
+
                 }));
 
                 btentrar.setName("bte" + bd + prubuser.substring(0, 3));
+                btel.setName("bteliminar" + bd + prubuser.substring(0, 3));
                 node2.setContent(Panelbd);//Añade el contenido al nodeswing
                 node2.setId("node" + nombd);//Cambia el nombre del nodo con respecto al nombre del empleado, deberas hacer que cambie con los nombres que vaya cogiendo de la base de datos
                 Pgridbd.add(node2, cols, filas);//Va añadiendo los nodeswing al gridpane sumando filas y columnas
@@ -860,10 +1013,45 @@ public class ERPController {
                 }//debes deshabilitar el método cuandotodo el gripane esta lleno
                 counter++;
             }
+
+             */
             //Controlamos la excepciones
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void addlabels() {
+        listalabels.clear();
+        listalabels.add(labelbd1);
+        listalabels.add(labelbd2);
+        listalabels.add(labelbd3);
+        listalabels.add(labelbd4);
+
+
+        for (int i = 0; i < listalabels.size() - 1; i++) {
+            listalabels.get(i).setVisible(false);
+        }
+    }
+
+    private void adddirbotones(ArrayList<Button> listabotonesacceder, Button btaccederbd1, Button btaccederbd2, Button btaccederbd3, Button btaccederbd4) {
+        listabotonesacceder.clear();
+        listabotonesacceder.add(btaccederbd1);
+        listabotonesacceder.add(btaccederbd2);
+        listabotonesacceder.add(btaccederbd3);
+        listabotonesacceder.add(btaccederbd4);
+
+        for (int i = 0; i < listabotonesacceder.size() - 1; i++) {
+            listabotonesacceder.get(i).setVisible(false);
+        }
+    }
+
+    private void asignarJButton(JButton btel) {
+        btel.setBackground(new Color(41, 45, 45));
+        ImageIcon iconoeliminar = new ImageIcon("src/main/resources/sge/proyectoerp/img/eliminar.png");
+        java.awt.Image newimgeliminar = iconoeliminar.getImage().getScaledInstance(7, 7, java.awt.Image.SCALE_SMOOTH);
+        iconoeliminar = new ImageIcon(newimgeliminar);
+        btel.setIcon(iconoeliminar);
     }
 
 
@@ -883,11 +1071,7 @@ public class ERPController {
 
     private void comprobrarregister() {
         compregister = false;
-        if (Objects.equals(txtusuario1.getText(), "") ||
-                Objects.equals(txtcontrasena1.getText(), "") ||
-                Objects.equals(txtcontrasena11.getText(), "") ||
-                Objects.equals(txtemailregister.getText(), "") ||
-                Objects.equals(txttelregister.getText(), "")) {
+        if (Objects.equals(txtusuario1.getText(), "") || Objects.equals(txtcontrasena1.getText(), "") || Objects.equals(txtcontrasena11.getText(), "") || Objects.equals(txtemailregister.getText(), "") || Objects.equals(txttelregister.getText(), "")) {
             crearalertaerror("Debe rellenar todos los campos");
         } else if (txtusuario1.getLength() > 20) {
             crearalertaerror("El usuario no puede tener más de 20 carácteres");
@@ -973,7 +1157,7 @@ public class ERPController {
     public void pressaddbd() {
         txtnombd.setText(null);
         Pnewbd.setVisible(true);
-
+        rellenartablasbd();
     }
 
     @FXML
@@ -1015,6 +1199,8 @@ public class ERPController {
                     st2.executeUpdate(tabla6);
                     st2.executeUpdate(tabla7);
                     st2.executeUpdate(tabla8);
+                    st2.executeUpdate(tabla9);
+                    st2.executeUpdate(tabla10);
 
                     Pnewbd.setVisible(false);
                     nombd = txtnombd.getText();
@@ -1040,90 +1226,144 @@ public class ERPController {
     @FXML
     void seleccionarimg() {
         // Agregar filtros para facilitar la busqueda
-        fil_chooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("All Images", "*.*"),
-                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                new FileChooser.ExtensionFilter("PNG", "*.png")
-        );
+        fil_chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All Images", "*.*"), new FileChooser.ExtensionFilter("JPG", "*.jpg"), new FileChooser.ExtensionFilter("PNG", "*.png"));
         // Obtener la imagen seleccionada
         File file = fil_chooser.showOpenDialog(selec);
         // Mostar la imagen
         if (file != null) {
             image = file.getPath();
             imagenem = new Image(image);
-            if (PRegistro.isVisible()) {
-                imgusuario.setImage(imagenem);
-                imgrellena = true;
-            } else if (PanelAddEmpleados.isVisible()) {
-                imgempleado.setImage(imagenem);
-            }
+            imgrellena = true;
+            imgempleado.setImage(imagenem);
+        }
+        assert file != null;
+        String image = file.getPath();
+        new Image(image);
+        imageruta = file.getName();
+    }
 
+    //Metodo para extraer las fotos de la base de datos
+    private Image extraerfotobdd(Connection con, ResultSet rs2) throws SQLException {
+        PreparedStatement ps = con.prepareStatement("Select image from imgempleados where Foto = ?");
+        ps.setString(1, rs2.getString(2));
+        return rsconimg(ps);
+    }
+
+    //Metodo para reconocer las imagenes
+    private Image rsconimg(PreparedStatement ps) throws SQLException {
+        ResultSet rs4 = ps.executeQuery();
+        Image imge = null;
+        if (rs4.next()) {
+            Blob blob = rs4.getBlob(1);
+            byte[] bytes = blob.getBytes(1, (int) blob.length());
+            imge = new Image(new ByteArrayInputStream(bytes));
+        }
+        return imge;
+    }
+
+    private void rellenarempleados() {
+        cols = 0;
+        filas = 0;
+        Image imagenempleados = null;
+        try {
+            Connection conexion;
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getUsuario());
+            //Creamos la conexion
+            conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
+            Statement st = conexion.createStatement();
+            String consultaempleados = "Select Nombre, Foto from empleados";
+            ResultSet rs = st.executeQuery(consultaempleados);
+            while (rs.next()) {
+                imagenempleados = extraerfotobdd(conexion, rs);
+                String nomempleado = String.valueOf(rs.getString(1));//Esto es una mera prueba para que obtenga el nombre del ultimo empleado añadido, deberas cambiarlo para que obtenga el de la base de datos
+                SwingNode node = new SwingNode();
+                JPanel newpane = new JPanel(new BorderLayout());//Creamos el panel que se va a añadir multiples veces
+                newpane.setBorder(new EmptyBorder(10, 10, 10, 10));
+                newpane.setBackground(new java.awt.Color(41, 45, 45));
+                JLabel nombreempleado = new JLabel(nomempleado);//Aqui aparecerá el nombre de los empleados con respecto a la base de datos
+                nombreempleado.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
+                nombreempleado.setForeground(Color.white);
+                JLabel imagen = new JLabel();
+                imagen.setBorder(new EmptyBorder(10, 10, 10, 10));
+                imagen.setIcon((Icon) imagenempleados);
+                JPanel btpane = new JPanel(new GridLayout(2, 1));
+                JButton bteliminar = new JButton();
+                asignarJButton(bteliminar);
+                JButton bteditar = new JButton();
+                bteditar.setBackground(new java.awt.Color(41, 45, 45));
+                ImageIcon iconoeditar = new ImageIcon("src/main/resources/sge/proyectoerp/img/lapiz.png");
+                java.awt.Image newimgeditar = iconoeditar.getImage().getScaledInstance(7, 7, java.awt.Image.SCALE_SMOOTH);
+                iconoeditar = new ImageIcon(newimgeditar);
+                bteditar.setIcon(iconoeditar);
+                btpane.add(bteliminar);
+                btpane.add(bteditar);
+                bteditar.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(java.awt.event.ActionEvent ed) {
+                        cambiarpanel(PanelEmpleados, PanelEditEmpleados);
+                    }
+                });
+                bteliminar.addActionListener(e -> {
+                    //pressbtnCrearEmpleados();
+                    //Eliminar de la base de datos el nombre de la persona que es el id el boton pulsado y usar la funcion para que se vuelva a rellenar el gridpane
+                });
+                //Establecemos la posicion en el panel de cada objeto
+                newpane.add(btpane, BorderLayout.EAST);
+                newpane.add(imagen, BorderLayout.WEST);
+                newpane.add(nombreempleado, BorderLayout.CENTER);
+                newpane.setVisible(true);
+                bteditar.setName("bted" + rs.getString(1));
+                bteliminar.setName("btel" + rs.getString(1));//Debe obtener el nombre de cada empleado de la bse de datos para su posterior eliminacion
+                newpane.setName("panel" + counter);//El nombre de cada panel sera panel+numero de panel
+                node.setContent(newpane);//Añade el contenido al nodeswing
+                node.setId("node" + nomempleado);//Cambia el nombre del nodo con respecto al nombre del empleado, deberas hacer que cambie con los nombres que vaya cogiendo de la base de datos
+                Pempleados.add(node, cols, filas);//Va añadiendo los nodeswing al gridpane sumando filas y columnas
+                if (cols == 4) {
+                    cols = -1;
+                    filas++;
+                }
+                if (filas == 5 && cols == 5) {
+
+                }//debes deshabilitar el método cuandotodo el gripane esta lleno
+                cols++;
+                counter++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
     //Metodo que crea los paneles de cada empleado
 
     @FXML
     void pressbtnCrearEmpleados() {
         cambiarpanel(panelactual, PanelEmpleados);
-        String nomempleado = String.valueOf(txtNombreEmpleado.getText());//Esto es una mera prueba para que obtenga el nombre del ultimo empleado añadido, deberas cambiarlo para que obtenga el de la base de datos
-        SwingNode node = new SwingNode();
-        JPanel newpane = new JPanel(new BorderLayout());//Creamos el panel que se va a añadir multiples veces
-        newpane.setBorder(new EmptyBorder(10, 10, 10, 10));
-        newpane.setBackground(new java.awt.Color(41, 45, 45));
-        JLabel nombreempleado = new JLabel(nomempleado);//Aqui aparecerá el nombre de los empleados con respecto a la base de datos
-        nombreempleado.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
-        nombreempleado.setForeground(Color.white);
-        JLabel imagen = new JLabel();
-        imagen.setBorder(new EmptyBorder(10, 10, 10, 10));
-        ImageIcon icono = new ImageIcon(image);//establece la dirección url de la imagen de perfil del empleado, debera cambiar respecto a la base de datos
-        java.awt.Image newimg = icono.getImage().getScaledInstance(54, 61, java.awt.Image.SCALE_SMOOTH);//Redimensiona la imagen
-        icono = new ImageIcon(newimg);
-        imagen.setIcon(icono);
-        JPanel btpane = new JPanel(new GridLayout(2, 1));
-        JButton bteliminar = new JButton();
-        bteliminar.setBackground(new java.awt.Color(41, 45, 45));
-        ImageIcon iconoeliminar = new ImageIcon("src/main/resources/sge/proyectoerp/img/eliminar.png");
-        java.awt.Image newimgeliminar = iconoeliminar.getImage().getScaledInstance(7, 7, java.awt.Image.SCALE_SMOOTH);
-        iconoeliminar = new ImageIcon(newimgeliminar);
-        bteliminar.setIcon(iconoeliminar);
-        JButton bteditar = new JButton();
-        bteditar.setBackground(new java.awt.Color(41, 45, 45));
-        ImageIcon iconoeditar = new ImageIcon("src/main/resources/sge/proyectoerp/img/lapiz.png");
-        java.awt.Image newimgeditar = iconoeditar.getImage().getScaledInstance(7, 7, java.awt.Image.SCALE_SMOOTH);
-        iconoeditar = new ImageIcon(newimgeditar);
-        bteditar.setIcon(iconoeditar);
-        btpane.add(bteliminar);
-        btpane.add(bteditar);
-        bteditar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent ed) {
-                cambiarpanel(PanelEmpleados, PanelEditEmpleados);
-            }
-        });
-        bteliminar.addActionListener(e -> {
-            //pressbtnCrearEmpleados();
-            //Eliminar de la base de datos el nombre de la persona que es el id el boton pulsado y usar la funcion para que se vuelva a rellenar el gridpane
-        });
-        //Establecemos la posicion en el panel de cada objeto
-        newpane.add(btpane, BorderLayout.EAST);
-        newpane.add(imagen, BorderLayout.WEST);
-        newpane.add(nombreempleado, BorderLayout.CENTER);
-        newpane.setVisible(true);
-        bteditar.setName("bted" + txtNombreEmpleado.getText());
-        bteliminar.setName("btel" + txtNombreEmpleado.getText());//Debe obtener el nombre de cada empleado de la bse de datos para su posterior eliminacion
-        newpane.setName("panel" + counter);//El nombre de cada panel sera panel+numero de panel
-        node.setContent(newpane);//Añade el contenido al nodeswing
-        node.setId("node" + nomempleado);//Cambia el nombre del nodo con respecto al nombre del empleado, deberas hacer que cambie con los nombres que vaya cogiendo de la base de datos
-        Pempleados.add(node, cols, filas);//Va añadiendo los nodeswing al gridpane sumando filas y columnas
-        if (cols == 4) {
-            cols = -1;
-            filas++;
+        try {
+            Connection conexion;
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getUsuario());
+            //Creamos la conexion
+            conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
+            PreparedStatement ps = conexion.prepareStatement("Insert into empleados values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            ps.setString(1, txtNombreEmpleado.getText());
+            ps.setString(2, txtPuestodetrabajo.getText());
+            ps.setString(3, txtTelefonoEmpleado.getText());
+            ps.setString(4, txtemailEmpleado.getText());
+            ps.setString(5, txtDepartamentoEmpleado.getText());
+            ps.setString(6, txtGerenteEmpleado.getText());
+            ps.setString(7, imageruta);
+            ps.setString(8, txtDireccionLaboralEmpleado.getText());
+            ps.setString(9, txtHorasSemanaEmpleado.getText());
+            ps.setString(10, txtDireccionPersonal.getText());
+            ps.setString(11, txtNumeroCuenta.getText());
+            ps.setString(12, txtDNI.getText());
+            ps.setString(13, txtGeneroEmpleado.getText());
+            ps.setDate(14, Date.valueOf(dateFecNa.getValue()));
+            ps.execute();
+            crearalertainfo("Empleado Creado");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (filas == 5 && cols == 5) {
-
-        }//debes deshabilitar el método cuandotodo el gripane esta lleno
-        cols++;
-        counter++;
+        rellenarempleados();
     }
 
     //Lo usaremos para informar al usuario mediante ventanas emergentes, podemos establecer el mensaje pasándoselo por
@@ -1238,6 +1478,7 @@ public class ERPController {
     void pressbtempleados() {
         cambiarpanel(PanelMenuPrincipal, PanelEmpleados);
         txtidpagina.setText("EMPLEADOS");
+        rellenarempleados();
     }
 
     private void cambiarpanel(Pane panel1, Pane panel2) {
@@ -1318,7 +1559,7 @@ public class ERPController {
                 txtDocumento.setText(rs.getString(4));
             }
             rellenartablaAddRecepciones();
-            lblAtrasRecepciones.setText("RECEPCIONES / EDITAR");
+            lblAtrasRecepciones.setText("/ EDITAR");
             txtReferencia.setDisable(true);
             btnCrearRecepciones.setText("EDITAR");
             cambiarpanel(panelactual, PanelAddRecepciones);
@@ -1395,12 +1636,7 @@ public class ERPController {
                 String fecha = dateReferencia.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 LocalDate localdate = parse(fecha);
 
-                String consulta = String.format("UPDATE recepciones SET Nombre = '%s', " +
-                                "FechaPrevista = '%s', " +
-                                "Documento = '%s' " +
-                                "WHERE Referencia = '%s'", txtrecibir.getText(),
-                        Date.valueOf(localdate), txtDocumento.getText(),
-                        txtReferencia.getText());
+                String consulta = String.format("UPDATE recepciones SET Nombre = '%s', " + "FechaPrevista = '%s', " + "Documento = '%s' " + "WHERE Referencia = '%s'", txtrecibir.getText(), Date.valueOf(localdate), txtDocumento.getText(), txtReferencia.getText());
 
                 //Creamos una ventana de confirmacion para la modificacion del ingreso
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -1413,10 +1649,7 @@ public class ERPController {
                     st.executeUpdate(consulta);
                     //Creamos el Statement con la conexion
                     for (Recepciones listrecepcione : listrecepciones) {
-                        String consulta2 = String.format("Update productosrec set Referencia = '%s', Producto = '%s', Cantidad = %s",
-                                txtReferencia.getText(),
-                                listrecepcione.getNombreproducto(),
-                                listrecepcione.getCantidad());
+                        String consulta2 = String.format("Update productosrec set Referencia = '%s', Producto = '%s', Cantidad = %s", txtReferencia.getText(), listrecepcione.getNombreproducto(), listrecepcione.getCantidad());
                         st.execute(consulta2);
                         crearalertainfo("Recepcion editada");
                         rellenartablaRecepciones();
@@ -1456,10 +1689,7 @@ public class ERPController {
                     //Creamos el Statement con la conexion
                     Statement st = conexion.createStatement();
                     for (Recepciones listrecepcione : listrecepciones) {
-                        String consulta = String.format("insert into productosrec values ('%s', '%s', %s)",
-                                txtReferencia.getText(),
-                                listrecepcione.getNombreproducto(),
-                                listrecepcione.getCantidad());
+                        String consulta = String.format("insert into productosrec values ('%s', '%s', %s)", txtReferencia.getText(), listrecepcione.getNombreproducto(), listrecepcione.getCantidad());
                         st.execute(consulta);
                     }
                     crearalertainfo("Recepcion creada");
@@ -1491,12 +1721,7 @@ public class ERPController {
             while (rs.next()) {
                 //ObservableList para guardar dentro el paciente correspondiente para añadirlo a las columnas
                 //Creamos un paciente, con los campos obtenidos de la consulta
-                obsrec.add(new Recepciones(rs.getString(1),
-                        rs.getString(2),
-                        rs.getDate(3).toLocalDate(),
-                        rs.getString(4),
-                        rs.getString(5))
-                );
+                obsrec.add(new Recepciones(rs.getString(1), rs.getString(2), rs.getDate(3).toLocalDate(), rs.getString(4), rs.getString(5)));
                 //Relacionamos la columna con el campo del constructor correcto
                 contactocolumn.setCellValueFactory(new PropertyValueFactory<>("contacto"));
                 Referenciacolumn.setCellValueFactory(new PropertyValueFactory<>("referencia"));
@@ -1569,18 +1794,9 @@ public class ERPController {
             while (rs.next()) {
                 //ObservableList para guardar dentro el paciente correspondiente para añadirlo a las columnas
                 //Creamos un paciente, con los campos obtenidos de la consulta
-                obsexp.add(new Expediciones(rs.getString(1),
-                        rs.getString(2),
-                        rs.getDate(3).toLocalDate(),
-                        rs.getString(4),
-                        rs.getString(5))
-                );
+                obsexp.add(new Expediciones(rs.getString(1), rs.getString(2), rs.getDate(3).toLocalDate(), rs.getString(4), rs.getString(5)));
                 //Relacionamos la columna con el campo del constructor correcto
-                ColumContExpediciones.setCellValueFactory(new PropertyValueFactory<>("contacto"));
-                ColumExpReferencia.setCellValueFactory(new PropertyValueFactory<>("referencia"));
-                ColumExpFecha.setCellValueFactory(new PropertyValueFactory<>("dateReferencia"));
-                ColumExpDoc.setCellValueFactory(new PropertyValueFactory<>("docorigen"));
-                ColumExpEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+                rellenarcolumnas();
                 //Metemos dentro la tabla paciente la lista creada anteriormente
                 TableExpediciones.setItems(obsexp);
             }
@@ -1643,14 +1859,7 @@ public class ERPController {
                 String fecha = DateExpediciones.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 LocalDate localdate = parse(fecha);
 
-                String consulta = String.format("UPDATE expediciones SET Nombre = '%s', " +
-                                "FechaPrevista = '%s', " +
-                                "Direccion = '%s', " +
-                                "Documento = '%s' " +
-                                "WHERE Referencia = '%s'", txtnombreExpediciones.getText(),
-                        Date.valueOf(localdate), txtdireccionExpediciones.getText(),
-                        txtDocExp.getText(),
-                        txtReferenciaExpediciones.getText());
+                String consulta = String.format("UPDATE expediciones SET Nombre = '%s', " + "FechaPrevista = '%s', " + "Direccion = '%s', " + "Documento = '%s' " + "WHERE Referencia = '%s'", txtnombreExpediciones.getText(), Date.valueOf(localdate), txtdireccionExpediciones.getText(), txtDocExp.getText(), txtReferenciaExpediciones.getText());
 
                 //Creamos una ventana de confirmacion para la modificacion del ingreso
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -1663,10 +1872,7 @@ public class ERPController {
                     st.executeUpdate(consulta);
                     //Creamos el Statement con la conexion
                     for (Expediciones listexp : listexpediciones) {
-                        String consulta2 = String.format("Update productosexp set Referencia = '%s', Producto = '%s', Cantidad = %s",
-                                txtReferenciaExpediciones.getText(),
-                                listexp.getNombreproducto(),
-                                listexp.getCantidad());
+                        String consulta2 = String.format("Update productosexp set Referencia = '%s', Producto = '%s', Cantidad = %s", txtReferenciaExpediciones.getText(), listexp.getNombreproducto(), listexp.getCantidad());
                         st.execute(consulta2);
                     }
                     crearalertainfo("Expedicion editada");
@@ -1714,10 +1920,7 @@ public class ERPController {
                     //Creamos el Statement con la conexion
                     Statement st = conexion.createStatement();
                     for (Expediciones listexp : listexpediciones) {
-                        String consulta = String.format("insert into productosexp values ('%s', '%s', %s)",
-                                txtReferenciaExpediciones.getText(),
-                                listexp.getNombreproducto(),
-                                listexp.getCantidad());
+                        String consulta = String.format("insert into productosexp values ('%s', '%s', %s)", txtReferenciaExpediciones.getText(), listexp.getNombreproducto(), listexp.getCantidad());
                         st.execute(consulta);
                     }
                     crearalertainfo("Expedicion creada");
@@ -1844,17 +2047,9 @@ public class ERPController {
             while (rs.next()) {
                 //ObservableList para guardar dentro el paciente correspondiente para añadirlo a las columnas
                 //Creamos un paciente, con los campos obtenidos de la consulta
-                obsdev.add(new Devoluciones(rs.getString(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getString(4)
-                ));
+                obsdev.add(new Devoluciones(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
                 //Relacionamos la columna con el campo del constructor correcto
-                ColumContExpediciones.setCellValueFactory(new PropertyValueFactory<>("contacto"));
-                ColumExpReferencia.setCellValueFactory(new PropertyValueFactory<>("referencia"));
-                ColumExpFecha.setCellValueFactory(new PropertyValueFactory<>("dateReferencia"));
-                ColumExpDoc.setCellValueFactory(new PropertyValueFactory<>("docorigen"));
-                ColumExpEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+                rellenarcolumnas();
                 //Metemos dentro la tabla paciente la lista creada anteriormente
                 TableDevoluciones.setItems(obsdev);
             }
@@ -1872,6 +2067,14 @@ public class ERPController {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void rellenarcolumnas() {
+        ColumContExpediciones.setCellValueFactory(new PropertyValueFactory<>("contacto"));
+        ColumExpReferencia.setCellValueFactory(new PropertyValueFactory<>("referencia"));
+        ColumExpFecha.setCellValueFactory(new PropertyValueFactory<>("dateReferencia"));
+        ColumExpDoc.setCellValueFactory(new PropertyValueFactory<>("docorigen"));
+        ColumExpEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
     }
 
     @FXML
@@ -1895,160 +2098,19 @@ public class ERPController {
 
     }
 
+    private void balon() throws InterruptedException {
+        Thread.sleep(1000);
+        rellenartablasbd();
+    }
 
     @FXML
-    void initialize() {
-        assert lblnombreusuario != null : "fx:id=\"lblnombreusuario\" was not injected: check your FXML file 'bd.fxml'.";
-        assert BarraSuperior1 != null : "fx:id=\"BarraSuperior1\" was not injected: check your FXML file 'bd.fxml'.";
-        assert imgperfil1 != null : "fx:id=\"imgperfil1\" was not injected: check your FXML file 'bd.fxml'.";
-        assert Pperfil != null : "fx:id=\"Pperfil\" was not injected: check your FXML file 'bd.fxml'.";
-        assert btaddbd != null : "fx:id=\"btaddbd\" was not injected: check your FXML file 'bd.fxml'.";
-        assert Pnewbd != null : "fx:id=\"Pnewbd\" was not injected: check your FXML file 'bd.fxml'.";
-        assert Pgridbd != null : "fx:id=\"Pgridbd\" was not injected: check your FXML file 'bd.fxml'.";
-        assert txtnombd != null : "fx:id=\"txtnombd\" was not injected: check your FXML file 'bd.fxml'.";
-        assert btcuenta1 != null : "fx:id=\"btcuenta1\" was not injected: check your FXML file 'bd.fxml'.";
-        assert btaddbd11 != null : "fx:id=\"btaddbd11\" was not injected: check your FXML file 'bd.fxml'.";
-        assert imgperfil12 != null : "fx:id=\"imgperfil12\" was not injected: check your FXML file 'bd.fxml'.";
-        assert btaddbd1 != null : "fx:id=\"btaddbd1\" was not injected: check your FXML file 'bd.fxml'.";
-        assert txtidpagina1 != null : "fx:id=\"txtidpagina1\" was not injected: check your FXML file 'bd.fxml'.";
-        assert Pbasesdedatos != null : "fx:id=\"Pbasesdedatos\" was not injected: check your FXML file 'bd.fxml'.";
-        assert btacceder != null : "fx:id=\"btacceder\" was not injected: check your FXML file 'inicio.fxml'.";
-        assert PInicio != null : "fx:id=\"PInicio\" was not injected: check your FXML file 'inicio.fxml'.";
-        assert txtusuario != null : "fx:id=\"txtusuario\" was not injected: check your FXML file 'inicio.fxml'.";
-        assert txtcontrasena != null : "fx:id=\"txtcontrasena\" was not injected: check your FXML file 'inicio.fxml'.";
-        assert imgperfil1111 != null : "fx:id=\"imgperfil1111\" was not injected: check your FXML file 'register.fxml'.";
-        assert txtemailregister != null : "fx:id=\"txtemailregister\" was not injected: check your FXML file 'register.fxml'.";
-        assert txtcontrasena11 != null : "fx:id=\"txtcontrasena11\" was not injected: check your FXML file 'register.fxml'.";
-        assert txtcontrasena1 != null : "fx:id=\"txtcontrasena1\" was not injected: check your FXML file 'register.fxml'.";
-        assert txttelregister != null : "fx:id=\"txttelregister\" was not injected: check your FXML file 'register.fxml'.";
-        assert PRegistro != null : "fx:id=\"PRegistro\" was not injected: check your FXML file 'register.fxml'.";
-        assert txtusuario1 != null : "fx:id=\"txtusuario1\" was not injected: check your FXML file 'register.fxml'.";
-        assert btcuenta1111 != null : "fx:id=\"btcuenta1111\" was not injected: check your FXML file 'register.fxml'.";
-        assert btnCrearRecepciones != null : "fx:id=\"btnCrearRecepciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert CantidadColum != null : "fx:id=\"CantidadColum\" was not injected: check your FXML file 'erp.fxml'.";
-        assert imgempleado1 != null : "fx:id=\"imgempleado1\" was not injected: check your FXML file 'erp.fxml'.";
-        assert PanelExpediciones != null : "fx:id=\"PanelExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btcuenta != null : "fx:id=\"btcuenta\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnExpediciones != null : "fx:id=\"btnExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtTelefonoEmpleado != null : "fx:id=\"txtTelefonoEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
-        assert lblAtrasRecepciones != null : "fx:id=\"lblAtrasRecepciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnDevolucionesAdd != null : "fx:id=\"btnDevolucionesAdd\" was not injected: check your FXML file 'erp.fxml'.";
-        assert ColumProductDevoluciones != null : "fx:id=\"ColumProductDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtCantidadDevoluciones != null : "fx:id=\"txtCantidadDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert PanelEmpleados != null : "fx:id=\"PanelEmpleados\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtDocumento212131 != null : "fx:id=\"txtDocumento212131\" was not injected: check your FXML file 'erp.fxml'.";
-        assert Fechacolumn != null : "fx:id=\"Fechacolumn\" was not injected: check your FXML file 'erp.fxml'.";
-        assert dateReferencia != null : "fx:id=\"dateReferencia\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtReferencia != null : "fx:id=\"txtReferencia\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnAddDevoluciones != null : "fx:id=\"btnAddDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnSeleccionarIMGEditarEmpleado != null : "fx:id=\"btnSeleccionarIMGEditarEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtDepartamentoEmpleado != null : "fx:id=\"txtDepartamentoEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtCantidadExp != null : "fx:id=\"txtCantidadExp\" was not injected: check your FXML file 'erp.fxml'.";
-        assert Pempleados != null : "fx:id=\"Pempleados\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtDireccionLaboralEmpleado != null : "fx:id=\"txtDireccionLaboralEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
-        assert ColumProductoExpedic != null : "fx:id=\"ColumProductoExpedic\" was not injected: check your FXML file 'erp.fxml'.";
-        assert imgperfil11211 != null : "fx:id=\"imgperfil11211\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtCantidad != null : "fx:id=\"txtCantidad\" was not injected: check your FXML file 'erp.fxml'.";
-        assert imgempleado != null : "fx:id=\"imgempleado\" was not injected: check your FXML file 'erp.fxml'.";
-        assert imgperfil != null : "fx:id=\"imgperfil\" was not injected: check your FXML file 'erp.fxml'.";
-        assert PanelEditEmpleados != null : "fx:id=\"PanelEditEmpleados\" was not injected: check your FXML file 'erp.fxml'.";
-        assert PanelInventarioInicial != null : "fx:id=\"PanelInventarioInicial\" was not injected: check your FXML file 'erp.fxml'.";
-        assert ColumExpFecha != null : "fx:id=\"ColumExpFecha\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtNombreEmpleado != null : "fx:id=\"txtNombreEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtGerenteEditarEmpleado != null : "fx:id=\"txtGerenteEditarEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnEmpleados != null : "fx:id=\"btnEmpleados\" was not injected: check your FXML file 'erp.fxml'.";
-        assert PanelAddDevoluciones != null : "fx:id=\"PanelAddDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnSeleccionarIMG != null : "fx:id=\"btnSeleccionarIMG\" was not injected: check your FXML file 'erp.fxml'.";
-        assert ColumExpEstado != null : "fx:id=\"ColumExpEstado\" was not injected: check your FXML file 'erp.fxml'.";
-        assert dateReferencia2 != null : "fx:id=\"dateReferencia2\" was not injected: check your FXML file 'erp.fxml'.";
-        assert DateExpediciones != null : "fx:id=\"DateExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert dateReferencia21 != null : "fx:id=\"dateReferencia21\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtDocumento212111 != null : "fx:id=\"txtDocumento212111\" was not injected: check your FXML file 'erp.fxml'.";
-        assert Menu != null : "fx:id=\"Menu\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btncrearRecepciones != null : "fx:id=\"btncrearRecepciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnRecepcionesAdd != null : "fx:id=\"btnRecepcionesAdd\" was not injected: check your FXML file 'erp.fxml'.";
-        assert PanelAddRecepciones != null : "fx:id=\"PanelAddRecepciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtDocExp != null : "fx:id=\"txtDocExp\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnEditarEmpleados != null : "fx:id=\"btnEditarEmpleados\" was not injected: check your FXML file 'erp.fxml'.";
-        assert Referenciacolumn != null : "fx:id=\"Referenciacolumn\" was not injected: check your FXML file 'erp.fxml'.";
-        assert tableDepartamentos != null : "fx:id=\"tableDepartamentos\" was not injected: check your FXML file 'erp.fxml'.";
-        assert TableExpediciones != null : "fx:id=\"TableExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtHorasSemanalesEditarEmpleado != null : "fx:id=\"txtHorasSemanalesEditarEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtProductoDevoluciones != null : "fx:id=\"txtProductoDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnCrearDevoluciones != null : "fx:id=\"btnCrearDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnVolverEmpEdit != null : "fx:id=\"btnVolverEmpEdit\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtTelefonoEditarEmpleado != null : "fx:id=\"txtTelefonoEditarEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
-        assert tablaExp != null : "fx:id=\"tablaExp\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtemailEmpleado != null : "fx:id=\"txtemailEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnExpAdd != null : "fx:id=\"btnExpAdd\" was not injected: check your FXML file 'erp.fxml'.";
-        assert tableDevoluciones != null : "fx:id=\"tableDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnCompras != null : "fx:id=\"btnCompras\" was not injected: check your FXML file 'erp.fxml'.";
-        assert imgperfil113 != null : "fx:id=\"imgperfil113\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtDocumento212121 != null : "fx:id=\"txtDocumento212121\" was not injected: check your FXML file 'erp.fxml'.";
-        assert PanelRecepciones != null : "fx:id=\"PanelRecepciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert imgperfil111 != null : "fx:id=\"imgperfil111\" was not injected: check your FXML file 'erp.fxml'.";
-        assert imgperfil112 != null : "fx:id=\"imgperfil112\" was not injected: check your FXML file 'erp.fxml'.";
-        assert ColumDocDevoluciones != null : "fx:id=\"ColumDocDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert PanelMenuPrincipal != null : "fx:id=\"PanelMenuPrincipal\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtemailEditarEmpleado != null : "fx:id=\"txtemailEditarEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
-        assert Estadocolumn != null : "fx:id=\"Estadocolumn\" was not injected: check your FXML file 'erp.fxml'.";
-        assert PanelDevoluciones != null : "fx:id=\"PanelDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert ColumRefDevoluciones != null : "fx:id=\"ColumRefDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtDocumento != null : "fx:id=\"txtDocumento\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnVentas != null : "fx:id=\"btnVentas\" was not injected: check your FXML file 'erp.fxml'.";
-        assert imgperfil1122 != null : "fx:id=\"imgperfil1122\" was not injected: check your FXML file 'erp.fxml'.";
-        assert TableDevoluciones != null : "fx:id=\"TableDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert imgperfil1121 != null : "fx:id=\"imgperfil1121\" was not injected: check your FXML file 'erp.fxml'.";
-        assert contactocolumn != null : "fx:id=\"contactocolumn\" was not injected: check your FXML file 'erp.fxml'.";
-        assert ProductoColum != null : "fx:id=\"ProductoColum\" was not injected: check your FXML file 'erp.fxml'.";
-        assert BarraSuperior != null : "fx:id=\"BarraSuperior\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnVolverExpediciones != null : "fx:id=\"btnVolverExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert dateDevoluciones != null : "fx:id=\"dateDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtGerenteEmpleado != null : "fx:id=\"txtGerenteEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
-        assert ColumCantidadExpedic != null : "fx:id=\"ColumCantidadExpedic\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnDevoluciones != null : "fx:id=\"btnDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnCrearExpediciones != null : "fx:id=\"btnCrearExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtRecibirDevoluciones != null : "fx:id=\"txtRecibirDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtHorasSemanaEmpleado != null : "fx:id=\"txtHorasSemanaEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
-        assert ColumCantidadDevoluciones != null : "fx:id=\"ColumCantidadDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtNombreEditEmpleado != null : "fx:id=\"txtNombreEditEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
-        assert ColumFechaDevoluciones != null : "fx:id=\"ColumFechaDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert ColumContacDevoluciones != null : "fx:id=\"ColumContacDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtDocDevoluciones != null : "fx:id=\"txtDocDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnVolverEmpNuevo != null : "fx:id=\"btnVolverEmpNuevo\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtPuestoEditarEmpleado != null : "fx:id=\"txtPuestoEditarEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtDocumento21213 != null : "fx:id=\"txtDocumento21213\" was not injected: check your FXML file 'erp.fxml'.";
-        assert Documentocolumn != null : "fx:id=\"Documentocolumn\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnVolverRecepNew != null : "fx:id=\"btnVolverRecepNew\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtDocumento21212 != null : "fx:id=\"txtDocumento21212\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtrecibir != null : "fx:id=\"txtrecibir\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnInventario != null : "fx:id=\"btnInventario\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnVolverRecepciones != null : "fx:id=\"btnVolverRecepciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnVolverDevolNew != null : "fx:id=\"btnVolverDevolNew\" was not injected: check your FXML file 'erp.fxml'.";
-        assert ColumExpReferencia != null : "fx:id=\"ColumExpReferencia\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtDocumentoEditarEmpleado != null : "fx:id=\"txtDocumentoEditarEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtidpagina != null : "fx:id=\"txtidpagina\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btncrearExpediciones != null : "fx:id=\"btncrearExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert ColumContExpediciones != null : "fx:id=\"ColumContExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnVolverDevoluciones != null : "fx:id=\"btnVolverDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtDocumento21211 != null : "fx:id=\"txtDocumento21211\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtdireccionLaboralEditarEmpleado != null : "fx:id=\"txtdireccionLaboralEditarEmpleado\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtPuestodetrabajo != null : "fx:id=\"txtPuestodetrabajo\" was not injected: check your FXML file 'erp.fxml'.";
-        assert imgperfil11 != null : "fx:id=\"imgperfil11\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtProducto != null : "fx:id=\"txtProducto\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnmenu != null : "fx:id=\"btnmenu\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnCrearEmpleados != null : "fx:id=\"btnCrearEmpleados\" was not injected: check your FXML file 'erp.fxml'.";
-        assert ColumEstadoDevoluciones != null : "fx:id=\"ColumEstadoDevoluciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txt6 != null : "fx:id=\"txt6\" was not injected: check your FXML file 'erp.fxml'.";
-        assert imgperfil1131 != null : "fx:id=\"imgperfil1131\" was not injected: check your FXML file 'erp.fxml'.";
-        assert PanelAddExpediciones != null : "fx:id=\"PanelAddExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtdireccionExpediciones != null : "fx:id=\"txtdireccionExpediciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txt5 != null : "fx:id=\"txt5\" was not injected: check your FXML file 'erp.fxml'.";
-        assert PanelAddEmpleados != null : "fx:id=\"PanelAddEmpleados\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnRecepciones != null : "fx:id=\"btnRecepciones\" was not injected: check your FXML file 'erp.fxml'.";
-        assert txtProductoExp != null : "fx:id=\"txtProductoExp\" was not injected: check your FXML file 'erp.fxml'.";
-        assert ColumExpDoc != null : "fx:id=\"ColumExpDoc\" was not injected: check your FXML file 'erp.fxml'.";
-        assert btnFacturacion != null : "fx:id=\"btnFacturacion\" was not injected: check your FXML file 'erp.fxml'.";
-
+    void initialize() throws InterruptedException {
+        System.out.println("Initialize");
+        System.out.println("ID Del panel: " + panelcontrol.getId());
+        // Obtener el título del stage actual
+        if(Objects.equals(panelcontrol.getId(), "BasesDeDatos")){
+            System.out.println("Entra");
+            balon();
+        }
     }
 }

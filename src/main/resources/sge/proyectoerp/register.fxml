@@ -83,10 +83,11 @@
             <Font name="Comic Sans MS Bold" size="15.0" />
          </font>
       </Button>
-      <ImageView fx:id="imgusuario" fitHeight="127.0" fitWidth="108.0" layoutX="820.0" layoutY="213.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imgempleado" fitHeight="127.0" fitWidth="108.0" layoutX="820.0" layoutY="213.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@img/usuarioblanco.png" />
          </image>
       </ImageView>
+      <Pane fx:id="panelcontrol" prefHeight="200.0" prefWidth="200.0" visible="false" />
    </children>
 </Pane>

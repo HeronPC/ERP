@@ -64,6 +64,104 @@
          <padding>
             <Insets right="5.0" top="5.0" />
          </padding>
+         <children>
+            <Button fx:id="bteliminarbd1" mnemonicParsing="false" onAction="#borrarbd" visible="false">
+               <GridPane.margin>
+                  <Insets left="50.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="Comic Sans MS" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="btaccederbd1" mnemonicParsing="false" onAction="#accederbd1" prefHeight="56.0" prefWidth="91.0" text="ACCEDER" visible="false">
+               <GridPane.margin>
+                  <Insets left="750.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="Comic Sans MS" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="bteliminarbd2" mnemonicParsing="false" onAction="#borrarbd" visible="false" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="50.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="Comic Sans MS" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="btaccederbd2" mnemonicParsing="false" onAction="#accederbd2" prefHeight="56.0" prefWidth="91.0" text="ACCEDER" visible="false" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="750.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="Comic Sans MS" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="bteliminarbd4" mnemonicParsing="false" onAction="#borrarbd" visible="false" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets left="50.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="Comic Sans MS" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="bteliminarbd3" mnemonicParsing="false" onAction="#borrarbd" visible="false" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets left="50.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="Comic Sans MS" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="btaccederbd4" mnemonicParsing="false" onAction="#accederbd4" prefHeight="56.0" prefWidth="91.0" text="ACCEDER" visible="false" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets left="750.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="Comic Sans MS" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="btaccederbd3" mnemonicParsing="false" onAction="#accederbd3" prefHeight="56.0" prefWidth="91.0" text="ACCEDER" visible="false" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets left="750.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="Comic Sans MS" size="12.0" />
+               </font>
+            </Button>
+            <Label fx:id="labelbd1" textFill="WHITE" visible="false">
+               <GridPane.margin>
+                  <Insets left="200.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="Comic Sans MS" size="27.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelbd2" textFill="WHITE" visible="false" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="200.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="Comic Sans MS" size="27.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelbd3" textFill="WHITE" visible="false" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets left="200.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="Comic Sans MS" size="27.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelbd4" textFill="WHITE" visible="false" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets left="200.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="Comic Sans MS" size="27.0" />
+               </font>
+            </Label>
+         </children>
       </GridPane>
       <Pane id="panelprincipal" fx:id="Pnewbd" layoutX="334.0" layoutY="283.0" prefHeight="134.0" prefWidth="400.0" stylesheets="@css/darkmode.css" visible="false">
          <children>
@@ -107,5 +205,6 @@
             </Button>
          </children>
       </VBox>
+      <Pane id="BasesDeDatos" fx:id="panelcontrol" prefHeight="200.0" prefWidth="200.0" visible="false" />
    </children>
 </Pane>

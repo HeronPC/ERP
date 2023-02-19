@@ -54,5 +54,6 @@
             <Font name="Comic Sans MS Bold" size="24.0" />
          </font>
       </Button>
+      <Pane fx:id="panelcontrol" prefHeight="200.0" prefWidth="200.0" visible="false" />
    </children>
 </Pane>
