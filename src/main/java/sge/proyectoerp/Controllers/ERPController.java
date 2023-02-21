@@ -15,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
@@ -483,6 +484,9 @@ public class ERPController {
     private ImageView imgperfil12;
 
     @FXML
+    private Button btaddbd1;
+
+    @FXML
     private Button btaccederbd1;
 
     @FXML
@@ -573,6 +577,61 @@ public class ERPController {
     @FXML
     private Pane PanelVentas;
 
+    @FXML
+    private Pane PanelAddVentas;
+
+    @FXML
+    private Pane PanelCompras;
+
+    @FXML
+    private Pane PanelAddCompras;
+
+    @FXML
+    private Pane PanelProveedores;
+
+    @FXML
+    private Pane PaneAddProveedores;
+    @FXML
+    private Pane PaneListaProveedores;
+    @FXML
+    private Pane PanelClientes;
+
+    @FXML
+    private AnchorPane PaneAddClientes;
+
+    @FXML
+    private Pane PaneListaClientes;
+
+    @FXML
+    public void pressbtclientes() {
+        PanelClientes.setVisible(true);
+        PaneAddClientes.setVisible(false);
+        PaneListaClientes.setVisible(true);
+        panelactual = PanelVentas;
+    }
+
+    @FXML
+    public void pressbtnAddcrearcliente(ActionEvent event) {
+        PaneListaClientes.setVisible(false);
+        PaneAddClientes.setVisible(true);
+    }
+    @FXML
+    public void pressbtncrearcliente(ActionEvent event) {
+    }
+    @FXML
+    public void pressbtproveedores(ActionEvent event) {
+        PanelProveedores.setVisible(true);
+        PaneListaProveedores.setVisible(true);
+        PaneAddProveedores.setVisible(false);
+        panelactual = PanelCompras;
+    }
+
+    @FXML
+    public void pressbtnAddcrearproveedores(){
+        PaneListaProveedores.setVisible(false);
+        PaneAddProveedores.setVisible(true);
+
+    }
     //Variables nuevas
     private Pane panelactual;
 
@@ -658,9 +717,6 @@ public class ERPController {
     String nombd;
     Stage stageerp = new Stage();
     ArrayList<String> listabds = new ArrayList<>();
-
-    public void pressbtclientes() {
-    }
 
     public String setUser() {
         usuario = txtusuario.getText();
@@ -1217,9 +1273,14 @@ public class ERPController {
 
 
     @FXML
-    public void presscerrar() {
-        txtnombd.setText(null);
-        Pnewbd.setVisible(false);
+    public void presscerrar(ActionEvent event) {
+        try{
+            Button botonclick = (Button) event.getSource();
+            botonclick.getParent().setVisible(false);
+            txtnombd.setText(null);
+        }catch (NullPointerException e){
+
+        }
     }
 
     //Obtiene la imagen a la hora de crear un empleado
@@ -1448,6 +1509,8 @@ public class ERPController {
             cambiarpanel(panelactual, PanelDevoluciones);
         } else if (PanelAddEmpleados.isVisible() || PanelEditEmpleados.isVisible()) {
             cambiarpanel(panelactual, PanelEmpleados);
+        }else if (PanelAddVentas.isVisible()){
+        cambiarpanel(panelactual, PanelVentas);
         }
     }
 
@@ -1458,7 +1521,11 @@ public class ERPController {
 
     @FXML
     void pressbtcompras() {
+        cambiarpanel(PanelMenuPrincipal, PanelCompras);
+    }
 
+    @FXML
+    public void pressbtnconfirmar(ActionEvent event) {
     }
 
     @FXML
@@ -1521,6 +1588,8 @@ public class ERPController {
             cambiarpanel(PanelDevoluciones, PanelAddDevoluciones);
         } else if (PanelEmpleados.isVisible()) {
             cambiarpanel(PanelEmpleados, PanelAddEmpleados);
+        } else if (PanelVentas.isVisible()) {
+            cambiarpanel(PanelVentas, PanelAddVentas);
         }
     }
 

@@ -55,6 +55,14 @@
     -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #2F3636, #2F3636);
     -fx-cursor: hand;
 }
+#panelesflotantes{
+    -fx-background-radius: 30 30 30 30;
+    -fx-background-color: #3B4343;
+    -fx-border-color: #3B4343;
+    -fx-border-radius: 30;
+    -fx-border-width: 0.1;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 0);
+}
 #botonescp{
     -fx-background-color: #2F3636;
 }
@@ -72,6 +80,8 @@
 #btsgeneral{
     -fx-background-radius: 30 30 30 30;
     -fx-background-color: #2F3636;
+    -fx-border-width: 0.1;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 0);
 }
 #btsgeneral:hover {
     -fx-background-color: radial-gradient(center 50% 50%, radius 100%, #2F3636, #3B4343);
