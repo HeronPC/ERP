@@ -676,23 +676,110 @@ public class ERPController {
 
     private boolean imgrellena;
 
-    String tabla1 = "CREATE OR REPLACE TABLE proveedores( CIF CHAR(9) PRIMARY KEY, Nombre VARCHAR(50) UNIQUE, " + "Direccion VARCHAR(100), Email VARCHAR(50), Tel CHAR(9) UNIQUE);";
-    String tabla2 = "CREATE OR REPLACE TABLE recepciones(Referencia VARCHAR(15) PRIMARY KEY, Nombre VARCHAR(50), " + "FechaPrevista DATE, Documento VARCHAR(100), Tel CHAR(9), Estado VARCHAR(100), " + "CONSTRAINT Nombre FOREIGN KEY (Nombre) REFERENCES proveedores (Nombre)," + "CONSTRAINT Tel FOREIGN KEY (Tel) REFERENCES proveedores (TEl));";
-    String tabla3 = "CREATE OR REPLACE TABLE devoluciones(Referencia VARCHAR(15) PRIMARY KEY, Proveedor VARCHAR(50)," + "FechaPrevista DATE, Documento VARCHAR(100), NombreProducto VARCHAR(50), Cantidad INT);";
-    String tabla5 = "CREATE OR REPLACE TABLE expediciones(Referencia CHAR(15) PRIMARY KEY, Direccion VARCHAR(50), Nombre VARCHAR(50), " + "FechaPrevista DATE, Documento VARCHAR(100), Tel CHAR(9), Estado VARCHAR(100)," + "FOREIGN KEY (Nombre) REFERENCES clientes (Nombre)," + "FOREIGN KEY (Tel) REFERENCES clientes (Tel));";
-    String tabla4 = "CREATE OR REPLACE TABLE clientes( CIF CHAR(9) PRIMARY KEY, Nombre VARCHAR(50) UNIQUE," + "Direccion VARCHAR(100), Email VARCHAR(50), Tel CHAR(9) UNIQUE);";
+    String createProveedoresTable = "CREATE TABLE IF NOT EXISTS proveedores("
+            + "CIF CHAR(9) PRIMARY KEY,"
+            + "Nombre VARCHAR(50) UNIQUE,"
+            + "Direccion VARCHAR(100),"
+            + "Email VARCHAR(50),"
+            + "Tel CHAR(9) UNIQUE"
+            + ");";
 
-    String tabla9 = "CREATE OR REPLACE TABLE empleados(Nombre VARCHAR(50) NOT NULL, PuestoEmpresa VARCHAR(50) NOT NULL, Telefono CHAR(9) NULL, emaillaboral VARCHAR(100) NOT NULL, Departamento VARCHAR(50) NOT NULL, " +
-            "Gerente VARCHAR(50) NOT NULL, Foto VARCHAR(255), DireccionLaboral VARCHAR(100), HorarioLaboral VARCHAR(50), DireccionPersonal VARCHAR(150), NumeroCuentaBancaria CHAR(24), " +
-            "DNI CHAR(9), Genero VARCHAR(50), FechaNacimiento DATE );";
+    String createRecepcionesTable = "CREATE TABLE IF NOT EXISTS recepciones("
+            + "Referencia VARCHAR(15) PRIMARY KEY,"
+            + "Nombre VARCHAR(50),"
+            + "FechaPrevista DATE,"
+            + "Documento VARCHAR(100),"
+            + "Tel CHAR(9),"
+            + "Estado VARCHAR(100),"
+            + "CONSTRAINT Nombre FOREIGN KEY (Nombre) REFERENCES proveedores (Nombre),"
+            + "CONSTRAINT Tel FOREIGN KEY (Tel) REFERENCES proveedores (Tel)"
+            + ");";
 
-    String tabla10 = "CREATE OR REPLACE TABLE imgempleados(Foto VARCHAR(255), image BLOB (524288000));";
+    String createDevolucionesTable = "CREATE TABLE devoluciones("
+            + "Referencia VARCHAR(15) PRIMARY KEY,"
+            + "Direccion VARCHAR(50),"
+            + "Nombre VARCHAR(50),"
+            + "FechaPrevista DATE,"
+            + "Documento VARCHAR(100),"
+            + "Tel CHAR(9),"
+            + "Estado VARCHAR(100),"
+            + "CONSTRAINT FK_Nombre_Devoluciones FOREIGN KEY (Nombre) REFERENCES clientes (Nombre),"
+            + "CONSTRAINT FK_Tel_Devoluciones FOREIGN KEY (Tel) REFERENCES clientes (Tel)"
+            + ");";
 
-    String tabla6 = "CREATE OR REPLACE Table productosexp(Referencia VARCHAR(15), Producto VARCHAR(50), Cantidad INT," + "CONSTRAINT Referenciaexp FOREIGN KEY (Referencia) REFERENCES expediciones (Referencia));";
+    String createProductosdevTable = "CREATE TABLE IF NOT EXISTS productosdev("
+            + "Referencia VARCHAR(15),"
+            + "Producto VARCHAR(50),"
+            + "Cantidad INT,"
+            + "CONSTRAINT Referenciadev FOREIGN KEY (Referencia) REFERENCES Devoluciones (Referencia) ON UPDATE CASCADE ON DELETE CASCADE"
+            + ");";
 
-    String tabla7 = "CREATE OR REPLACE Table productosrec(Referencia VARCHAR(15), Producto VARCHAR(50), Cantidad INT, " + "CONSTRAINT Referencia FOREIGN KEY (Referencia) REFERENCES Recepciones (Referencia));";
+    String createClientesTable = "CREATE TABLE IF NOT EXISTS clientes("
+            + "CIF CHAR(9) PRIMARY KEY,"
+            + "Nombre VARCHAR(50) UNIQUE,"
+            + "Direccion VARCHAR(100),"
+            + "Email VARCHAR(50),"
+            + "Tel CHAR(9) UNIQUE"
+            + ");";
 
-    String tabla8 = "INSERT INTO proveedores VALUES ('CAD87542G', 'Prueba', 'Calatrava', 'iago@safareyes.es', '645342345');";
+    String createExpedicionesTable = "CREATE TABLE IF NOT EXISTS expediciones("
+            + "Referencia VARCHAR(15) PRIMARY KEY,"
+            + "Direccion VARCHAR(50),"
+            + "Nombre VARCHAR(50),"
+            + "FechaPrevista DATE,"
+            + "Documento VARCHAR(100),"
+            + "Tel CHAR(9),"
+            + "Estado VARCHAR(100),"
+            + "FOREIGN KEY (Nombre) REFERENCES clientes (Nombre),"
+            + "FOREIGN KEY (Tel) REFERENCES clientes (Tel)"
+            + ");";
+
+    String createProductosexpTable = "CREATE TABLE IF NOT EXISTS productosexp("
+            + "Referencia VARCHAR(15),"
+            + "Producto VARCHAR(50),"
+            + "Cantidad INT,"
+            + "CONSTRAINT Referenciaexp FOREIGN KEY (Referencia) REFERENCES expediciones (Referencia) ON UPDATE CASCADE ON DELETE CASCADE"
+            + ");";
+
+    String createProductosrecTable = "CREATE TABLE IF NOT EXISTS productosrec("
+            + "Referencia VARCHAR(15),"
+            + "Producto VARCHAR(50),"
+            + "Cantidad INT,"
+            + "CONSTRAINT Referencia FOREIGN KEY (Referencia) REFERENCES Recepciones (Referencia) ON UPDATE CASCADE ON DELETE CASCADE"
+            + ");";
+
+    String tablaEmpleados = "CREATE OR REPLACE TABLE empleados("
+            + "Nombre VARCHAR(50) NOT NULL, "
+            + "PuestoEmpresa VARCHAR(50) NOT NULL, "
+            + "Telefono CHAR(9) NULL, "
+            + "emaillaboral VARCHAR(100) NOT NULL, "
+            + "Departamento VARCHAR(50) NOT NULL, "
+            + "Gerente VARCHAR(50) NOT NULL, "
+            + "Foto VARCHAR(255), "
+            + "DireccionLaboral VARCHAR(100), "
+            + "HorarioLaboral VARCHAR(50), "
+            + "DireccionPersonal VARCHAR(150), "
+            + "NumeroCuentaBancaria CHAR(24), "
+            + "DNI CHAR(9), "
+            + "Genero VARCHAR(50), "
+            + "FechaNacimiento DATE"
+            + ")";
+
+    String tablaImgEmpleados = "CREATE TABLE IF NOT EXISTS imgempleados("
+            + "Foto VARCHAR(255), "
+            + "image BLOB (524288000), "
+            + "PRIMARY KEY (Foto)"
+            + ");";
+
+    String tablaVentas = "CREATE TABLE IF NOT EXISTS ventas("
+            + "CIF VARCHAR(9), "
+            + "PRIMARY KEY (CIF)"
+            + ");";
+
+    String insertProveedor = "INSERT INTO proveedores VALUES ('CAD87542G', 'Iago S.L.', 'C/ Calatrava n8', 'iago@safareyes.es', '678542987');";
+
+    String insertRecepcion = "INSERT INTO recepciones VALUES ('HSJF', 'Iago S.L.', '2020-03-04', 'agfg.pdf', '678542987', 'En camino');";
+
 
     String consulta1 = "CREATE DATABASE IF NOT EXISTS erp;";
     String consulta2 = "Create table usuarios(Usuario VARCHAR(50) PRIMARY KEY, Passwd VARCHAR(50), email VARCHAR(50) UNIQUE, tel char(9), img VARCHAR(50));";
@@ -741,7 +828,7 @@ public class ERPController {
     }
 
     @FXML
-    public void pressbtnacceder(ActionEvent event) throws IOException {
+    public void pressbtnacceder() throws IOException {
         //Definimos conexion como null
         Connection conexion = null;
         //Ejecutamos el comprobarlogin para controlar posibles fallos a la hora de hacer la consulta
@@ -848,7 +935,6 @@ public class ERPController {
                 String nombreUsuarioActual = rs.getString(1);
                 singleton.setUsuario(nombreUsuarioActual);
                 lblnombreusuario.setText(singleton.getUsuario());
-                System.out.println("Nombre de usuario actual: " + nombreUsuarioActual);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -984,10 +1070,7 @@ public class ERPController {
 
     private void cargarerp(Pane root, String nombrebd) throws IOException {
         pruebauser = singleton.getUsuario();
-        System.out.println("Prueba User: " + pruebauser);
         URL url;
-        System.out.println("Declarado: " + singleton.getUsuario());
-        System.out.println("Nombre del boton: " + nombrebd);
         singleton.setNombrebd(nombrebd);
         Label myLabel = (Label) root.lookup("#lblnombreusuario");
         url = Paths.get("./src/main/resources/sge/proyectoerp/erp.fxml").toUri().toURL();
@@ -997,7 +1080,7 @@ public class ERPController {
         stageerp.centerOnScreen();
         stageerp.setMaximized(true);
         stageerp.show();
-        usuario = lblnombreusuario.getText();
+        usuario = singleton.getUsuario();
         myLabel.setText(usuario);
     }
 
@@ -1235,16 +1318,21 @@ public class ERPController {
                     String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", bd + pruebauser.substring(0, 3));
                     conexion2 = DriverManager.getConnection(conexionbdusuario, user, pswd);
                     Statement st2 = conexion2.createStatement();
-                    st2.executeUpdate(tabla1);
-                    st2.executeUpdate(tabla2);
-                    st2.executeUpdate(tabla3);
-                    st2.executeUpdate(tabla4);
-                    st2.executeUpdate(tabla5);
-                    st2.executeUpdate(tabla6);
-                    st2.executeUpdate(tabla7);
-                    st2.executeUpdate(tabla8);
-                    st2.executeUpdate(tabla9);
-                    st2.executeUpdate(tabla10);
+                    st2.executeUpdate(createProveedoresTable);
+                    st2.executeUpdate(createRecepcionesTable);
+                    st2.executeUpdate(createClientesTable);
+                    st2.executeUpdate(createDevolucionesTable);
+                    st2.executeUpdate(createProductosdevTable);
+                    st2.executeUpdate(createExpedicionesTable);
+                    st2.executeUpdate(createProductosexpTable);
+                    st2.executeUpdate(createProductosrecTable);
+                    st2.executeUpdate(tablaEmpleados);
+                    st2.executeUpdate(tablaImgEmpleados);
+                    st2.executeUpdate(tablaVentas);
+
+                    //De manera provisional
+                    st2.executeUpdate(insertProveedor);
+                    st2.executeUpdate(insertRecepcion);
 
                     Pnewbd.setVisible(false);
                     nombd = txtnombd.getText();
@@ -1765,7 +1853,6 @@ public class ERPController {
         //Ejecutamos el código en un try para controlar las excepciones
         try {
             //Creamos la conexion
-            System.out.println("Base De Datos Rellenar Tabla: " + singleton.getNombrebd());
             String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             Statement st = conexion.createStatement();
@@ -1844,7 +1931,6 @@ public class ERPController {
             TableExpediciones.getItems().clear();
             //Creamos la consulta
             String consulta = "SELECT Tel, Referencia, FechaPrevista, Documento, Estado FROM expediciones";
-            System.out.println("Conexion: " + conexionbdusuario);
             //Guardamos la ejecución de la consulta en la variable rs
             ResultSet rs = st.executeQuery(consulta);
             //Bucle para seguir importando datos mientras los haya
@@ -2097,7 +2183,7 @@ public class ERPController {
             Statement st = conexion.createStatement();
             TableDevoluciones.getItems().clear();
             //Creamos la consulta
-            String consulta = "SELECT Tel, Referencia, FechaPrevista, Documento, Estado FROM devoluciones";
+            String consulta = "SELECT Referencia, FechaPrevista, Documento, Estado FROM devoluciones";
             //Guardamos la ejecución de la consulta en la variable rs
             ResultSet rs = st.executeQuery(consulta);
             //Bucle para seguir importando datos mientras los haya
@@ -2132,7 +2218,6 @@ public class ERPController {
 
     }
 
-
     @FXML
     void selectDevoluciones() {
 
@@ -2151,11 +2236,8 @@ public class ERPController {
 
     @FXML
     void initialize(){
-        System.out.println("Initialize");
-        System.out.println("ID Del panel: " + panelcontrol.getId());
         // Obtener el título del stage actual
         if (Objects.equals(panelcontrol.getId(), "BasesDeDatos")) {
-            System.out.println("Entra");
             rellenartablasbd();
         }
     }
