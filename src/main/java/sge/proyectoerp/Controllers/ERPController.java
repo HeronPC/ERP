@@ -615,9 +615,11 @@ public class ERPController {
         PaneListaClientes.setVisible(false);
         PaneAddClientes.setVisible(true);
     }
+
     @FXML
     public void pressbtncrearcliente(ActionEvent event) {
     }
+
     @FXML
     public void pressbtproveedores(ActionEvent event) {
         PanelProveedores.setVisible(true);
@@ -627,11 +629,12 @@ public class ERPController {
     }
 
     @FXML
-    public void pressbtnAddcrearproveedores(){
+    public void pressbtnAddcrearproveedores() {
         PaneListaProveedores.setVisible(false);
         PaneAddProveedores.setVisible(true);
 
     }
+
     //Variables nuevas
     private Pane panelactual;
 
@@ -695,7 +698,9 @@ public class ERPController {
     String consulta2 = "Create table usuarios(Usuario VARCHAR(50) PRIMARY KEY, Passwd VARCHAR(50), email VARCHAR(50) UNIQUE, tel char(9), img VARCHAR(50));";
     String consulta3 = "Create table bds(Nombre VARCHAR(50), Usuario VARCHAR(50), Foreign key (Usuario) References usuarios (Usuario));";
 
-    String consulta4 = "INSERT INTO usuarios VALUES ('root', 'root', '', '', '');";
+    String consulta4 = "Create table usuarioactual(usuario varchar(50));";
+
+    String consulta5 = "INSERT INTO usuarios VALUES ('root', 'root', '', '', '');";
     //CAMBIOS
     ERPApplication app = new ERPApplication();
 
@@ -769,6 +774,12 @@ public class ERPController {
                             if (Objects.equals(rs.getString(1), txtcontrasena.getText())) {
                                 //Abrimos la ventana principal
                                 setUser();
+                                String condel = "Delete from usuarioactual";
+                                String consul = String.format("insert into usuarioactual values ('%s')", txtusuario.getText());
+                                Connection con = DriverManager.getConnection(conexionerp, user, pswd);
+                                Statement st = con.createStatement();
+                                st.execute(condel);
+                                st.execute(consul);
                                 URL url = Paths.get("./src/main/resources/sge/proyectoerp/bd.fxml").toUri().toURL();
                                 Pane root = FXMLLoader.load(url);
                                 Scene scene = new Scene(root, 1068, 700);
@@ -780,11 +791,6 @@ public class ERPController {
                                 stagebd.initStyle(StageStyle.DECORATED);
                                 stagebd.initStyle(StageStyle.TRANSPARENT);
                                 stagebd.show();
-                                System.out.println(singleton.getTitstage());
-                                ((Node) (event.getSource())).getScene().getWindow().hide();
-                                Label myLabel = (Label) root.lookup("#lblnombreusuario");
-                                myLabel.setText(setUser());
-                                singleton.setUsuario(txtusuario.getText());
                             } else {
                                 //Informamos al usuario
                                 crearalertaerror("La contraseña para este usuario es incorrecta");
@@ -803,28 +809,50 @@ public class ERPController {
 
                 //Controlamos la excepciones
             } catch (SQLException e) {
-                try {
-                    Connection conexion2;
-                    conexion2 = DriverManager.getConnection("jdbc:mysql://localhost:3306/sys", user, pswd);
-                    Statement st2 = conexion2.createStatement();
-                    st2.execute(consulta1);
-                    conexion2 = DriverManager.getConnection(conexionerp, user, pswd);
-                    Statement st4 = conexion2.createStatement();
-                    st4.execute(consulta2);
-                    st4.execute(consulta3);
-                    st4.execute(consulta4);
-                    pressbtnacceder(event);
-                } catch (Exception eo) {
-                    eo.printStackTrace();
+                if (e.getSQLState().equals("42S02")) {
+                    try {
+                        // Crear la base de datos y las tablas necesarias
+                        Connection conexion2 = DriverManager.getConnection("jdbc:mysql://localhost:3306/sys", user, pswd);
+                        Statement st2 = conexion2.createStatement();
+                        st2.execute(consulta1);
+                        conexion2 = DriverManager.getConnection(conexionerp, user, pswd);
+                        Statement st4 = conexion2.createStatement();
+                        st4.execute(consulta2);
+                        st4.execute(consulta3);
+                        st4.execute(consulta4);
+                        st4.execute(consulta5);
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                        // No se pudo crear la base de datos
+                        crearalertaerror("No se pudo crear la base de datos");
+                        return; // Salir del método o función
+                    }
+                } else {
+                    e.printStackTrace();
+                    // Ocurrió otra excepción en la conexión a la base de datos
+                    crearalertaerror("Ocurrió un error en la conexión a la base de datos");
+                    // Salir del método o función
                 }
             }
         }
     }
 
     private void rellenartablasbd() {
-        pruebauser = lblnombreusuario.getText();
-        System.out.println("Prueba User: " + pruebauser);
-        crearpaneles(pruebauser);
+        try {
+            Connection conexion = DriverManager.getConnection(conexionerp, user, pswd);
+            String consulta = "SELECT * FROM usuarioactual";
+            PreparedStatement ps = conexion.prepareStatement(consulta);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                crearpaneles(rs.getString(1));
+                String nombreUsuarioActual = rs.getString(1);
+                singleton.setUsuario(nombreUsuarioActual);
+                lblnombreusuario.setText(singleton.getUsuario());
+                System.out.println("Nombre de usuario actual: " + nombreUsuarioActual);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void comprobarlogin() {
@@ -847,43 +875,120 @@ public class ERPController {
 
     @FXML
     public void borrarbd() {
-        int n = 0;
-        String nombrebd = listabotonesacceder.get(n).getId();
-        if (Objects.equals(nombrebd, "bteliminar" + nombd)) {
-            try {
-                Connection conexion1;
-                conexion1 = DriverManager.getConnection(conexionerp, user, pswd);
-                //Creamos la consulta con PreparedStatement
-                Statement st1 = conexion1.createStatement();
-                String consulta5 = String.format("delete from bds where usuario = '%s' and nombre = '%s'", usuario, nombrebd);
-                String consulta2 = String.format("DROP DATABASE %s", nombrebd);
+        try {
+            Connection conexion1;
+            conexion1 = DriverManager.getConnection(conexionerp, user, pswd);
+            //Creamos la consulta con PreparedStatement
+            Statement st1 = conexion1.createStatement();
+            String consulta5 = String.format("delete from bds where usuario = '%s' and nombre = '%s'", singleton.getUsuario(), listabotoneliminar.get(0).getId().substring(0, listabotoneliminar.get(0).getId().length() - 3));
+            String consulta2 = String.format("DROP DATABASE %s", listabotoneliminar.get(0).getId());
 
-                //Creamos una ventana de confirmacion para la modificacion del ingreso
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setHeaderText(null);
-                alert.setTitle("Confirmación");
-                alert.setContentText("¿Está seguro de qué quiere borrar esta base de datos?");
-                Optional<ButtonType> action = alert.showAndWait();
-                //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
-                if (action.orElseThrow() == ButtonType.OK) {
-                    st1.executeUpdate(consulta5);
-                    st1.executeUpdate(consulta2);
-                    crearalertainfo("Base de datos eliminada");
-                    rellenartablasbd();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            //Creamos una ventana de confirmacion para la modificacion del ingreso
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Confirmación");
+            alert.setContentText("¿Está seguro de qué quiere borrar esta base de datos?");
+            Optional<ButtonType> action = alert.showAndWait();
+            //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+            if (action.orElseThrow() == ButtonType.OK) {
+                st1.executeUpdate(consulta5);
+                st1.executeUpdate(consulta2);
+                crearalertainfo("Base de datos eliminada");
+                rellenartablasbd();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void borrarbd1() {
+        try {
+            Connection conexion1;
+            conexion1 = DriverManager.getConnection(conexionerp, user, pswd);
+            //Creamos la consulta con PreparedStatement
+            Statement st1 = conexion1.createStatement();
+            String consulta5 = String.format("delete from bds where usuario = '%s' and nombre = '%s'", singleton.getUsuario(), listabotoneliminar.get(1).getId().substring(0, listabotoneliminar.get(1).getId().length() - 3));
+            String consulta2 = String.format("DROP DATABASE %s", listabotoneliminar.get(1).getId());
+
+            //Creamos una ventana de confirmacion para la modificacion del ingreso
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Confirmación");
+            alert.setContentText("¿Está seguro de qué quiere borrar esta base de datos?");
+            Optional<ButtonType> action = alert.showAndWait();
+            //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+            if (action.orElseThrow() == ButtonType.OK) {
+                st1.executeUpdate(consulta5);
+                st1.executeUpdate(consulta2);
+                crearalertainfo("Base de datos eliminada");
+                rellenartablasbd();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void borrarbd2() {
+        try {
+            Connection conexion1;
+            conexion1 = DriverManager.getConnection(conexionerp, user, pswd);
+            //Creamos la consulta con PreparedStatement
+            Statement st1 = conexion1.createStatement();
+            String consulta5 = String.format("delete from bds where usuario = '%s' and nombre = '%s'", singleton.getUsuario(), listabotoneliminar.get(2).getId().substring(0, listabotoneliminar.get(2).getId().length() - 3));
+            String consulta2 = String.format("DROP DATABASE %s", listabotoneliminar.get(2).getId());
+
+            //Creamos una ventana de confirmacion para la modificacion del ingreso
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Confirmación");
+            alert.setContentText("¿Está seguro de qué quiere borrar esta base de datos?");
+            Optional<ButtonType> action = alert.showAndWait();
+            //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+            if (action.orElseThrow() == ButtonType.OK) {
+                st1.executeUpdate(consulta5);
+                st1.executeUpdate(consulta2);
+                crearalertainfo("Base de datos eliminada");
+                rellenartablasbd();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void borrarbd3() {
+        try {
+            Connection conexion1;
+            conexion1 = DriverManager.getConnection(conexionerp, user, pswd);
+            //Creamos la consulta con PreparedStatement
+            Statement st1 = conexion1.createStatement();
+            String consulta5 = String.format("delete from bds where usuario = '%s' and nombre = '%s'", singleton.getUsuario(), listabotoneliminar.get(3).getId().substring(0, listabotoneliminar.get(3).getId().length() - 3));
+            String consulta2 = String.format("DROP DATABASE %s", listabotoneliminar.get(3).getId());
+
+            //Creamos una ventana de confirmacion para la modificacion del ingreso
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Confirmación");
+            alert.setContentText("¿Está seguro de qué quiere borrar esta base de datos?");
+            Optional<ButtonType> action = alert.showAndWait();
+            //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+            if (action.orElseThrow() == ButtonType.OK) {
+                st1.executeUpdate(consulta5);
+                st1.executeUpdate(consulta2);
+                crearalertainfo("Base de datos eliminada");
+                rellenartablasbd();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private void cargarerp(Pane root, String nombrebd) throws IOException {
-        pruebauser = txtusuario.getText();
+        pruebauser = singleton.getUsuario();
         System.out.println("Prueba User: " + pruebauser);
         URL url;
-        singleton.setUsuario(pruebauser);
         System.out.println("Declarado: " + singleton.getUsuario());
         System.out.println("Nombre del boton: " + nombrebd);
+        singleton.setNombrebd(nombrebd);
         Label myLabel = (Label) root.lookup("#lblnombreusuario");
         url = Paths.get("./src/main/resources/sge/proyectoerp/erp.fxml").toUri().toURL();
         root = FXMLLoader.load(url);
@@ -951,126 +1056,10 @@ public class ERPController {
                 listabotoneliminar.get(cont).setId(rs.getString(1) + rs.getString(2).substring(0, 3));
                 listabotoneliminar.get(cont).setVisible(true);
                 listalabels.get(cont).setId(rs.getString(1) + rs.getString(2).substring(0, 3));
+                listalabels.get(cont).setText(rs.getString(1));
                 listalabels.get(cont).setVisible(true);
                 cont++;
             }
-
-            /*
-            URL url = Paths.get("./src/main/resources/sge/proyectoerp/bd.fxml").toUri().toURL();
-            Pane root = FXMLLoader.load(url);
-            GridPane myPanel = (GridPane) root.lookup("#Pgridbd");
-            myPanel.getChildren().clear();
-            while (rs.next()) {
-                JButton btel = new JButton();
-                JButton btentrar = new JButton("Acceder");
-                SwingNode node2 = new SwingNode();
-                JPanel Panelbd = new JPanel(new BorderLayout());//Creamos el panel que se va a añadir multiples veces
-                JPanel Panelizq = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 3));
-                nombd = rs.getString(1);
-                System.out.println("Base de datos " + cont + rs.getString(1));
-                cont++;
-
-                Panelizq.setBackground(new java.awt.Color(41, 45, 45));
-                Panelizq.setSize(100, 30);
-                Panelbd.setBorder(new EmptyBorder(40, 30, 30, 30));
-                Panelbd.setBackground(new java.awt.Color(41, 45, 45));
-                JLabel nombrebd = new JLabel(nombd);//Aqui aparecerá el nombre de los empleados con respecto a la base de datos
-                nombrebd.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
-                nombrebd.setForeground(Color.white);
-                asignarJButton(btel);
-                btentrar.setBackground(new java.awt.Color(41, 184, 78));
-                Panelizq.add(btel);
-                Panelizq.add(nombrebd);
-                Panelbd.add(Panelizq, BorderLayout.WEST);
-                Panelbd.add(btentrar, BorderLayout.EAST);
-
-                btentrar.setName("bte" + rs.getString(1));
-                btel.setName("btel" + rs.getString(1));
-                node2.setContent(Panelbd);//Añade el contenido al nodeswing
-                node2.setId("node" + nombd);
-
-                Button mybutton = (Button) root.lookup("#btaddbd");
-                myPanel.add(node2, cols, filas);//Va añadiendo los nodeswing al gridpane sumando filas y columnas
-                filas++;
-                if (filas == 4) {
-                    mybutton.setDisable(true);
-                }//debes deshabilitar el método cuandotodo el gripane esta lleno
-                counter++;
-
-
-                //Metodo para eliminar las base de datos añadidas en el usuario, para eliminarlas deberas hacer un delete a la base de datos y luego llamar al metodo para que recarge los paneles de las base de datos
-                btel.addActionListener(el -> {
-                    if (Objects.equals(btel.getName(), "bteliminar" + nombd)) {
-                        try {
-                            Connection conexion1;
-                            conexion1 = DriverManager.getConnection(conexionerp, user, pswd);
-                            //Creamos la consulta con PreparedStatement
-                            Statement st1 = conexion1.createStatement();
-                            String consulta5 = String.format("delete from bds where usuario = '%s' and nombre = '%s'", prubuser, nombd);
-                            String consulta2 = String.format("DROP DATABASE %s", nombd);
-
-                            //Creamos una ventana de confirmacion para la modificacion del ingreso
-                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                            alert.setHeaderText(null);
-                            alert.setTitle("Confirmación");
-                            alert.setContentText("¿Está seguro de qué quiere borrar esta base de datos?");
-                            Optional<ButtonType> action = alert.showAndWait();
-                            //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
-                            if (action.orElseThrow() == ButtonType.OK) {
-                                st1.executeUpdate(consulta5);
-                                st1.executeUpdate(consulta2);
-                                crearalertainfo("Base de datos eliminada");
-                                rellenartablasbd();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-                btentrar.addActionListener(e -> Platform.runLater(() -> {
-                    singleton.setUsuario(btentrar.getName().substring(3));
-                    System.out.println("Declarado: " + singleton.getUsuario());
-                    System.out.println("Nombre del boton: " + btentrar.getName());
-                    Scene scene = new Scene(root, 1536, 790);
-                    stageerp.setScene(scene);
-                    stageerp.centerOnScreen();
-                    stageerp.setMaximized(true);
-                    stageerp.show();
-                    Label myLabel = (Label) root.lookup("#lblnombreusuario");
-                    usuario = lblnombreusuario.getText();
-                    myLabel.setText(usuario);
-                    try {
-                        Connection conexion2;
-                        conexion2 = DriverManager.getConnection(conexionerp, user, pswd);
-                        //Creamos la consulta con PreparedStatement
-                        Statement st2 = conexion2.createStatement();
-                        String consulta2 = String.format("Select nombre from bds where usuario = '%s'", prubuser);
-                        ResultSet rs2 = st2.executeQuery(consulta2);
-                        while (rs2.next()) {
-                            if (Objects.equals(btentrar.getName(), "bt" + rs2.getString(1))) {
-
-                            }
-                        }
-                    } catch (Exception eo) {
-                        eo.printStackTrace();
-                    }
-
-                }));
-
-                btentrar.setName("bte" + bd + prubuser.substring(0, 3));
-                btel.setName("bteliminar" + bd + prubuser.substring(0, 3));
-                node2.setContent(Panelbd);//Añade el contenido al nodeswing
-                node2.setId("node" + nombd);//Cambia el nombre del nodo con respecto al nombre del empleado, deberas hacer que cambie con los nombres que vaya cogiendo de la base de datos
-                Pgridbd.add(node2, cols, filas);//Va añadiendo los nodeswing al gridpane sumando filas y columnas
-                filas++;
-                if (filas >= 4) {
-                    btaddbd.setDisable(true);
-                }//debes deshabilitar el método cuandotodo el gripane esta lleno
-                counter++;
-            }
-
-             */
             //Controlamos la excepciones
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -1083,7 +1072,6 @@ public class ERPController {
         listalabels.add(labelbd2);
         listalabels.add(labelbd3);
         listalabels.add(labelbd4);
-
 
         for (int i = 0; i < listalabels.size() - 1; i++) {
             listalabels.get(i).setVisible(false);
@@ -1222,7 +1210,7 @@ public class ERPController {
             Connection conexion;
             Connection conexion2;
             bd = txtnombd.getText();
-            pruebauser = lblnombreusuario.getText();
+            pruebauser = singleton.getUsuario();
             boolean comnombrebd = true;
             conexion = DriverManager.getConnection(conexionerp, user, pswd);
 
@@ -1274,11 +1262,11 @@ public class ERPController {
 
     @FXML
     public void presscerrar(ActionEvent event) {
-        try{
+        try {
             Button botonclick = (Button) event.getSource();
             botonclick.getParent().setVisible(false);
             txtnombd.setText(null);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
 
         }
     }
@@ -1509,8 +1497,8 @@ public class ERPController {
             cambiarpanel(panelactual, PanelDevoluciones);
         } else if (PanelAddEmpleados.isVisible() || PanelEditEmpleados.isVisible()) {
             cambiarpanel(panelactual, PanelEmpleados);
-        }else if (PanelAddVentas.isVisible()){
-        cambiarpanel(panelactual, PanelVentas);
+        } else if (PanelAddVentas.isVisible()) {
+            cambiarpanel(panelactual, PanelVentas);
         }
     }
 
@@ -1567,6 +1555,7 @@ public class ERPController {
     @FXML
     void pressDevoluciones() {
         cambiarpanel(PanelInventarioInicial, PanelDevoluciones);
+        rellenaTableDevoluciones();
     }
 
     @FXML
@@ -1776,8 +1765,8 @@ public class ERPController {
         //Ejecutamos el código en un try para controlar las excepciones
         try {
             //Creamos la conexion
-            System.out.println("Base De Datos Rellenar Tabla: " + singleton.getUsuario());
-            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getUsuario());
+            System.out.println("Base De Datos Rellenar Tabla: " + singleton.getNombrebd());
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             Statement st = conexion.createStatement();
             tableRecepciones.getItems().clear();
@@ -1849,7 +1838,7 @@ public class ERPController {
         //Ejecutamos el código en un try para controlar las excepciones
         try {
             //Creamos la conexion
-            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getUsuario());
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             Statement st = conexion.createStatement();
             TableExpediciones.getItems().clear();
@@ -2103,12 +2092,12 @@ public class ERPController {
         //Ejecutamos el código en un try para controlar las excepciones
         try {
             //Creamos la conexion
-            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getUsuario());
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             Statement st = conexion.createStatement();
             TableDevoluciones.getItems().clear();
             //Creamos la consulta
-            String consulta = "SELECT Tel, Referencia, FechaPrevista, Documento, Estado FROM expediciones";
+            String consulta = "SELECT Tel, Referencia, FechaPrevista, Documento, Estado FROM devoluciones";
             //Guardamos la ejecución de la consulta en la variable rs
             ResultSet rs = st.executeQuery(consulta);
             //Bucle para seguir importando datos mientras los haya
@@ -2127,14 +2116,6 @@ public class ERPController {
             //Controlamos las excepciones mostrándolas por la terminal
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            //Controlamos que la connexion sea null, en el caso contrario lo definiremos como tal
-            try {
-                assert conexion != null;
-                conexion.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -2167,19 +2148,15 @@ public class ERPController {
 
     }
 
-    private void balon() throws InterruptedException {
-        Thread.sleep(1000);
-        rellenartablasbd();
-    }
 
     @FXML
-    void initialize() throws InterruptedException {
+    void initialize(){
         System.out.println("Initialize");
         System.out.println("ID Del panel: " + panelcontrol.getId());
         // Obtener el título del stage actual
-        if(Objects.equals(panelcontrol.getId(), "BasesDeDatos")){
+        if (Objects.equals(panelcontrol.getId(), "BasesDeDatos")) {
             System.out.println("Entra");
-            balon();
+            rellenartablasbd();
         }
     }
 }

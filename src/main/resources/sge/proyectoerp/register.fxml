@@ -89,5 +89,6 @@
          </image>
       </ImageView>
       <Pane fx:id="panelcontrol" prefHeight="200.0" prefWidth="200.0" visible="false" />
+      <Pane fx:id="panelcontrol" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" visible="false" />
    </children>
 </Pane>

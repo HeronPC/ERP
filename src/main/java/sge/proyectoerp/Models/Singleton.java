@@ -5,6 +5,7 @@ public class Singleton {
     private static String Usuario;
 
     private static String titstage;
+    private static String nombrebd;
 
     public String getTitstage() {
         return titstage;
@@ -16,6 +17,14 @@ public class Singleton {
 
     public Singleton() {
         // constructor privado para evitar la creación de nuevas instancias
+    }
+
+    public static String getNombrebd() {
+        return nombrebd;
+    }
+
+    public static void setNombrebd(String nombrebd) {
+        Singleton.nombrebd = nombrebd;
     }
 
     public static Singleton getInstance() {

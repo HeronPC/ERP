@@ -65,7 +65,7 @@
             <Insets right="5.0" top="5.0" />
          </padding>
          <children>
-            <Button fx:id="bteliminarbd1" mnemonicParsing="false" onAction="#borrarbd" visible="false">
+            <Button fx:id="bteliminarbd1" mnemonicParsing="false" onAction="#borrarbd" prefHeight="26.0" prefWidth="70.0" text="Eliminar" visible="false">
                <GridPane.margin>
                   <Insets left="50.0" />
                </GridPane.margin>
@@ -81,7 +81,7 @@
                   <Font name="Comic Sans MS" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="bteliminarbd2" mnemonicParsing="false" onAction="#borrarbd" visible="false" GridPane.rowIndex="1">
+            <Button fx:id="bteliminarbd2" mnemonicParsing="false" onAction="#borrarbd1" text="Eliminar" visible="false" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="50.0" />
                </GridPane.margin>
@@ -97,7 +97,7 @@
                   <Font name="Comic Sans MS" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="bteliminarbd4" mnemonicParsing="false" onAction="#borrarbd" visible="false" GridPane.rowIndex="3">
+            <Button fx:id="bteliminarbd4" mnemonicParsing="false" onAction="#borrarbd3" text="Eliminar" visible="false" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="50.0" />
                </GridPane.margin>
@@ -105,7 +105,7 @@
                   <Font name="Comic Sans MS" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="bteliminarbd3" mnemonicParsing="false" onAction="#borrarbd" visible="false" GridPane.rowIndex="2">
+            <Button fx:id="bteliminarbd3" mnemonicParsing="false" onAction="#borrarbd2" text="Eliminar" visible="false" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="50.0" />
                </GridPane.margin>
