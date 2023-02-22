@@ -22,10 +22,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import sge.proyectoerp.ERPApplication;
-import sge.proyectoerp.Models.Devoluciones;
-import sge.proyectoerp.Models.Expediciones;
-import sge.proyectoerp.Models.Recepciones;
-import sge.proyectoerp.Models.Singleton;
+import sge.proyectoerp.Models.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -349,6 +346,9 @@ public class ERPController {
     private Button btnVolverEmpNuevo;
 
     @FXML
+    private Button btnCrearClientes;
+
+    @FXML
     private TextField txtPuestoEditarEmpleado;
 
     @FXML
@@ -481,6 +481,27 @@ public class ERPController {
     private Button btaddbd11;
 
     @FXML
+    private TableColumn<?, ?> ColumNomCliente;
+
+    @FXML
+    private TableView<Clientes> tablaClientesView;
+
+    @FXML
+    private TextField txtDireccionCliente;
+
+    @FXML
+    private TextField txtNombreCliente;
+
+    @FXML
+    private TextField txtNifCliente;
+
+    @FXML
+    private TextField txtEmailCliente;
+
+    @FXML
+    private TextField txtTelefonoCliente;
+
+    @FXML
     private ImageView imgperfil12;
 
     @FXML
@@ -601,39 +622,6 @@ public class ERPController {
 
     @FXML
     private Pane PaneListaClientes;
-
-    @FXML
-    public void pressbtclientes() {
-        PanelClientes.setVisible(true);
-        PaneAddClientes.setVisible(false);
-        PaneListaClientes.setVisible(true);
-        panelactual = PanelVentas;
-    }
-
-    @FXML
-    public void pressbtnAddcrearcliente(ActionEvent event) {
-        PaneListaClientes.setVisible(false);
-        PaneAddClientes.setVisible(true);
-    }
-
-    @FXML
-    public void pressbtncrearcliente(ActionEvent event) {
-    }
-
-    @FXML
-    public void pressbtproveedores(ActionEvent event) {
-        PanelProveedores.setVisible(true);
-        PaneListaProveedores.setVisible(true);
-        PaneAddProveedores.setVisible(false);
-        panelactual = PanelCompras;
-    }
-
-    @FXML
-    public void pressbtnAddcrearproveedores() {
-        PaneListaProveedores.setVisible(false);
-        PaneAddProveedores.setVisible(true);
-
-    }
 
     //Variables nuevas
     private Pane panelactual;
@@ -1583,6 +1571,8 @@ public class ERPController {
             cambiarpanel(panelactual, PanelExpediciones);
         } else if (PanelAddDevoluciones.isVisible()) {
             cambiarpanel(panelactual, PanelDevoluciones);
+        } else if (PanelAddVentas.isVisible()) {
+            cambiarpanel(panelactual, PanelVentas);
         } else if (PanelAddEmpleados.isVisible() || PanelEditEmpleados.isVisible()) {
             cambiarpanel(panelactual, PanelEmpleados);
         } else if (PanelAddVentas.isVisible()) {
@@ -2232,7 +2222,177 @@ public class ERPController {
     void selectDepartamentos() {
 
     }
+    
+    //Panel Ventas
+    private void rellenarTabClientes(){
+        Connection conexion = null;
+        //Ejecutamos el código en un try para controlar las excepciones
+        try {
+            //Creamos la conexion
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
+            conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
+            Statement st = conexion.createStatement();
+            tablaClientesView.getItems().clear();
+            //Creamos la consulta
+            String consulta = "SELECT Nombre FROM clientes";
+            //Guardamos la ejecución de la consulta en la variable rs
+            ResultSet rs = st.executeQuery(consulta);
+            //Bucle para seguir importando datos mientras los haya
+            ObservableList<Clientes> obscli = FXCollections.observableArrayList();
+            while (rs.next()) {
+                //ObservableList para guardar dentro el paciente correspondiente para añadirlo a las columnas
+                //Creamos un paciente, con los campos obtenidos de la consulta
+                obscli.add(new Clientes(rs.getString(1)));
+                //Relacionamos la columna con el campo del constructor correcto
+                ColumNomCliente.setCellValueFactory(new PropertyValueFactory<>("Nombre"));
+                //Metemos dentro la tabla paciente la lista creada anteriormente
+                tablaClientesView.setItems(obscli);
+            }
+            //Refrescamos la tabla paciente
+            tablaClientesView.refresh();
+            //Controlamos las excepciones mostrándolas por la terminal
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    @FXML
+    public void pressbtclientes() {
+        PanelClientes.setVisible(true);
+        PaneAddClientes.setVisible(false);
+        PaneListaClientes.setVisible(true);
+        panelactual = PanelVentas;
+        rellenarTabClientes();
+    }
+
+    @FXML
+    public void pressbtnAddcrearcliente() {
+        PaneListaClientes.setVisible(false);
+        PaneAddClientes.setVisible(true);
+    }
+
+    @FXML
+    public void pressbtncrearcliente() {
+        if(Objects.equals(btnCrearClientes.getText(), "CREAR")){
+            Connection conexion = null;
+            //Ejecutamos el código en un try para controlar las excepciones
+            try {
+                //Creamos la conexion
+                String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
+                conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
+                PreparedStatement ps = conexion.prepareStatement("INSERT INTO Clientes VALUES (?, ?, ?, ?, ?)");
+                ps.setString(1, txtNifCliente.getText());
+                ps.setString(2, txtNombreCliente.getText());
+                ps.setString(3, txtDireccionCliente.getText());
+                ps.setString(4, txtEmailCliente.getText());
+                ps.setString(5, txtTelefonoCliente.getText());
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setHeaderText(null);
+                alert.setTitle("Confirmación");
+                alert.setContentText(String.format("¿Desea añadir el cliente %s?", txtNombreCliente.getText()));
+                Optional<ButtonType> action = alert.showAndWait();
+                //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+                if (action.orElseThrow() == ButtonType.OK) {
+                    ps.execute();
+                    //Creamos el Statement con la conexion
+                    crearalertainfo("Cliente creado");
+                    rellenarTabClientes();
+                    PaneAddClientes.setVisible(false);
+                    PaneListaClientes.setVisible(true);
+                }
+                //Controlamos las excepciones mostrándolas por la terminal
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if(Objects.equals(btnCrearClientes.getText(), "EDITAR")){
+            Connection conexion = null;
+            //Ejecutamos el código en un try para controlar las excepciones
+            try {
+                //Creamos la conexion
+                String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
+                conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
+                PreparedStatement ps = conexion.prepareStatement("UPDATE Clientes SET Nombre = ?, Direccion = ?, Email = ?, Tel = ? WHERE CIF = ?");
+                ps.setString(1, txtNombreCliente.getText());
+                ps.setString(2, txtDireccionCliente.getText());
+                ps.setString(3, txtEmailCliente.getText());
+                ps.setString(4, txtTelefonoCliente.getText());
+                ps.setString(5, txtNifCliente.getText());
+
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setHeaderText(null);
+                alert.setTitle("Confirmación");
+                alert.setContentText(String.format("¿Desea editar el cliente %s?", txtNombreCliente.getText()));
+                Optional<ButtonType> action = alert.showAndWait();
+                //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+                if (action.orElseThrow() == ButtonType.OK) {
+                    ps.execute();
+                    //Creamos el Statement con la conexion
+                    crearalertainfo("Cliente editado");
+                    btnCrearClientes.setText("CREAR");
+                    txtNifCliente.setDisable(false);
+                    rellenarTabClientes();
+                    PaneAddClientes.setVisible(false);
+                    PaneListaClientes.setVisible(true);
+                }
+                //Controlamos las excepciones mostrándolas por la terminal
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    public void selectCliente(){
+        Connection conexion = null;
+        //Ejecutaremos el codigo dentro de un try para controlar las excepciones
+        try {
+            //Creamos un médico con los datos selecionados de la tabla
+            Clientes cli = tablaClientesView.getSelectionModel().getSelectedItem();
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
+            //Creamos la conexion
+            conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
+            //Creamos el Statement con la conexion
+            Statement st = conexion.createStatement();
+            //Creamos la consulta
+            String consulta = String.format("Select * from clientes where nombre = '%s'", cli.getNombre());
+            //Guardamos dentro del ResulSet la ejecucion de la consulta con la conexion anterior
+            ResultSet rs = st.executeQuery(consulta);
+            if(rs.next()){
+                PaneAddClientes.setVisible(true);
+                txtNifCliente.setDisable(true);
+                btnCrearClientes.setText("EDITAR");
+                txtNifCliente.setText(rs.getString("CIF"));
+                txtNombreCliente.setText(rs.getString("Nombre"));
+                txtDireccionCliente.setText(rs.getString("Direccion"));
+                txtEmailCliente.setText(rs.getString("Email"));
+                txtTelefonoCliente.setText(rs.getString("Tel"));
+            } else{
+                crearalertaerror("Ha ocurrido un error");
+            }
+            //Controlamos las excepciones mostrandolas por la terminal
+        } catch (NullPointerException pi) {
+            System.out.print("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void pressbtproveedores() {
+        PanelProveedores.setVisible(true);
+        PaneListaProveedores.setVisible(true);
+        PaneAddProveedores.setVisible(false);
+        panelactual = PanelCompras;
+    }
+
+    @FXML
+    public void pressbtnAddcrearproveedores() {
+        PaneListaProveedores.setVisible(false);
+        PaneAddProveedores.setVisible(true);
+
+    }
 
     @FXML
     void initialize(){

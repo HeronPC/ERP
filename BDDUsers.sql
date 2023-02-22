@@ -16,7 +16,9 @@ Usuario VARCHAR(50),
 FOREIGN KEY (Usuario) REFERENCES usuarios (Usuario)
 );
 
-INSERT INTO usuarios VALUES ("root", "root", "", "", "");
-INSERT INTO bds VALUES ("heron","root");
+Create table usuarioactual(
+usuario varchar(50)
+);
 
-INSERT INTO proveedores VALUES ("CAD87542G", "Prueba", "Calatrava", "erpbdsiago@safareyes.es", "645342345");
+
+INSERT INTO usuarios VALUES ("root", "root", "", "", "");
