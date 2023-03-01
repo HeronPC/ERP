@@ -47,9 +47,12 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -1684,7 +1687,7 @@ public class ERPController {
         } else if (PanelAddVentas.isVisible()){
             cambiarpanel(panelactual, PanelVentas);
         }else if (PanelVerFactura.isVisible()){
-            cambiarpanel(panelactual,PanelAddFacturas);
+            cambiarpanel(PanelVerFactura,PanelAddFacturas);
         } else if (PanelAddFacturas.isVisible()){
             cambiarpanel(panelactual,PanelFacturacion);
         }else if (PanelAddEmpleados.isVisible() || PanelEditEmpleados.isVisible()) {
@@ -1766,7 +1769,6 @@ public class ERPController {
     @FXML
     public void abrirPDF() throws IOException {
         crearFactura(txtidFactura.getText(),txtcliente.getText(), String.valueOf(txtfeclim.getValue()), lbltotalfactura.getText());
-        System.out.println("macaco");
         PanelAddFacturas.setVisible(false);
         PanelVerFactura.setVisible(true);
         File archivoPDF = new File("factura.pdf");
@@ -1803,6 +1805,27 @@ public class ERPController {
         });
 
         // Cierra el documento al salir del método
+    }
+    Stage guardar;
+    @FXML
+    void pressbtnguardarfact(){
+        FileChooser fileChooser = new FileChooser();
+
+        // Establecer el título y la extensión de archivo predeterminada
+        fileChooser.setTitle("Guardar factura");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos PDF", "*.pdf"));
+
+        // Mostrar el diálogo de selección de archivo
+        File file = fileChooser.showSaveDialog(guardar);
+
+        if (file != null) {
+            // Si el usuario seleccionó un archivo, guardar la factura en la ubicación especificada
+            try {
+                Files.copy(new FileInputStream("factura.pdf"), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
