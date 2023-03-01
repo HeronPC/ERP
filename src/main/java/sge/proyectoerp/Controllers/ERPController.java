@@ -50,8 +50,6 @@ public class ERPController {
     @FXML
     private TableColumn<?, ?> CantidadColum;
 
-    @FXML
-    private ImageView imgempleado1;
 
     @FXML
     private TableView<Recepciones> tableInventarioRecep;
@@ -59,11 +57,6 @@ public class ERPController {
     @FXML
     private Pane PanelExpediciones;
 
-    @FXML
-    private Button btcuenta;
-
-    @FXML
-    private Button btnExpediciones;
 
     @FXML
     private TextField txtTelefonoEmpleado;
@@ -71,20 +64,10 @@ public class ERPController {
     @FXML
     private Label lblAtrasRecepciones;
 
-    @FXML
-    private Button btnDevolucionesAdd;
-
-    @FXML
-    private TableColumn<?, ?> ColumProductDevoluciones;
-
-    @FXML
-    private TextField txtCantidadDevoluciones;
 
     @FXML
     private Pane PanelEmpleados;
 
-    @FXML
-    private TextField txtDocumento212131;
 
     @FXML
     private TableColumn<?, ?> Fechacolumn;
@@ -94,12 +77,6 @@ public class ERPController {
 
     @FXML
     private TextField txtReferencia;
-
-    @FXML
-    private Button btnAddDevoluciones;
-
-    @FXML
-    private Button btnSeleccionarIMGEditarEmpleado;
 
     @FXML
     private TextField txtDepartamentoEmpleado;
@@ -192,7 +169,7 @@ public class ERPController {
     private TableColumn<?, ?> Referenciacolumn;
 
     @FXML
-    private TableView<?> tableDepartamentos;
+    private TableView<Proveedores> tablaProveedores;
 
     @FXML
     private TableView<Expediciones> TableExpediciones;
@@ -415,10 +392,10 @@ public class ERPController {
     private Button btnmenu;
 
     @FXML
-    private Button btnCrearEmpleados;
+    private Button btnCrearProveedores;
 
     @FXML
-    private TableColumn<?, ?> ColumEstadoDevoluciones;
+    private TableColumn<?, ?> ColumnNombreProveedores;
 
     @FXML
     private TextField txt6;
@@ -439,10 +416,23 @@ public class ERPController {
     private Pane PanelAddEmpleados;
 
     @FXML
+    private Pane panelsuperiorventas;
+
+    @FXML
     private Button btnRecepciones;
 
     @FXML
     private TextField txtProductoExp;
+    @FXML
+    private TextField txtemailProve;
+    @FXML
+    private TextField txtNombreEmpresaProve;
+    @FXML
+    private TextField txtDireccionProve;
+    @FXML
+    private TextField txtNifProve;
+    @FXML
+    private TextField txtTelefonoProve;
 
     @FXML
     private TextField txtGeneroEmpleado;
@@ -484,7 +474,38 @@ public class ERPController {
     private TableColumn<?, ?> ColumNomCliente;
 
     @FXML
+    private TableColumn<?, ?> ColumnCodigoPresu;
+
+    @FXML
+    private TableColumn<?, ?> ColumnProductoPresu;
+    @FXML
+    private TableColumn<?, ?> ColumnFecVentas;
+    @FXML
+    private TableColumn<?, ?> ColumnCantidadPresu;
+    @FXML
+    private TableColumn<?, ?> ColumnPrecioUnidadPresu;
+    @FXML
+    private TableColumn<?, ?> ColumnImpuestoPresu;
+    @FXML
+    private TableColumn<?, ?> ColumnSubTotalPresu;
+
+    @FXML
+    private TableColumn<?, ?> ColumnClientePresu;
+
+    @FXML
+    private TableColumn<?, ?> ColumnTotalPresu;
+
+    @FXML
+    private TableColumn<?, ?> ColumnEstadoPresu;
+
+    @FXML
     private TableView<Clientes> tablaClientesView;
+
+    @FXML
+    private TableView<Ventas> tablePresupuestos;
+
+    @FXML
+    private TableView<Ventas> tablaPresuProduc;
 
     @FXML
     private TextField txtDireccionCliente;
@@ -549,18 +570,41 @@ public class ERPController {
 
     @FXML
     private Label lblAtrasExp;
+    @FXML
+    private Label lblnuevopresupuesto;
 
     @FXML
     private Pane Pbasesdedatos;
 
     @FXML
-    private Button btacceder;
+    private Button btnCrearPresupuestoPresu;
 
     @FXML
     private Pane PInicio;
 
     @FXML
     private TextField txtusuario;
+
+    @FXML
+    private TextField txtCodigoPresu;
+
+    @FXML
+    private TextField txtProductoPresu;
+
+    @FXML
+    private TextField txtCantidadPresu;
+
+    @FXML
+    private TextField txtPrecioUnidadPresu;
+
+    @FXML
+    private TextField txtClientePresu;
+
+    @FXML
+    private TextField txtPlazosPresu;
+
+    @FXML
+    private DatePicker datePickerPresu;
 
     @FXML
     private TextField txtcontrasena;
@@ -631,6 +675,8 @@ public class ERPController {
     private String imageruta;
 
     private final ArrayList<Recepciones> listrecepciones = new ArrayList<>();
+
+    private final ArrayList<Ventas> listpresupuestos = new ArrayList<Ventas>();
     private final ArrayList<Expediciones> listexpediciones = new ArrayList<>();
     private final ArrayList<Devoluciones> listdevoluciones = new ArrayList<>();
 
@@ -759,14 +805,21 @@ public class ERPController {
             + "PRIMARY KEY (Foto)"
             + ");";
 
-    String tablaVentas = "CREATE TABLE IF NOT EXISTS ventas("
-            + "CIF VARCHAR(9), "
-            + "PRIMARY KEY (CIF)"
+    String tablaVentas = "CREATE TABLE IF NOT EXISTS ventas( "
+            + "Codigo CHAR(6),"
+            + "FechaPrevista DATE,"
+            + "Cliente VARCHAR(50),"
+            + "PlazosDePago INT,"
+            + "PRIMARY KEY (Codigo)"
             + ");";
 
-    String insertProveedor = "INSERT INTO proveedores VALUES ('CAD87542G', 'Iago S.L.', 'C/ Calatrava n8', 'iago@safareyes.es', '678542987');";
+    String tablaProductosVentas = "CREATE TABLE IF NOT EXISTS productosvent("
+            + "Codigo CHAR(6),"
+            + "Producto VARCHAR(50),"
+            + "Cantidad VARCHAR(50),"
+            + "PrecioUnidad VARCHAR(50)"
+            + ");";
 
-    String insertRecepcion = "INSERT INTO recepciones VALUES ('HSJF', 'Iago S.L.', '2020-03-04', 'agfg.pdf', '678542987', 'En camino');";
 
 
     String consulta1 = "CREATE DATABASE IF NOT EXISTS erp;";
@@ -1317,10 +1370,8 @@ public class ERPController {
                     st2.executeUpdate(tablaEmpleados);
                     st2.executeUpdate(tablaImgEmpleados);
                     st2.executeUpdate(tablaVentas);
+                    st2.executeUpdate(tablaProductosVentas);
 
-                    //De manera provisional
-                    st2.executeUpdate(insertProveedor);
-                    st2.executeUpdate(insertRecepcion);
 
                     Pnewbd.setVisible(false);
                     nombd = txtnombd.getText();
@@ -1392,7 +1443,7 @@ public class ERPController {
         Image imagenempleados = null;
         try {
             Connection conexion;
-            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getUsuario());
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
             //Creamos la conexion
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             Statement st = conexion.createStatement();
@@ -1465,7 +1516,7 @@ public class ERPController {
         cambiarpanel(panelactual, PanelEmpleados);
         try {
             Connection conexion;
-            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getUsuario());
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
             //Creamos la conexion
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             PreparedStatement ps = conexion.prepareStatement("Insert into empleados values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -1576,13 +1627,14 @@ public class ERPController {
         } else if (PanelAddEmpleados.isVisible() || PanelEditEmpleados.isVisible()) {
             cambiarpanel(panelactual, PanelEmpleados);
         } else if (PanelAddVentas.isVisible()) {
-            cambiarpanel(panelactual, PanelVentas);
+            cambiarpanel(PanelAddVentas, PanelVentas);
         }
     }
 
     @FXML
     void pressbtventas() {
         cambiarpanel(PanelMenuPrincipal, PanelVentas);
+        rellenartablaVentas();
     }
 
     @FXML
@@ -1679,7 +1731,7 @@ public class ERPController {
             tableRecepciones.getItems().clear();
             //Creamos un paciente con los datos extraidos del campo seleccionado de la tabla
             Recepciones rec = tableInventarioRecep.getSelectionModel().getSelectedItem();
-            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getUsuario());
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
             //Creamos la conexion
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             //Creamos el correspondiente Statement con nuestra conexion anterior
@@ -1722,7 +1774,7 @@ public class ERPController {
         try {
             //Creamos un médico con los datos selecionados de la tabla
             Recepciones rec = tableRecepciones.getSelectionModel().getSelectedItem();
-            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getUsuario());
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
             //Creamos la conexion
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             //Creamos el Statement con la conexion
@@ -1763,7 +1815,7 @@ public class ERPController {
             //Ejecutamos dentro de un try para controlar todas las excepciones posibles
             try {
                 //Creamos la conexión con la base de datos
-                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true", singleton.getUsuario());
+                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true", singleton.getNombrebd());
                 conexion = DriverManager.getConnection(conexionerpsusuario, user, pswd);
                 //Utilizamos un PreparedStatement para la consulta para mayor seguridad
 
@@ -1801,7 +1853,7 @@ public class ERPController {
             //Ejecutamos dentro de un try para controlar todas las excepciones posibles
             try {
                 //Creamos la conexión con la base de datos
-                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true", singleton.getUsuario());
+                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true", singleton.getNombrebd());
                 conexion = DriverManager.getConnection(conexionerpsusuario, user, pswd);
                 //Utilizamos un PreparedStatement para la consulta para mayor seguridad
                 PreparedStatement ps = conexion.prepareStatement("INSERT INTO recepciones (Referencia, Nombre, FechaPrevista, Documento) VALUES  (?, ?, ?, ?)");
@@ -1984,7 +2036,7 @@ public class ERPController {
             //Ejecutamos dentro de un try para controlar todas las excepciones posibles
             try {
                 //Creamos la conexión con la base de datos
-                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true", singleton.getUsuario());
+                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true", singleton.getNombrebd());
                 conexion = DriverManager.getConnection(conexionerpsusuario, user, pswd);
                 //Utilizamos un PreparedStatement para la consulta para mayor seguridad
 
@@ -2021,7 +2073,7 @@ public class ERPController {
             Connection conexion = null;
             //Ejecutamos dentro de un try para controlar todas las excepciones posibles
             try {
-                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true", singleton.getUsuario());
+                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true", singleton.getNombrebd());
                 conexion = DriverManager.getConnection(conexionerpsusuario, user, pswd);
                 PreparedStatement ps2 = conexion.prepareStatement("Select Nombre, Tel from Telefono where ");
             } catch (Exception e) {
@@ -2029,7 +2081,7 @@ public class ERPController {
             }
             try {
                 //Creamos la conexión con la base de datos
-                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true", singleton.getUsuario());
+                String conexionerpsusuario = String.format("jdbc:mysql://localhost:3306/%s?useServerPrepStmts=true", singleton.getNombrebd());
                 conexion = DriverManager.getConnection(conexionerpsusuario, user, pswd);
                 //Utilizamos un PreparedStatement para la consulta para mayor seguridad
                 PreparedStatement ps = conexion.prepareStatement("INSERT INTO expediciones (Referencia, Nombre, Direccion, FechaPrevista, Documento) VALUES  (?, ?, ?, ?, ?)");
@@ -2076,7 +2128,7 @@ public class ERPController {
             tablaExp.getItems().clear();
             //Creamos un paciente con los datos extraidos del campo seleccionado de la tabla
             Expediciones exp = TableExpediciones.getSelectionModel().getSelectedItem();
-            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getUsuario());
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
             //Creamos la conexion
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             //Creamos el correspondiente Statement con nuestra conexion anterior
@@ -2119,7 +2171,7 @@ public class ERPController {
         try {
             //Creamos un médico con los datos selecionados de la tabla
             Expediciones exp = tablaExp.getSelectionModel().getSelectedItem();
-            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getUsuario());
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
             //Creamos la conexion
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
             //Creamos el Statement con la conexion
@@ -2380,18 +2432,429 @@ public class ERPController {
     }
 
     @FXML
+    public void pressbtncrearPPresupuestos(){
+        PanelVentas.setVisible(false);
+        PanelAddVentas.setVisible(true);
+        btnCrearPresupuestoPresu.setText("CREAR");
+        lblnuevopresupuesto.setText("/ NUEVO");
+    }
+
+    @FXML
+    public void pressbtncrearpresupuesto(){
+        if(Objects.equals(btnCrearPresupuestoPresu.getText(), "CREAR")){
+            Connection conexion = null;
+            //Ejecutamos el código en un try para controlar las excepciones
+            try {
+                //Creamos la conexion
+                String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
+                conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
+                PreparedStatement ps = conexion.prepareStatement("INSERT INTO Ventas VALUES (?, ?, ?, ?)");
+                ps.setString(1, txtCodigoPresu.getText());
+                ps.setDate(2, Date.valueOf(datePickerPresu.getValue()));
+                ps.setString(3, txtClientePresu.getText());
+                ps.setInt(4, Integer.parseInt(txtPlazosPresu.getText()));
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setHeaderText(null);
+                alert.setTitle("Confirmación");
+                alert.setContentText(String.format("¿Desea añadir la venta con el cliente %s?", txtClientePresu.getText()));
+                Optional<ButtonType> action = alert.showAndWait();
+                //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+                if (action.orElseThrow() == ButtonType.OK) {
+                    ps.execute();
+                    //Creamos el Statement con la conexion
+                    for (Ventas listpresu : listpresupuestos) {
+                        String consulta2 = String.format("Insert into productosvent values ('%s', '%s', '%s', '%s')", listpresu.getCodigo(), listpresu.getProducto(), listpresu.getCantidad(), listpresu.getPreciounidad());
+                        Statement st = conexion.createStatement();
+                        st.execute(consulta2);
+                    }
+                    //Creamos el Statement con la conexion
+                    crearalertainfo("Venta creada");
+                    rellenartablaVentas();
+                    PanelAddVentas.setVisible(false);
+                    PanelVentas.setVisible(true);
+                }
+                //Controlamos las excepciones mostrándolas por la terminal
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if(Objects.equals(btnCrearPresupuestoPresu.getText(), "EDITAR")){
+            Connection conexion = null;
+            //Ejecutamos el código en un try para controlar las excepciones
+            try {
+                //Creamos la conexion
+                String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
+                conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
+
+                PreparedStatement ps = conexion.prepareStatement("UPDATE Ventas SET FechaPrevista = ?, Cliente = ?, PlazosDePago = ? WHERE codigo = ?");
+                ps.setDate(1, Date.valueOf(datePickerPresu.getValue()));
+                ps.setString(2, txtClientePresu.getText());
+                ps.setInt(3, Integer.parseInt(txtPlazosPresu.getText()));
+                ps.setString(4, txtCodigoPresu.getText());
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setHeaderText(null);
+                alert.setTitle("Confirmación");
+                alert.setContentText(String.format("¿Desea actualizar la venta con el cliente %s?", txtClientePresu.getText()));
+                Optional<ButtonType> action = alert.showAndWait();
+                //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+                if (action.orElseThrow() == ButtonType.OK) {
+                    ps.execute();
+                    //Creamos el Statement con la conexion
+                    for (Ventas listpresu : listpresupuestos) {
+                        try {
+                            String consulta2 = String.format("Update productosvent set Cantidad = '%s', PrecioUnidad = '%s' where Codigo = '%s' and Producto = '%s'", listpresu.getCantidad(), listpresu.getPreciounidad(), listpresu.getCodigo(), listpresu.getProducto());
+                            Statement st = conexion.createStatement();
+                            st.execute(consulta2);
+                        } catch (SQLSyntaxErrorException sql){
+                            sql.printStackTrace();
+                            String consulta2 = String.format("Insert into productosvent values ('%s', '%s', '%s', '%s')", listpresu.getCodigo(), listpresu.getProducto(), listpresu.getCantidad(), listpresu.getPreciounidad());
+                            Statement st = conexion.createStatement();
+                            st.execute(consulta2);
+                            break;
+                        }
+                    }
+                    //Creamos el Statement con la conexion
+                    crearalertainfo("Venta editada");
+                    rellenartablaVentas();
+                    PanelAddVentas.setVisible(false);
+                    PanelVentas.setVisible(true);
+                }
+                //Controlamos las excepciones mostrándolas por la terminal
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    private void rellenartablaVentas(){
+        Connection conexion = null;
+        //Ejecutamos el código en un try para controlar las excepciones
+        try {
+            //Creamos la conexion
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
+            conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
+            Statement st = conexion.createStatement();
+            tablePresupuestos.getItems().clear();
+            //Creamos la consulta
+            String consulta = "SELECT Codigo, FechaPrevista, Cliente FROM ventas";
+            //Guardamos la ejecución de la consulta en la variable rs
+            ResultSet rs = st.executeQuery(consulta);
+            //Bucle para seguir importando datos mientras los haya
+            ObservableList<Ventas> obsven = FXCollections.observableArrayList();
+            while (rs.next()) {
+                int cantidad = 0;
+                float precio = 0;
+                float total = 0;
+                Connection con = DriverManager.getConnection(conexionbdusuario, user, pswd);
+                Statement st2 = con.createStatement();
+                String consut = String.format("Select Cantidad, PrecioUnidad from productosvent where codigo = '%s'", rs.getString(1) );
+                ResultSet rs2 = st2.executeQuery(consut);
+                while (rs2.next()){
+                    cantidad = Integer.parseInt(rs2.getString(1));
+                    precio = Float.parseFloat(rs2.getString(2));
+                    total += cantidad*precio*0.21;
+                }
+                //ObservableList para guardar dentro el paciente correspondiente para añadirlo a las columnas
+                //Creamos un paciente, con los campos obtenidos de la consulta
+                obsven.add(new Ventas(rs.getString(1), rs.getDate(2).toLocalDate(), rs.getString(3), "", total+"€"));
+                //Relacionamos la columna con el campo del constructor correcto
+                ColumnCodigoPresu.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+                ColumnFecVentas.setCellValueFactory(new PropertyValueFactory<>("fechaprevista"));
+                ColumnClientePresu.setCellValueFactory(new PropertyValueFactory<>("cliente"));
+                ColumnTotalPresu.setCellValueFactory(new PropertyValueFactory<>("total"));
+                ColumnEstadoPresu.setCellValueFactory(new PropertyValueFactory<>("estado"));
+                //Metemos dentro la tabla paciente la lista creada anteriormente
+                tablePresupuestos.setItems(obsven);
+            }
+            //Refrescamos la tabla paciente
+            tablePresupuestos.refresh();
+            //Controlamos las excepciones mostrándolas por la terminal
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    public void selectAddPresuesto(){
+        Connection conexion = null;
+        //Ejecutaremos el codigo dentro de un try para controlar las excepciones
+        try {
+            //Creamos un médico con los datos selecionados de la tabla
+            Ventas vent = tablaPresuProduc.getSelectionModel().getSelectedItem();
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
+            //Creamos la conexion
+            conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
+            //Creamos el Statement con la conexion
+            Statement st = conexion.createStatement();
+
+            //Creamos la consulta
+            String consulta = String.format("Select Producto, Cantidad, PrecioUnidad from productosvent where codigo = '%s'", vent.getCodigo());
+            //Guardamos dentro del ResulSet la ejecucion de la consulta con la conexion anterior
+            ResultSet rs = st.executeQuery(consulta);
+            //Con un if comprobamos que los datos sean validos
+            while (rs.next()) {
+                if (Objects.equals(rs.getString(1), vent.getProducto())) {
+                    txtProductoPresu.setText(rs.getString(1));
+                    txtCantidadPresu.setText(rs.getString(2));
+                    txtPrecioUnidadPresu.setText(rs.getString(3));
+                    break;
+                }
+            }
+        } catch (NullPointerException pi) {
+            System.out.print("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void selectPresu(){
+        btnCrearPresupuestoPresu.setText("EDITAR");
+        lblnuevopresupuesto.setText("/ EDITAR");
+        Connection conexion = null;
+        //Ejecutaremos el codigo dentro de un try para controlar las excepciones
+        try {
+            //Creamos un médico con los datos selecionados de la tabla
+            Ventas vent = tablePresupuestos.getSelectionModel().getSelectedItem();
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
+            //Creamos la conexion
+            conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
+            //Creamos el Statement con la conexion
+            Statement st = conexion.createStatement();
+
+            String consultainfo = String.format("Select * from Ventas where codigo = '%s'", vent.getCodigo());
+            ResultSet rs3 = st.executeQuery(consultainfo);
+
+            if(rs3.next()){
+                txtCodigoPresu.setText(rs3.getString(1));
+                datePickerPresu.setValue(rs3.getDate(2).toLocalDate());
+                txtClientePresu.setText(rs3.getString(3));
+                txtPlazosPresu.setText(String.valueOf(rs3.getInt(4)));
+            }
+            //Creamos la consulta
+            String consulta = String.format("Select Producto, Cantidad, PrecioUnidad from productosvent where codigo = '%s'", vent.getCodigo());
+            //Guardamos dentro del ResulSet la ejecucion de la consulta con la conexion anterior
+            ResultSet rs = st.executeQuery(consulta);
+            //Con un if comprobamos que los datos sean validos
+            if (rs.next()) {
+                txtProductoPresu.setText(rs.getString(1));
+                txtCantidadPresu.setText(rs.getString(2));
+                txtPrecioUnidadPresu.setText(rs.getString(2));
+            }
+
+            String consulta2 = String.format("Select Producto, Cantidad, PrecioUnidad from productosvent where codigo = '%s'", vent.getCodigo());
+            //Guardamos dentro del ResulSet la ejecucion de la consulta con la conexion anterior
+            ResultSet rs2 = st.executeQuery(consulta2);
+            listpresupuestos.clear();
+            while (rs2.next()) {
+                listpresupuestos.add(new Ventas(vent.getCodigo(),rs2.getString(1), rs2.getString(2), rs2.getString(3), 21.00F, ((Float.parseFloat(rs2.getString(2)) * Float.parseFloat(rs2.getString(3))) * 0.21)+"€"));            }
+            //Controlamos las excepciones mostrandolas por la terminal
+            cambiarpanel(panelactual, PanelAddVentas);
+            rellenartablaAddPresupuestos();
+        } catch (NullPointerException pi) {
+            System.out.print("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void rellenartablaAddPresupuestos() {
+        //Ejecutamos el código en un try para controlar las excepciones
+        tablaPresuProduc.getItems().clear();
+        try {
+            ObservableList<Ventas> obsven = FXCollections.observableArrayList();
+            //Rellenamos los datos de los pacientes con sus respectivos campos
+            ColumnProductoPresu.setCellValueFactory(new PropertyValueFactory<>("producto"));
+            ColumnCantidadPresu.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+            ColumnPrecioUnidadPresu.setCellValueFactory(new PropertyValueFactory<>("preciounidad"));
+            ColumnImpuestoPresu.setCellValueFactory(new PropertyValueFactory<>("impuestos"));
+            ColumnSubTotalPresu.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
+            txtProductoPresu.setText("");
+            txtCantidadPresu.setText("");
+            txtPrecioUnidadPresu.clear();
+            obsven.addAll(listpresupuestos);
+            tablaPresuProduc.setItems(obsven);
+            tablaPresuProduc.refresh();
+            //Controlamos las excepciones mostrándolas por la terminal
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void pressbtnPresuAdd(){
+        //Ejecutamos el código en un try para controlar las excepciones
+        try {
+            listpresupuestos.add(new Ventas(txtCodigoPresu.getText(),txtProductoPresu.getText(), txtCantidadPresu.getText(), txtPrecioUnidadPresu.getText(), 21.00F, (Float.parseFloat(txtCantidadPresu.getText())*Float.parseFloat(txtPrecioUnidadPresu.getText())+"€")));
+            txtProductoPresu.clear();
+            txtCantidadPresu.clear();
+            txtPrecioUnidadPresu.clear();
+            rellenartablaAddPresupuestos();
+
+            //Controlamos las excepciones mostrándolas por la terminal
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+//Proveedores
+    @FXML
     public void pressbtproveedores() {
         PanelProveedores.setVisible(true);
         PaneListaProveedores.setVisible(true);
         PaneAddProveedores.setVisible(false);
         panelactual = PanelCompras;
+        rellenarTabProveedores();
     }
 
     @FXML
     public void pressbtnAddcrearproveedores() {
         PaneListaProveedores.setVisible(false);
         PaneAddProveedores.setVisible(true);
+    }
 
+    private void rellenarTabProveedores(){
+        Connection conexion = null;
+        //Ejecutamos el código en un try para controlar las excepciones
+        try {
+            //Creamos la conexion
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
+            conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
+            Statement st = conexion.createStatement();
+            tablaProveedores.getItems().clear();
+            //Creamos la consulta
+            String consulta = "SELECT Nombre FROM proveedores";
+            //Guardamos la ejecución de la consulta en la variable rs
+            ResultSet rs = st.executeQuery(consulta);
+            //Bucle para seguir importando datos mientras los haya
+            ObservableList<Proveedores> obspro = FXCollections.observableArrayList();
+            while (rs.next()) {
+                //ObservableList para guardar dentro el paciente correspondiente para añadirlo a las columnas
+                //Creamos un paciente, con los campos obtenidos de la consulta
+                obspro.add(new Proveedores(rs.getString(1)));
+                //Relacionamos la columna con el campo del constructor correcto
+                ColumnNombreProveedores.setCellValueFactory(new PropertyValueFactory<>("Nombre"));
+                //Metemos dentro la tabla paciente la lista creada anteriormente
+                tablaProveedores.setItems(obspro);
+            }
+            //Refrescamos la tabla paciente
+            tablaProveedores.refresh();
+            //Controlamos las excepciones mostrándolas por la terminal
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void pressbtncrearproveedores() {
+        if(Objects.equals(btnCrearProveedores.getText(), "CREAR")){
+            Connection conexion = null;
+            //Ejecutamos el código en un try para controlar las excepciones
+            try {
+                //Creamos la conexion
+                String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
+                conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
+                PreparedStatement ps = conexion.prepareStatement("INSERT INTO Proveedores VALUES (?, ?, ?, ?, ?)");
+                ps.setString(1, txtNifProve.getText());
+                ps.setString(2, txtNombreEmpresaProve.getText());
+                ps.setString(3, txtDireccionProve.getText());
+                ps.setString(4, txtemailProve.getText());
+                ps.setString(5, txtTelefonoProve.getText());
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setHeaderText(null);
+                alert.setTitle("Confirmación");
+                alert.setContentText(String.format("¿Desea añadir el proveedor %s?", txtNombreEmpresaProve.getText()));
+                Optional<ButtonType> action = alert.showAndWait();
+                //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+                if (action.orElseThrow() == ButtonType.OK) {
+                    ps.execute();
+                    //Creamos el Statement con la conexion
+                    crearalertainfo("Cliente creado");
+                    rellenarTabClientes();
+                    PaneAddProveedores.setVisible(false);
+                    PaneListaProveedores.setVisible(true);
+                }
+                //Controlamos las excepciones mostrándolas por la terminal
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if(Objects.equals(btnCrearProveedores.getText(), "EDITAR")){
+            Connection conexion = null;
+            //Ejecutamos el código en un try para controlar las excepciones
+            try {
+                //Creamos la conexion
+                String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
+                conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
+                PreparedStatement ps = conexion.prepareStatement("UPDATE Proveedores SET Nombre = ?, Direccion = ?, Email = ?, Tel = ? WHERE CIF = ?");
+                ps.setString(1, txtNombreEmpresaProve.getText());
+                ps.setString(2, txtDireccionProve.getText());
+                ps.setString(3, txtemailProve.getText());
+                ps.setString(4, txtTelefonoProve.getText());
+                ps.setString(5, txtNifProve.getText());
+
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setHeaderText(null);
+                alert.setTitle("Confirmación");
+                alert.setContentText(String.format("¿Desea editar el proveedor %s?", txtNombreEmpresaProve.getText()));
+                Optional<ButtonType> action = alert.showAndWait();
+                //Comprobamos si el usuario ha presionado el boton Ok, si es asi, ejecutaremos los siguientes metodos
+                if (action.orElseThrow() == ButtonType.OK) {
+                    ps.execute();
+                    //Creamos el Statement con la conexion
+                    crearalertainfo("Proveedor editado");
+                    btnCrearProveedores.setText("CREAR");
+                    txtNifProve.setDisable(false);
+                    rellenarTabProveedores();
+                    PaneAddProveedores.setVisible(false);
+                    PaneListaProveedores.setVisible(true);
+                }
+                //Controlamos las excepciones mostrándolas por la terminal
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    public void selectProveedor(){
+        Connection conexion = null;
+        //Ejecutaremos el codigo dentro de un try para controlar las excepciones
+        try {
+            //Creamos un médico con los datos selecionados de la tabla
+            Proveedores pro = tablaProveedores.getSelectionModel().getSelectedItem();
+            String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
+            //Creamos la conexion
+            conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
+            //Creamos el Statement con la conexion
+            Statement st = conexion.createStatement();
+            //Creamos la consulta
+            String consulta = String.format("Select * from proveedores where nombre = '%s'", pro.getNombre());
+            //Guardamos dentro del ResulSet la ejecucion de la consulta con la conexion anterior
+            ResultSet rs = st.executeQuery(consulta);
+            if(rs.next()){
+                PaneAddProveedores.setVisible(true);
+                txtNifProve.setDisable(true);
+                btnCrearProveedores.setText("EDITAR");
+                txtNifProve.setText(rs.getString("CIF"));
+                txtNombreEmpresaProve.setText(rs.getString("Nombre"));
+                txtDireccionProve.setText(rs.getString("Direccion"));
+                txtemailProve.setText(rs.getString("Email"));
+                txtTelefonoProve.setText(rs.getString("Tel"));
+            } else{
+                crearalertaerror("Ha ocurrido un error");
+            }
+            //Controlamos las excepciones mostrandolas por la terminal
+        } catch (NullPointerException pi) {
+            System.out.print("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

@@ -1317,16 +1317,16 @@
       </AnchorPane>
       <AnchorPane fx:id="PanelVentas" layoutX="10.0" layoutY="93.0" prefHeight="1007.0" prefWidth="1930.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="83.0">
          <children>
-            <TableView fx:id="tablePresupuestos" layoutX="151.0" layoutY="196.0" onMouseClicked="#selectInventario" prefHeight="678.0" prefWidth="1629.0" stylesheets="@css/darkmode.css" AnchorPane.bottomAnchor="133.0" AnchorPane.leftAnchor="151.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="196.0">
+            <TableView fx:id="tablePresupuestos" layoutX="151.0" layoutY="196.0" onMouseClicked="#selectPresu" prefHeight="678.0" prefWidth="1629.0" stylesheets="@css/darkmode.css" AnchorPane.bottomAnchor="133.0" AnchorPane.leftAnchor="151.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="196.0">
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
                <columns>
-                  <TableColumn fx:id="contactocolumn1" editable="false" prefWidth="154.0" sortable="false" styleClass="celdas" text="Número" />
-                  <TableColumn id="celdas" fx:id="Referenciacolumn1" prefWidth="75.0" text="Fecha de Creación" />
-                  <TableColumn id="celdas" fx:id="Fechacolumn1" prefWidth="75.0" text="Cliente" />
-                  <TableColumn id="celdas" fx:id="Documentocolumn1" prefWidth="75.0" text="Total" />
-                  <TableColumn id="celdas" fx:id="Estadocolumn1" prefWidth="75.0" text="Estado" />
+                  <TableColumn fx:id="ColumnCodigoPresu" editable="false" prefWidth="154.0" sortable="false" styleClass="celdas" text="Código" />
+                  <TableColumn id="celdas" fx:id="ColumnFecVentas" prefWidth="75.0" text="Fecha de Prevista" />
+                  <TableColumn id="celdas" fx:id="ColumnClientePresu" prefWidth="75.0" text="Cliente" />
+                  <TableColumn id="celdas" fx:id="ColumnTotalPresu" prefWidth="75.0" text="Total" />
+                  <TableColumn id="celdas" fx:id="ColumnEstadoPresu" prefWidth="75.0" text="Estado" />
                </columns>
                <opaqueInsets>
                   <Insets />
@@ -1346,12 +1346,12 @@
                   </Label>
                </children>
             </AnchorPane>
-            <Button id="btscrear" fx:id="btnCrearPresupuestos" layoutX="27.0" layoutY="100.0" mnemonicParsing="false" onAction="#pressbtncrear" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="100.0">
+            <Button id="btscrear" fx:id="btnCrearPresupuestos" layoutX="27.0" layoutY="100.0" mnemonicParsing="false" onAction="#pressbtncrearPPresupuestos" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="100.0">
                <font>
                   <Font name="Comic Sans MS Bold" size="14.0" />
                </font>
             </Button>
-            <AnchorPane id="panelempleados" prefHeight="83.0" prefWidth="1930.0" stylesheets="@css/darkmode.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-2.0">
+            <AnchorPane id="panelempleados" fx:id="panelsuperiorventas" prefHeight="83.0" prefWidth="1930.0" stylesheets="@css/darkmode.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-2.0">
                <children>
                   <Label fx:id="lblnombreusuario11" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="23.0" prefHeight="37.0" prefWidth="161.0" text="Presupuestos" textFill="WHITE" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="23.0">
                      <font>
@@ -1429,7 +1429,7 @@
                <content>
                   <AnchorPane>
                      <children>
-                        <Button id="btscrear" fx:id="btnCrearEmpleados11" layoutX="1850.0" layoutY="14.0" mnemonicParsing="false" onAction="#pressbtncrear" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE" AnchorPane.rightAnchor="13.999999999999957" AnchorPane.topAnchor="14.0">
+                        <Button id="btscrear" fx:id="btnCrearPresupuestoPresu" layoutX="1850.0" layoutY="14.0" mnemonicParsing="false" onAction="#pressbtncrearpresupuesto" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE" AnchorPane.rightAnchor="13.999999999999957" AnchorPane.topAnchor="14.0">
                            <font>
                               <Font name="Comic Sans MS Bold" size="14.0" />
                            </font>
@@ -1444,27 +1444,27 @@
                               <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <TextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="328.0" promptText="Cliente" GridPane.rowIndex="1">
+                              <TextField fx:id="txtClientePresu" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="328.0" promptText="Cliente" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="22.0" />
                                  </font>
                               </TextField>
-                              <DatePicker maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="217.0" promptText="Expiración" GridPane.columnIndex="1" />
-                              <TextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="206.0" promptText="Plazos de pago" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <TextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="71.0" prefWidth="365.0" promptText="SE2002">
+                              <DatePicker fx:id="datePickerPresu" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="217.0" promptText="Expiración" GridPane.columnIndex="1" />
+                              <TextField fx:id="txtPlazosPresu" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="206.0" promptText="Plazos de pago" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="txtCodigoPresu" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="71.0" prefWidth="365.0" promptText="SE2002">
                                  <font>
                                     <Font size="30.0" />
                                  </font>
                               </TextField>
                            </children>
                         </GridPane>
-                        <TableView fx:id="tablaExp1" editable="true" layoutX="442.0" layoutY="326.0" onMouseClicked="#selectAddExpediciones" prefHeight="220.0" prefWidth="1043.0" AnchorPane.bottomAnchor="39.60000000000002" AnchorPane.leftAnchor="442.0" AnchorPane.rightAnchor="443.5999999999999">
+                        <TableView fx:id="tablaPresuProduc" editable="true" layoutX="442.0" layoutY="326.0" onMouseClicked="#selectAddPresuesto" prefHeight="220.0" prefWidth="1043.0" AnchorPane.bottomAnchor="39.60000000000002" AnchorPane.leftAnchor="442.0" AnchorPane.rightAnchor="443.5999999999999">
                            <columns>
-                              <TableColumn prefWidth="664.0" text="Producto" />
-                              <TableColumn prefWidth="378.0" text="Cantidad" />
-                              <TableColumn prefWidth="664.0" text="Precio unidad" />
-                              <TableColumn prefWidth="664.0" text="Impuestos %" />
-                              <TableColumn prefWidth="664.0" text="Subtotal" />
+                              <TableColumn fx:id="ColumnProductoPresu" prefWidth="664.0" text="Producto" />
+                              <TableColumn fx:id="ColumnCantidadPresu" prefWidth="378.0" text="Cantidad" />
+                              <TableColumn fx:id="ColumnPrecioUnidadPresu" prefWidth="664.0" text="Precio unidad" />
+                              <TableColumn fx:id="ColumnImpuestoPresu" prefWidth="664.0" text="Impuestos %" />
+                              <TableColumn fx:id="ColumnSubTotalPresu" prefWidth="664.0" text="Subtotal" />
                            </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -1472,14 +1472,14 @@
                         </TableView>
                         <HBox alignment="CENTER" layoutX="442.0" layoutY="286.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="31.0" prefWidth="1043.0" spacing="50.0" AnchorPane.leftAnchor="442.0" AnchorPane.rightAnchor="443.5999999999999" AnchorPane.topAnchor="286.0">
                            <children>
-                              <TextField prefHeight="25.0" prefWidth="272.0" promptText="Producto" />
-                              <TextField fx:id="txtProductoExp1" minHeight="-Infinity" minWidth="130.0" prefHeight="31.0" prefWidth="144.0" promptText="Cantidad" stylesheets="@css/darkmode.css">
+                              <TextField fx:id="txtProductoPresu" prefHeight="25.0" prefWidth="272.0" promptText="Producto" />
+                              <TextField fx:id="txtCantidadPresu" minHeight="-Infinity" minWidth="130.0" prefHeight="31.0" prefWidth="144.0" promptText="Cantidad" stylesheets="@css/darkmode.css">
                                  <padding>
                                     <Insets right="50.0" />
                                  </padding>
                               </TextField>
-                              <TextField fx:id="txtCantidadExp1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="31.0" prefWidth="137.0" promptText="Precio unidad" stylesheets="@css/darkmode.css" />
-                              <Button id="btscrear" fx:id="btnExpAdd1" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressbtnExpAdd" prefHeight="31.0" prefWidth="82.0" stylesheets="@css/darkmode.css" text="AÑADIR" textFill="WHITE">
+                              <TextField fx:id="txtPrecioUnidadPresu" minHeight="-Infinity" minWidth="-Infinity" prefHeight="31.0" prefWidth="137.0" promptText="Precio unidad" stylesheets="@css/darkmode.css" />
+                              <Button id="btscrear" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressbtnPresuAdd" prefHeight="31.0" prefWidth="82.0" stylesheets="@css/darkmode.css" text="AÑADIR" textFill="WHITE">
                                  <font>
                                     <Font name="Comic Sans MS Bold" size="14.0" />
                                  </font>
@@ -1488,7 +1488,7 @@
                         </HBox>
                         <AnchorPane id="panelsmenu" fx:id="BarraSuperior11" layoutX="442.0" layoutY="554.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="31.0" prefWidth="1043.0" stylesheets="@css/darkmode.css">
                            <children>
-                              <Label fx:id="lbltotalventas1" alignment="CENTER" layoutX="720.0" layoutY="-1.0" minHeight="-Infinity" prefHeight="30.0" prefWidth="246.0" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="720.0" AnchorPane.rightAnchor="77.0">
+                              <Label fx:id="lbltotalventasProductos" alignment="CENTER" layoutX="720.0" layoutY="-1.0" minHeight="-Infinity" prefHeight="30.0" prefWidth="246.0" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="720.0" AnchorPane.rightAnchor="77.0">
                                  <font>
                                     <Font name="Comic Sans MS" size="20.0" />
                                  </font>
@@ -1506,7 +1506,7 @@
             </ScrollPane>
             <AnchorPane id="panelempleados" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="85.0" prefWidth="1930.0" stylesheets="@css/darkmode.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-2.0">
                <children>
-                  <Label fx:id="lblnombreusuario111" alignment="CENTER_RIGHT" layoutX="220.0" layoutY="27.0" prefHeight="34.0" prefWidth="102.0" text="/ NUEVO" textFill="WHITE" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="27.0">
+                  <Label fx:id="lblnuevopresupuesto" alignment="CENTER_RIGHT" layoutX="220.0" layoutY="27.0" prefHeight="34.0" prefWidth="102.0" text="/ NUEVO" textFill="WHITE" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="27.0">
                      <font>
                         <Font name="Comic Sans MS Bold" size="22.0" />
                      </font>
@@ -1590,9 +1590,9 @@
                   </Button>
                   <AnchorPane fx:id="PaneListaProveedores" layoutX="-2.0" layoutY="64.0" prefHeight="559.0" prefWidth="1130.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
-                        <TableView layoutX="711.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="559.0" prefWidth="405.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="14.000000000000227" AnchorPane.topAnchor="0.0">
+                        <TableView fx:id="tablaProveedores" layoutX="711.0" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#selectProveedor" prefHeight="559.0" prefWidth="405.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="14.000000000000227" AnchorPane.topAnchor="0.0">
                            <columns>
-                              <TableColumn prefWidth="75.0" text="Lista de Proveedores" />
+                              <TableColumn fx:id="ColumnNombreProveedores" prefWidth="75.0" text="Lista de Proveedores" />
                            </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -1611,20 +1611,20 @@
                            <content>
                               <AnchorPane prefHeight="559.0" prefWidth="629.0">
                                  <children>
-                                    <Button id="btscrear" fx:id="btnCrearEmpleados1112" layoutX="318.0" layoutY="444.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressbtncrearcliente" prefHeight="56.0" prefWidth="135.0" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE" AnchorPane.bottomAnchor="93.0" AnchorPane.leftAnchor="318.0" AnchorPane.rightAnchor="317.0">
+                                    <Button id="btscrear" fx:id="btnCrearProveedores" layoutX="318.0" layoutY="444.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressbtncrearproveedores" prefHeight="56.0" prefWidth="135.0" stylesheets="@css/darkmode.css" text="CREAR" textFill="WHITE" AnchorPane.bottomAnchor="93.0" AnchorPane.leftAnchor="318.0" AnchorPane.rightAnchor="317.0">
                                        <font>
                                           <Font name="Comic Sans MS Bold" size="22.0" />
                                        </font>
                                     </Button>
-                                    <TextField layoutX="57.0" layoutY="135.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="81.0" prefWidth="365.0" promptText="Nombre de la empresa" AnchorPane.bottomAnchor="376.4" AnchorPane.leftAnchor="57.0" AnchorPane.rightAnchor="647.6000000000003" AnchorPane.topAnchor="135.0">
+                                    <TextField fx:id="txtNombreEmpresaProve" layoutX="57.0" layoutY="135.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="81.0" prefWidth="365.0" promptText="Nombre de la empresa" AnchorPane.bottomAnchor="376.4" AnchorPane.leftAnchor="57.0" AnchorPane.rightAnchor="647.6000000000003" AnchorPane.topAnchor="135.0">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
                                     </TextField>
-                                    <TextField layoutX="57.0" layoutY="281.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="31.0" prefWidth="255.0" promptText="Dirección" AnchorPane.leftAnchor="57.0" />
-                                    <TextField layoutX="777.0" layoutY="186.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="31.0" prefWidth="179.0" promptText="NIF" AnchorPane.rightAnchor="114.00000000000023" AnchorPane.topAnchor="186.0" />
-                                    <TextField layoutX="777.0" layoutY="281.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="31.0" prefWidth="230.0" promptText="Teléfono" AnchorPane.rightAnchor="63.0" AnchorPane.topAnchor="281.0" />
-                                    <TextField layoutX="51.0" layoutY="352.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="31.0" prefWidth="246.0" promptText="Correo electrónico" />
+                                    <TextField fx:id="txtDireccionProve" layoutX="57.0" layoutY="281.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="31.0" prefWidth="255.0" promptText="Dirección" AnchorPane.leftAnchor="57.0" />
+                                    <TextField fx:id="txtNifProve" layoutX="777.0" layoutY="186.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="31.0" prefWidth="179.0" promptText="NIF" AnchorPane.rightAnchor="114.00000000000023" AnchorPane.topAnchor="186.0" />
+                                    <TextField fx:id="txtTelefonoProve" layoutX="777.0" layoutY="281.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="31.0" prefWidth="230.0" promptText="Teléfono" AnchorPane.rightAnchor="63.0" AnchorPane.topAnchor="281.0" />
+                                    <TextField fx:id="txtemailProve" layoutX="51.0" layoutY="352.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="31.0" prefWidth="246.0" promptText="Correo electrónico" />
                                  </children>
                               </AnchorPane>
                            </content>

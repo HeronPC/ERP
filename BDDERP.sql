@@ -10,6 +10,23 @@ CREATE OR REPLACE TABLE proveedores(
     Tel CHAR(9) UNIQUE
 );
 
+CREATE TABLE IF NOT EXISTS ventas(
+Codigo CHAR(6),
+FechaPrevista DATE,
+Cliente VARCHAR(50),
+PlazosDePago INT,
+PRIMARY KEY (Codigo)
+);
+
+CREATE TABLE IF NOT EXISTS productosvent(
+Codigo CHAR(6),
+Producto VARCHAR(50),
+Cantidad VARCHAR(50),
+PrecioUnidad VARCHAR(50),
+PRIMARY KEY (codigo)
+);
+            
+         
 CREATE OR REPLACE TABLE recepciones(
     Referencia VARCHAR(15) PRIMARY KEY,
     Nombre VARCHAR(50),
@@ -104,6 +121,7 @@ CREATE OR REPLACE TABLE imgempleados(
     Foto VARCHAR(255),
     image BLOB (524288000)
 );
+
 
 INSERT INTO proveedores VALUES ('CAD87542G', 'Iago S.L.', 'C/ Calatrava n8', 'iago@safareyes.es', '678542987');
 
