@@ -3,6 +3,10 @@ module sge.proyectoerp {
     requires javafx.fxml;
     requires java.sql;
     requires javafx.swing;
+    requires layout;
+    requires io;
+    requires kernel;
+    requires org.apache.pdfbox;
 
 
     opens sge.proyectoerp to javafx.fxml;

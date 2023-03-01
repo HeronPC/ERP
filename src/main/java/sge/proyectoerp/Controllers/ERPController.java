@@ -1,7 +1,20 @@
 package sge.proyectoerp.Controllers;
 
+import com.itextpdf.layout.property.UnitValue;
+import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.HorizontalAlignment;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,6 +23,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -21,6 +35,8 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
 import sge.proyectoerp.ERPApplication;
 import sge.proyectoerp.Models.*;
 
@@ -28,6 +44,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -667,6 +684,48 @@ public class ERPController {
     @FXML
     private Pane PaneListaClientes;
 
+    @FXML
+    private TableView<Producto> TbProdFact;
+
+    @FXML
+    private AnchorPane PanelFacturacion;
+
+    @FXML
+    private TextField txtidFactura;
+
+    @FXML
+    private TextField txtcliente;
+
+    @FXML
+    private DatePicker txtfeclim;
+
+    @FXML
+    private Label  lbltotalfactura;
+
+    @FXML
+    private ScrollPane PdfViewer;
+
+    @FXML
+    private Pane PanelAddFacturas;
+
+    @FXML
+    private  Pane PanelVerFactura;
+
+    @FXML
+    public void pressbtnAddcrearcliente(ActionEvent event) {
+        PaneListaClientes.setVisible(false);
+        PaneAddClientes.setVisible(true);
+    }
+    @FXML
+    public void pressbtncrearcliente(ActionEvent event) {
+    }
+    @FXML
+    public void pressbtproveedores(ActionEvent event) {
+        PanelProveedores.setVisible(true);
+        PaneListaProveedores.setVisible(true);
+        PaneAddProveedores.setVisible(false);
+        panelactual = PanelCompras;
+    }
     //Variables nuevas
     private Pane panelactual;
 
@@ -1622,23 +1681,27 @@ public class ERPController {
             cambiarpanel(panelactual, PanelExpediciones);
         } else if (PanelAddDevoluciones.isVisible()) {
             cambiarpanel(panelactual, PanelDevoluciones);
-        } else if (PanelAddVentas.isVisible()) {
+        } else if (PanelAddVentas.isVisible()){
             cambiarpanel(panelactual, PanelVentas);
-        } else if (PanelAddEmpleados.isVisible() || PanelEditEmpleados.isVisible()) {
+        }else if (PanelVerFactura.isVisible()){
+            cambiarpanel(panelactual,PanelAddFacturas);
+        } else if (PanelAddFacturas.isVisible()){
+            cambiarpanel(panelactual,PanelFacturacion);
+        }else if (PanelAddEmpleados.isVisible() || PanelEditEmpleados.isVisible()) {
             cambiarpanel(panelactual, PanelEmpleados);
-        } else if (PanelAddVentas.isVisible()) {
-            cambiarpanel(PanelAddVentas, PanelVentas);
         }
     }
 
     @FXML
     void pressbtventas() {
+        txtidpagina.setText("VENTAS");
         cambiarpanel(PanelMenuPrincipal, PanelVentas);
         rellenartablaVentas();
     }
 
     @FXML
     void pressbtcompras() {
+        txtidpagina.setText("COMPRAS");
         cambiarpanel(PanelMenuPrincipal, PanelCompras);
     }
 
@@ -1656,7 +1719,90 @@ public class ERPController {
 
     @FXML
     void pressbtfacturacion() {
+        cambiarpanel(PanelMenuPrincipal, PanelFacturacion);
+        txtidpagina.setText("FACTURACIÓN");
+    }
+    public void crearFactura(String idfactura, String nombreCliente, String fecha, String Total) throws IOException {
+        // Crear el objeto PdfWriter para escribir el documento en un archivo
+        PdfWriter writer = new PdfWriter("factura.pdf");
+        // Crear el objeto PdfDocument
+        PdfDocument pdf = new PdfDocument(writer);
+        // Crear el objeto Document
+        Document document = new Document(pdf, PageSize.A4);
+        // Crear el objeto PdfFont
+        PdfFont font = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
+        // Agregar el encabezado de la factura
+        Paragraph titulo = new Paragraph("Factura").setFont(font).setFontSize(18);
+        titulo.setHorizontalAlignment(HorizontalAlignment.CENTER);
+        document.add(titulo);
+        document.add(new Paragraph("Número de factura: " + idfactura).setFont(font));
+        document.add(new Paragraph("Fecha: " + fecha).setFont(font));
+        document.add(new Paragraph("Cliente: " + nombreCliente).setFont(font));
 
+        // Agregar la tabla de productos
+        Table tablaProductosPDF = new Table(new float[]{2, 1, 1, 1, 1});
+        tablaProductosPDF.setWidth(525);
+        tablaProductosPDF.addHeaderCell(new Cell().add(new Paragraph("Producto").setFont(font).setBold()));
+        tablaProductosPDF.addHeaderCell(new Cell().add(new Paragraph("Cantidad").setFont(font).setBold()));
+        tablaProductosPDF.addHeaderCell(new Cell().add(new Paragraph("Precio unitario").setFont(font).setBold()));
+        tablaProductosPDF.addHeaderCell(new Cell().add(new Paragraph("Impuestos").setFont(font).setBold()));
+        tablaProductosPDF.addHeaderCell(new Cell().add(new Paragraph("Subtotal").setFont(font).setBold()));
+
+        for (Producto producto : TbProdFact.getItems()) {
+            tablaProductosPDF.addCell(new Cell().add(new Paragraph(producto.getNombreProducto()).setFont(font)));
+            tablaProductosPDF.addCell(new Cell().add(new Paragraph(String.valueOf(producto.getCantidad())).setFont(font)));
+            tablaProductosPDF.addCell(new Cell().add(new Paragraph(String.valueOf(producto.getPrecioUnitario())).setFont(font)));
+            tablaProductosPDF.addCell(new Cell().add(new Paragraph(String.valueOf(producto.getImpuestos())).setFont(font)));
+            tablaProductosPDF.addCell(new Cell().add(new Paragraph(String.valueOf(producto.getSubtotal())).setFont(font)));
+        }
+        document.add(tablaProductosPDF);
+        Paragraph total = new Paragraph("Total:" + Total).setFont(font).setFontSize(18);
+        total.setHorizontalAlignment(HorizontalAlignment.RIGHT).setMarginRight(20f);
+        document.add(total);
+        // Cerrar el documento y liberar recursos
+        document.close();
+        pdf.close();
+    }
+    @FXML
+    public void abrirPDF() throws IOException {
+        crearFactura(txtidFactura.getText(),txtcliente.getText(), String.valueOf(txtfeclim.getValue()), lbltotalfactura.getText());
+        System.out.println("macaco");
+        PanelAddFacturas.setVisible(false);
+        PanelVerFactura.setVisible(true);
+        File archivoPDF = new File("factura.pdf");
+        // Carga el archivo PDF en PDDocument
+        PDDocument documento = PDDocument.load(archivoPDF);
+
+        // Crea un objeto PDFRenderer para renderizar las páginas
+        PDFRenderer renderer = new PDFRenderer(documento);
+
+        // Crea un ImageView para mostrar las páginas
+        ImageView imageView = new ImageView();
+
+        // Crea un ScrollPane para permitir la navegación por las páginas
+        PdfViewer.setContent(imageView);
+
+        // Renderiza la primera página y la muestra en el ImageView
+        BufferedImage image = renderer.renderImage(0);
+        Image fxImage = SwingFXUtils.toFXImage(image, null);
+        imageView.setImage(fxImage);
+
+        // Agrega un listener al ScrollPane para detectar los cambios de scroll
+        PdfViewer.vvalueProperty().addListener((observable, oldValue, newValue) -> {
+            // Calcula el número de página que se debe mostrar
+            int pageIndex = (int) Math.round(newValue.doubleValue() * (documento.getNumberOfPages() - 1));
+
+            // Renderiza la página correspondiente y la muestra en el ImageView
+            try {
+                BufferedImage image2 = renderer.renderImage(pageIndex);
+                Image fxImage2 = SwingFXUtils.toFXImage(image2, null);
+                imageView.setImage(fxImage2);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Cierra el documento al salir del método
     }
 
     @FXML
@@ -1709,6 +1855,8 @@ public class ERPController {
             cambiarpanel(PanelEmpleados, PanelAddEmpleados);
         } else if (PanelVentas.isVisible()) {
             cambiarpanel(PanelVentas, PanelAddVentas);
+        } else if(PanelFacturacion.isVisible()){
+            cambiarpanel(PanelFacturacion,PanelAddFacturas);
         }
     }
 
