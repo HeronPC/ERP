@@ -755,7 +755,7 @@ public class ERPController {
     //Esta variable tiene el usuario con el que nos conectaremos a la base de datos
     private final String user = "root";
     //Esta es la contraseña del usuario anterior para conectarnos a la base de datos
-    private final String pswd = "root";
+    private final String pswd = "1492";
 
     //Debes crear otro método que añada los distintos departamentos que se vayan creando en la base de datos y se rellenen los gridlayout de los distintos departamentos
     int counter = 0;
@@ -931,7 +931,7 @@ public class ERPController {
     }
 
     @FXML
-    public void pressbtnacceder() throws IOException {
+    public void pressbtnacceder(ActionEvent event) throws IOException {
         //Definimos conexion como null
         Connection conexion = null;
         //Ejecutamos el comprobarlogin para controlar posibles fallos a la hora de hacer la consulta
@@ -962,6 +962,7 @@ public class ERPController {
                         if (rs.next()) {
                             //Comparamos los datos introducidos por el usuario con la contraseña que nos ha dado la consulta anterior
                             if (Objects.equals(rs.getString(1), txtcontrasena.getText())) {
+                                ((Node) (event.getSource())).getScene().getWindow().hide();
                                 //Abrimos la ventana principal
                                 setUser();
                                 String condel = "Delete from usuarioactual";
@@ -1231,14 +1232,15 @@ public class ERPController {
             ResultSet rs = st.executeQuery(consulta);
 
             adddirbotones(listabotonesacceder, btaccederbd1, btaccederbd2, btaccederbd3, btaccederbd4);
-
             adddirbotones(listabotoneliminar, bteliminarbd1, bteliminarbd2, bteliminarbd3, bteliminarbd4);
 
             addlabels();
             listabds.clear();
             while (rs.next()) {
+                listabotonesacceder.get(cont).setStyle("-fx-background-radius: 20 20 20 20; -fx-background-color: #2F3636; -fx-border-width: 0.1; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 0); -fx-text-fill: white");
                 listabotonesacceder.get(cont).setId(rs.getString(1) + rs.getString(2).substring(0, 3));
                 listabotonesacceder.get(cont).setVisible(true);
+                listabotoneliminar.get(cont).setStyle("-fx-background-radius: 20 20 20 20; -fx-background-color: #2F3636; -fx-border-width: 0.1; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 0); -fx-text-fill: white");
                 listabotoneliminar.get(cont).setId(rs.getString(1) + rs.getString(2).substring(0, 3));
                 listabotoneliminar.get(cont).setVisible(true);
                 listalabels.get(cont).setId(rs.getString(1) + rs.getString(2).substring(0, 3));
@@ -1538,7 +1540,8 @@ public class ERPController {
                 bteditar.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(java.awt.event.ActionEvent ed) {
-                        cambiarpanel(PanelEmpleados, PanelEditEmpleados);
+                        PanelEmpleados.setVisible(false);
+                        PanelEditEmpleados.setVisible(true);
                     }
                 });
                 bteliminar.addActionListener(e -> {
