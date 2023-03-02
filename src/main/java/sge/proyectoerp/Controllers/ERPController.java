@@ -1173,15 +1173,21 @@ public class ERPController {
     }
 
     private void cargarerp(Pane root, String nombrebd) throws IOException {
+        //Obtiene el usuario logeado
         pruebauser = singleton.getUsuario();
         URL url;
+        //Coge el nombre de la base de datos seleccionada para cargarlo
         singleton.setNombrebd(nombrebd);
+        //Cambia el label del nombre de usuario
         Label myLabel = (Label) root.lookup("#lblnombreusuario");
+        //Carga el fxml del erp
         url = Paths.get("./src/main/resources/sge/proyectoerp/erp.fxml").toUri().toURL();
         root = FXMLLoader.load(url);
+        //Establece la escena con un tamaño
         Scene scene = new Scene(root, 1536, 790);
         stageerp.setScene(scene);
         stageerp.centerOnScreen();
+        //Amplia la ventana
         stageerp.setMaximized(true);
         stageerp.show();
         usuario = singleton.getUsuario();
@@ -1189,34 +1195,38 @@ public class ERPController {
     }
 
     @FXML
-    public void accederbd1() throws IOException {
+    public void accederbd1() throws IOException {//Accede a la base de datos 1
         URL url = Paths.get("./src/main/resources/sge/proyectoerp/bd.fxml").toUri().toURL();
         Pane root = FXMLLoader.load(url);
+        //Obtiene el nombre de la base de datos
         String nombrebd = listabotonesacceder.get(0).getId();
         cargarerp(root, nombrebd);
     }
 
 
     @FXML
-    public void accederbd2() throws IOException {
+    public void accederbd2() throws IOException {//Accede a la base de datos 2
         URL url = Paths.get("./src/main/resources/sge/proyectoerp/bd.fxml").toUri().toURL();
         Pane root = FXMLLoader.load(url);
+        //Obtiene el nombre de la base de datos
         String nombrebd = listabotonesacceder.get(1).getId();
         cargarerp(root, nombrebd);
     }
 
     @FXML
-    public void accederbd3() throws IOException {
+    public void accederbd3() throws IOException {//Accede a la base de datos 3
         URL url = Paths.get("./src/main/resources/sge/proyectoerp/bd.fxml").toUri().toURL();
         Pane root = FXMLLoader.load(url);
+        //Obtiene el nombre de la base de datos
         String nombrebd = listabotonesacceder.get(2).getId();
         cargarerp(root, nombrebd);
     }
 
     @FXML
-    public void accederbd4() throws IOException {
+    public void accederbd4() throws IOException {//Accede a la base de datos 4
         URL url = Paths.get("./src/main/resources/sge/proyectoerp/bd.fxml").toUri().toURL();
         Pane root = FXMLLoader.load(url);
+        //Obtiene el nombre de la base de datos
         String nombrebd = listabotonesacceder.get(3).getId();
         cargarerp(root, nombrebd);
     }
@@ -1228,21 +1238,22 @@ public class ERPController {
             conexion = DriverManager.getConnection(conexionerp, user, pswd);
             //Creamos la consulta con PreparedStatement
             Statement st = conexion.createStatement();
+            //Obtiene todas las bases de datos del usuario logeado
             String consulta = String.format("Select nombre, usuario from bds where usuario = '%s'", prubuser);
             ResultSet rs = st.executeQuery(consulta);
-
+            //Añade los botones a una lista, una de botones de eliminar y otros de acceder
             adddirbotones(listabotonesacceder, btaccederbd1, btaccederbd2, btaccederbd3, btaccederbd4);
             adddirbotones(listabotoneliminar, bteliminarbd1, bteliminarbd2, bteliminarbd3, bteliminarbd4);
 
             addlabels();
             listabds.clear();
-            while (rs.next()) {
+            while (rs.next()) {//Cambia estilo de los botones
                 listabotonesacceder.get(cont).setStyle("-fx-background-radius: 20 20 20 20; -fx-background-color: #2F3636; -fx-border-width: 0.1; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 0); -fx-text-fill: white");
                 listabotonesacceder.get(cont).setId(rs.getString(1) + rs.getString(2).substring(0, 3));
-                listabotonesacceder.get(cont).setVisible(true);
+                listabotonesacceder.get(cont).setVisible(true);//Pone el boton visible si existe la base de datos
                 listabotoneliminar.get(cont).setStyle("-fx-background-radius: 20 20 20 20; -fx-background-color: #2F3636; -fx-border-width: 0.1; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 0); -fx-text-fill: white");
                 listabotoneliminar.get(cont).setId(rs.getString(1) + rs.getString(2).substring(0, 3));
-                listabotoneliminar.get(cont).setVisible(true);
+                listabotoneliminar.get(cont).setVisible(true);//Pone el boton visible si existe la base de datos
                 listalabels.get(cont).setId(rs.getString(1) + rs.getString(2).substring(0, 3));
                 listalabels.get(cont).setText(rs.getString(1));
                 listalabels.get(cont).setVisible(true);
@@ -1254,7 +1265,7 @@ public class ERPController {
         }
     }
 
-    private void addlabels() {
+    private void addlabels() {//Añade los nombres de cada una de las bases de datos
         listalabels.clear();
         listalabels.add(labelbd1);
         listalabels.add(labelbd2);
@@ -1265,7 +1276,7 @@ public class ERPController {
             listalabels.get(i).setVisible(false);
         }
     }
-
+    //Añade los botones a su respectiva lista
     private void adddirbotones(ArrayList<Button> listabotonesacceder, Button btaccederbd1, Button btaccederbd2, Button btaccederbd3, Button btaccederbd4) {
         listabotonesacceder.clear();
         listabotonesacceder.add(btaccederbd1);
@@ -1278,7 +1289,7 @@ public class ERPController {
         }
     }
 
-    private void asignarJButton(JButton btel) {
+    private void asignarJButton(JButton btel) {//Añadimos el icono de eliminar a los botones
         btel.setBackground(new Color(41, 45, 45));
         ImageIcon iconoeliminar = new ImageIcon("src/main/resources/sge/proyectoerp/img/eliminar.png");
         java.awt.Image newimgeliminar = iconoeliminar.getImage().getScaledInstance(7, 7, java.awt.Image.SCALE_SMOOTH);
@@ -1301,7 +1312,7 @@ public class ERPController {
         }
     }
 
-    private void comprobrarregister() {
+    private void comprobrarregister() {//Comprueba los campos del registro
         compregister = false;
         if (Objects.equals(txtusuario1.getText(), "") || Objects.equals(txtcontrasena1.getText(), "") || Objects.equals(txtcontrasena11.getText(), "") || Objects.equals(txtemailregister.getText(), "") || Objects.equals(txttelregister.getText(), "")) {
             crearalertaerror("Debe rellenar todos los campos");
@@ -1324,7 +1335,7 @@ public class ERPController {
         }
     }
 
-    private void clearRegistro() {
+    private void clearRegistro() {//Limpia los campos de los registros al salir o al registrarse
         txtusuario1.clear();
         txtcontrasena1.clear();
         txtcontrasena11.clear();
@@ -1335,7 +1346,7 @@ public class ERPController {
     }
 
     @FXML
-    public void pressbtnregistrarse() {
+    public void pressbtnregistrarse() {//Registra el usuario en la base de datos
         //Definimos conexion como null
         Connection conexion = null;
         //Ejecutamos el comprobarlogin para controlar posibles fallos a la hora de hacer la consulta
@@ -1386,14 +1397,14 @@ public class ERPController {
     }
 
     @FXML
-    public void pressaddbd() {
+    public void pressaddbd() {//Abre el panel para crear una nueva base de datos
         txtnombd.setText(null);
         Pnewbd.setVisible(true);
         rellenartablasbd();
     }
 
     @FXML
-    public void pressbtnewbd() {
+    public void pressbtnewbd() {//Agrega la base de datos al usurio logueado
         try {
             Connection conexion;
             Connection conexion2;
@@ -1401,12 +1412,12 @@ public class ERPController {
             pruebauser = singleton.getUsuario();
             boolean comnombrebd = true;
             conexion = DriverManager.getConnection(conexionerp, user, pswd);
-
+            //Lo añade al usuario logueado
             String consulta = String.format("Select Nombre from bds where Usuario = '%s'", pruebauser);
             Statement st = conexion.createStatement();
 
             ResultSet rs = st.executeQuery(consulta);
-
+            //Detecta si el nombre de la base de datos ya ha sido creada
             if (rs.next()) {
                 if (Objects.equals(bd, rs.getString(1))) {
                     crearalertaerror("Este nombre ya se esta usando en una base de datos");
@@ -1452,7 +1463,7 @@ public class ERPController {
 
 
     @FXML
-    public void presscerrar(ActionEvent event) {
+    public void presscerrar(ActionEvent event) {//Detecta el panel en el que se realiza la acción y lo cierra
         try {
             Button botonclick = (Button) event.getSource();
             botonclick.getParent().setVisible(false);
@@ -1584,6 +1595,7 @@ public class ERPController {
             String conexionbdusuario = String.format("jdbc:mysql://localhost:3306/%s", singleton.getNombrebd());
             //Creamos la conexion
             conexion = DriverManager.getConnection(conexionbdusuario, user, pswd);
+            //La sentencia SQL que es un preparedstatement que obtiene los datos posteriormente de los campos de texto
             PreparedStatement ps = conexion.prepareStatement("Insert into empleados values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             ps.setString(1, txtNombreEmpleado.getText());
             ps.setString(2, txtPuestodetrabajo.getText());
@@ -1636,21 +1648,21 @@ public class ERPController {
     @FXML
     void cerrarperfil() {
         Pperfil.setVisible(false);
-    }
+    }//Cierra el panel de opciones de usuario al salir del panel con el raton
 
     @FXML
     void presslogout(ActionEvent event) {
         ((Node) (event.getSource())).getScene().getWindow().hide();
         app.start(new Stage());
-    }
+    }//Cierra la aplicación y la abre de nuevo
 
     @FXML
     void presscerrarbd(ActionEvent event) {
         ((Node) (event.getSource())).getScene().getWindow().hide();
-    }
+    }//Cierra el panel de las bases de datos
 
     @FXML
-    void pressMenu() {
+    void pressMenu() {//Abre el menú desde cualquier panel
         if (panelactual != PanelMenuPrincipal) {
             if (PanelMenuPrincipal.isVisible()) {
                 PanelMenuPrincipal.setVisible(false);
@@ -1666,7 +1678,7 @@ public class ERPController {
     }
 
     @FXML
-    void pressatrasinicio(ActionEvent event) {
+    void pressatrasinicio(ActionEvent event) {//Vuelve al panel de inicio de sesion desde el panel de registro
         if (PRegistro.isVisible()) {
             ((Node) (event.getSource())).getScene().getWindow().hide();
             app.start(new Stage());
@@ -1674,7 +1686,7 @@ public class ERPController {
     }
 
     @FXML
-    void pressatras() {
+    void pressatras() {//Vuelve para el panel anterior desde cualquier panel
         if (PanelRecepciones.isVisible() || PanelExpediciones.isVisible() || PanelDevoluciones.isVisible()) {
             cambiarpanel(panelactual, PanelInventarioInicial);
             dateReferencia.setValue(LocalDate.now());
@@ -1699,14 +1711,14 @@ public class ERPController {
     }
 
     @FXML
-    void pressbtventas() {
+    void pressbtventas() {//Abre el panel Ventas
         txtidpagina.setText("VENTAS");
         cambiarpanel(PanelMenuPrincipal, PanelVentas);
         rellenartablaVentas();
     }
 
     @FXML
-    void pressbtcompras() {
+    void pressbtcompras() {//Abre el panel Compras
         txtidpagina.setText("COMPRAS");
         cambiarpanel(PanelMenuPrincipal, PanelCompras);
     }
@@ -1716,7 +1728,7 @@ public class ERPController {
     }
 
     @FXML
-    void pressbtInventario() {
+    void pressbtInventario() {//Abre el panel inventario
         cambiarpanel(PanelMenuPrincipal, PanelInventarioInicial);
         txtidpagina.setText("INVENTARIO");
         rellenartablaRecepciones();
@@ -1724,7 +1736,7 @@ public class ERPController {
     }
 
     @FXML
-    void pressbtfacturacion() {
+    void pressbtfacturacion() {//Anbre el panel facturación
         cambiarpanel(PanelMenuPrincipal, PanelFacturacion);
         txtidpagina.setText("FACTURACIÓN");
     }
@@ -1753,7 +1765,7 @@ public class ERPController {
         tablaProductosPDF.addHeaderCell(new Cell().add(new Paragraph("Precio unitario").setFont(font).setBold()));
         tablaProductosPDF.addHeaderCell(new Cell().add(new Paragraph("Impuestos").setFont(font).setBold()));
         tablaProductosPDF.addHeaderCell(new Cell().add(new Paragraph("Subtotal").setFont(font).setBold()));
-
+        //Obtiene los datos de la tabla de productos
         for (Producto producto : TbProdFact.getItems()) {
             tablaProductosPDF.addCell(new Cell().add(new Paragraph(producto.getNombreProducto()).setFont(font)));
             tablaProductosPDF.addCell(new Cell().add(new Paragraph(String.valueOf(producto.getCantidad())).setFont(font)));
@@ -1761,7 +1773,9 @@ public class ERPController {
             tablaProductosPDF.addCell(new Cell().add(new Paragraph(String.valueOf(producto.getImpuestos())).setFont(font)));
             tablaProductosPDF.addCell(new Cell().add(new Paragraph(String.valueOf(producto.getSubtotal())).setFont(font)));
         }
+        //Añade los datos al pdf
         document.add(tablaProductosPDF);
+        //Añadimos el total
         Paragraph total = new Paragraph("Total:" + Total).setFont(font).setFontSize(18);
         total.setHorizontalAlignment(HorizontalAlignment.RIGHT).setMarginRight(20f);
         document.add(total);
@@ -1832,13 +1846,13 @@ public class ERPController {
     }
 
     @FXML
-    void pressbtempleados() {
+    void pressbtempleados() {//Abre el panel Empleados
         cambiarpanel(PanelMenuPrincipal, PanelEmpleados);
         txtidpagina.setText("EMPLEADOS");
         rellenarempleados();
     }
 
-    private void cambiarpanel(Pane panel1, Pane panel2) {
+    private void cambiarpanel(Pane panel1, Pane panel2) {//Método al cual recurrimos para cambiar entre paneles
         panel1.setVisible(false);
         panel2.setVisible(true);
         panelactual = panel2;
@@ -1847,21 +1861,19 @@ public class ERPController {
     @FXML
     void pressRecepciones() {
         cambiarpanel(PanelInventarioInicial, PanelRecepciones);
-    }
+    }//Abre el apartado de recepciones
 
     @FXML
-    void pressExpediciones() {
-        cambiarpanel(PanelInventarioInicial, PanelExpediciones);
-    }
+    void pressExpediciones() {cambiarpanel(PanelInventarioInicial, PanelExpediciones);}//Abre el apartado de expediciones
 
     @FXML
     void pressDevoluciones() {
         cambiarpanel(PanelInventarioInicial, PanelDevoluciones);
         rellenaTableDevoluciones();
-    }
+    }//Abre el apartado devoluciones
 
     @FXML
-    void pressbtncrear() {
+    void pressbtncrear() {//Añade funcion de crear en cualquier de los paneles de crear
         if (PanelRecepciones.isVisible()) {
             cambiarpanel(PanelRecepciones, PanelAddRecepciones);
             dateReferencia.setValue(LocalDate.now());
@@ -1886,7 +1898,7 @@ public class ERPController {
         }
     }
 
-    private void clearRecepciones() {
+    private void clearRecepciones() {//Limpia los campos de añadir recepciones
         listrecepciones.clear();
         txtReferencia.clear();
         txtCantidad.clear();
@@ -2483,7 +2495,7 @@ public class ERPController {
     }
 
     @FXML
-    public void pressbtclientes() {
+    public void pressbtclientes() {//Abre el panel flotante de clientes
         PanelClientes.setVisible(true);
         PaneAddClientes.setVisible(false);
         PaneListaClientes.setVisible(true);
@@ -2492,13 +2504,13 @@ public class ERPController {
     }
 
     @FXML
-    public void pressbtnAddcrearcliente() {
+    public void pressbtnAddcrearcliente() {//Abre el panel de crear clientes
         PaneListaClientes.setVisible(false);
         PaneAddClientes.setVisible(true);
     }
 
     @FXML
-    public void pressbtncrearcliente() {
+    public void pressbtncrearcliente() {//Añade clientes
         if(Objects.equals(btnCrearClientes.getText(), "CREAR")){
             Connection conexion = null;
             //Ejecutamos el código en un try para controlar las excepciones
@@ -2606,7 +2618,7 @@ public class ERPController {
     }
 
     @FXML
-    public void pressbtncrearPPresupuestos(){
+    public void pressbtncrearPPresupuestos(){//Abre el panel de crear presupuestos
         PanelVentas.setVisible(false);
         PanelAddVentas.setVisible(true);
         btnCrearPresupuestoPresu.setText("CREAR");
@@ -2877,7 +2889,7 @@ public class ERPController {
 
 //Proveedores
     @FXML
-    public void pressbtproveedores() {
+    public void pressbtproveedores() {//Abre el panel flotante de proveedores
         PanelProveedores.setVisible(true);
         PaneListaProveedores.setVisible(true);
         PaneAddProveedores.setVisible(false);
@@ -2886,7 +2898,7 @@ public class ERPController {
     }
 
     @FXML
-    public void pressbtnAddcrearproveedores() {
+    public void pressbtnAddcrearproveedores() {//Abre el panel para crear proveedores
         PaneListaProveedores.setVisible(false);
         PaneAddProveedores.setVisible(true);
     }
